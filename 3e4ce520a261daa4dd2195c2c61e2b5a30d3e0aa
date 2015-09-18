@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a79b1b5_cd02f86e",
+        "filename": "ui/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 2759
+      },
+      "writtenOn": "2015-09-18T13:29:38Z",
+      "side": 1,
+      "message": "The reason this patch is failing is because your parent does not match the pom.xml file that it is pointing to. Relative Path .. makes your parent \"centinel-aggregator\".",
+      "revId": "3e4ce520a261daa4dd2195c2c61e2b5a30d3e0aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
