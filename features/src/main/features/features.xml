@@ -31,6 +31,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version="${project.version}">odl-centinel-rest</feature>
     <feature version="${mdsal.version}">odl-mdsal-apidocs</feature>
     <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
+    <feature>http</feature>
+    <feature>webconsole</feature>
+    <bundle>mvn:org.opendaylight.centinel/ui/${project.version}</bundle>
   </feature>
 
 </features>
