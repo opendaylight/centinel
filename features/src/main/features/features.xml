@@ -10,11 +10,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 <features name="odl-centinel-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0">
-  <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/${mdsal.model.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
-  <repository>mvn:org.opendaylight.controller/features-restconf/${mdsal.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.netconf/features-restconf/${restconf.version}/xml/features</repository>
   <feature name='odl-centinel-api' version='${project.version}' description='OpenDaylight :: centinel :: api'>
-    <feature version='${yangtools.version}'>odl-yangtools-models</feature>
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <bundle>mvn:org.opendaylight.centinel/centinel-api/${project.version}</bundle>
   </feature>
   <feature name='odl-centinel' version='${project.version}' description='OpenDaylight :: centinel'>
@@ -25,7 +25,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
   <feature name='odl-centinel-rest' version='${project.version}' description='OpenDaylight :: centinel :: REST'>
     <feature version="${project.version}">odl-centinel</feature>
-    <feature version="${mdsal.version}">odl-restconf</feature>
+    <feature version="${restconf.version}">odl-restconf</feature>
   </feature>
   <feature name='odl-centinel-ui' version='${project.version}' description='OpenDaylight :: centinel :: UI'>
     <feature version="${project.version}">odl-centinel-rest</feature>
