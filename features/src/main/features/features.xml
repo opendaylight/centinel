@@ -11,26 +11,26 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0">
   <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
-  <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
-  <repository>mvn:org.opendaylight.controller/features-restconf/${mdsal.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.controller/features-mdsal/${controller.mdsal.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.controller/features-restconf/${controller.mdsal.version}/xml/features</repository>
   <feature name='odl-centinel-api' version='${project.version}' description='OpenDaylight :: centinel :: api'>
-    <feature version='${yangtools.version}'>odl-yangtools-models</feature>
+    <feature version='${yangtools.version}'>odl-mdsal-models</feature>
     <bundle>mvn:org.opendaylight.centinel/centinel-api/${project.version}</bundle>
   </feature>
   <feature name='odl-centinel' version='${project.version}' description='OpenDaylight :: centinel'>
-    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version='${controller.mdsal.version}'>odl-mdsal-broker</feature>
     <feature version='${project.version}'>odl-centinel-api</feature>
     <bundle>mvn:org.opendaylight.centinel/centinel-impl/${project.version}</bundle>
     <configfile finalname="${configfile.directory}/centinel.xml">mvn:org.opendaylight.centinel/centinel-impl/${project.version}/xml/config</configfile>
   </feature>
   <feature name='odl-centinel-rest' version='${project.version}' description='OpenDaylight :: centinel :: REST'>
     <feature version="${project.version}">odl-centinel</feature>
-    <feature version="${mdsal.version}">odl-restconf</feature>
+    <feature version="${controller.mdsal.version}">odl-restconf</feature>
   </feature>
   <feature name='odl-centinel-ui' version='${project.version}' description='OpenDaylight :: centinel :: UI'>
     <feature version="${project.version}">odl-centinel-rest</feature>
-    <feature version="${mdsal.version}">odl-mdsal-apidocs</feature>
-    <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
+    <feature version="${controller.mdsal.version}">odl-mdsal-apidocs</feature>
+    <feature version="${controller.mdsal.version}">odl-mdsal-xsql</feature>
     <feature>http</feature>
     <feature>webconsole</feature>
     <bundle>mvn:org.opendaylight.centinel/ui/${project.version}</bundle>
