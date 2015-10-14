@@ -22,9 +22,7 @@ public class CentinelProvider implements BindingAwareProvider, AutoCloseable {
     @Override
     public void onSessionInitiated(ProviderContext session) {
         LOG.info("CentinelProvider Session Initiated");
-        // alertruleService =
-        // session.addRpcImplementation(AlertruleService.class, new
-        // CentinelImpl());
+        alertruleService = session.addRpcImplementation(AlertruleService.class, new CentinelImpl());
     }
 
     @Override
