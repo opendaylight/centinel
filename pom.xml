@@ -25,7 +25,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <modules>
     <module>api</module>
     <module>impl</module>
-    <module>ui</module>
+    <module>laas</module>
+    <module>streamhandler</module>
     <module>karaf</module>
     <module>features</module>
     <module>artifacts</module>

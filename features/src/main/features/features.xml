@@ -13,13 +13,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/${mdsal.model.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.netconf/features-restconf/${restconf.version}/xml/features</repository>
-  <feature name='odl-centinel-api' version='${project.version}' description='OpenDaylight :: centinel :: api'>
+
+  <feature name='odl-centinel-core' version='${project.version}' description='OpenDaylight :: centinel'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
-    <bundle>mvn:org.opendaylight.centinel/centinel-api/${project.version}</bundle>
-  </feature>
-  <feature name='odl-centinel' version='${project.version}' description='OpenDaylight :: centinel'>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
-    <feature version='${project.version}'>odl-centinel-api</feature>
+    <feature version="${restconf.version}">odl-restconf</feature>
+    <feature version="${mdsal.version}">odl-mdsal-apidocs</feature>
+    <bundle>mvn:org.opendaylight.centinel/centinel-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.centinel/centinel-impl/${project.version}</bundle>
     <bundle>mvn:com.sun.jersey/jersey-client/${jersey.version}</bundle>
     <bundle>mvn:com.sun.jersey/jersey-core/${jersey.version}</bundle>
@@ -27,12 +27,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bundle>wrap:mvn:org.json/json/${org.json.version}</bundle>
     <configfile finalname="${configfile.directory}/centinel.xml">mvn:org.opendaylight.centinel/centinel-impl/${project.version}/xml/config</configfile>
   </feature>
-  <feature name='odl-centinel-rest' version='${project.version}' description='OpenDaylight :: centinel :: REST'>
-    <feature version="${project.version}">odl-centinel</feature>
-    <feature version="${restconf.version}">odl-restconf</feature>
+
+  <feature name='odl-centinel-laas' version='${project.version}' description='OpenDaylight :: centinel :: laas'>
+    <bundle>mvn:org.opendaylight.centinel/centinel-laas/${project.version}</bundle>
+    <bundle>mvn:com.sun.jersey/jersey-client/${jersey.version}</bundle>
+    <bundle>mvn:com.sun.jersey/jersey-core/${jersey.version}</bundle>
+    <bundle>mvn:org.glassfish/javax.json/1.0.4</bundle>
+    <bundle>wrap:mvn:org.json/json/${org.json.version}</bundle>
+  </feature>
+
+  <feature name='odl-centinel-streamhandler' version='${project.version}' description='OpenDaylight :: centinel :: stream-handler'>
+    <bundle>mvn:org.opendaylight.centinel/centinel-streamhandler/${project.version}</bundle>
   </feature>
   <feature name='odl-centinel-ui' version='${project.version}' description='OpenDaylight :: centinel :: UI'>
-    <feature version="${project.version}">odl-centinel-rest</feature>
     <feature version="${mdsal.version}">odl-mdsal-apidocs</feature>
     <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
     <feature>http</feature>
