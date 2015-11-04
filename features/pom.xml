@@ -86,7 +86,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <artifactId>centinel-laas</artifactId>
       <version>${project.version}</version>
     </dependency>
-
+      <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>ui</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>centinel-streamhandler</artifactId>
