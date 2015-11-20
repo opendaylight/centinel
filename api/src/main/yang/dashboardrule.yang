@@ -1,0 +1,111 @@
+/*
+ * Copyright (c) 2015 Tata Consultancy services and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+module dashboardrule {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:dashboardrule";
+    prefix "dashboardrule";
+    contact
+      "Sumit Kapoor <sumit.kapoor@tcs.com>";
+     
+    description
+      "YANG definition of Dashboard Data Model.";
+
+    revision "2015-01-05" {
+        description "Initial revision of dashboardrule model";
+    }
+    include dashboardruleservice;
+
+
+	typedef  WidgetMode {
+        description
+            "Type of widget level: alert or stream.";
+        type enumeration {
+            enum alert;
+            enum stream;           
+        }
+    }  
+        
+    typedef  WidgetType {
+        description
+            "Type of widget.";
+        type enumeration {
+            enum message_count;
+            enum histogram;           
+            enum chart;
+        }
+    }    
+    grouping createDashboardInput
+    {
+
+        leaf title {
+            type string;
+        }
+        leaf description {
+            type string;
+        }
+       
+    }
+
+    grouping widget
+    {
+       
+        leaf widgetID {
+            type string;
+        }
+        leaf dashboardID {
+            type string;
+        }
+        
+        leaf streamID {
+            type string;
+        }
+        leaf alertID {
+            type string;
+        }
+        leaf description {
+            type string;
+        }
+        leaf mode{
+        type WidgetMode;
+        
+        }
+        leaf type {
+            type WidgetType;
+        }
+        leaf time_range {
+            description
+            "time range for statistic historic display";
+            type int16;
+        }
+        
+    }
+
+  
+    grouping dashboard
+    {
+        uses createDashboardInput;
+        
+        
+        leaf dashboardID {
+            type string;
+        }
+        leaf timestamp {
+            type string;
+        }
+        list widgets
+        {
+        key widgetID;
+           uses widget;
+
+        }
+
+   
+    }
+
+   
+}

@@ -1,0 +1,59 @@
+/*
+ * Copyright (c) 2015 Tata Consultancy services and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+module rule {
+
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:rule";
+    prefix "rule";
+
+    revision "2015-01-05" {
+        description "Initial revision of alertrule model";
+    }
+
+    typedef  RuleType {
+        description
+            "Category of types of Rules.";
+        type enumeration {
+            enum base-alert;
+            enum stream;
+        }
+    }
+
+    grouping rule{
+        description
+            "The base type of rule data.";
+        leaf nodeType {
+            description
+                "The type of the network element.";
+            type string;
+            
+        }
+        leaf ruleTypeClassifier {
+            description
+                "The type of the rule data.";
+            type RuleType;
+        }
+        leaf timeStamp {
+            description
+                "The timestamp of the rule data.";
+            type int16;
+        }
+        leaf ruleID {
+            description
+                "The id of the rule data.";
+            type string;
+           
+        }
+         leaf configID {
+            description
+                "The id of the rule data.";
+            type string;
+           
+        }
+    }
+}

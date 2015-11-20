@@ -1,0 +1,188 @@
+/*
+ * Copyright (c) 2015 Tata Consultancy services and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+submodule dashboardruleservice {
+   
+     belongs-to "dashboardrule" {
+     prefix "dashboardrule";
+     }
+     
+     contact
+      "Sumit Kapoor <sumit.kapoor@tcs.com>";
+     
+    description
+      "YANG definition of Centinel Dshboard Rule Service Data Model.";
+
+   container dashboardRecord
+   {
+	   
+	list dashboardList
+	{
+                key dashboardID;
+	 	uses dashboard;
+	}
+   
+   }
+     rpc dashboard-increment-test
+     {
+     input {
+        	leaf streamID {
+		description "ID of stream/alert.";
+		type string;
+	       }
+        }
+        output {
+        	 leaf message {
+		type string;
+	       }            
+        }
+     } 
+     
+     
+   rpc set-dashboard {
+        description "Set dashboard page";
+
+        input {
+        	uses createDashboardInput;
+        }
+        output {
+        	leaf dashboardID {
+            		type string;
+            	 }  
+             uses createDashboardInput;          
+        	}
+    }
+    
+    
+   
+   rpc delete-dashboard {
+        description "Delete dashboard page";
+
+        input {
+        	leaf dashboardID {
+		description "ID of dashboard.";
+		type string;
+	       }
+        }
+        output {
+        	 leaf message {
+		type string;
+	       }            
+        }
+    }
+    
+    rpc delete-widget {
+        description "Delete widget page";
+
+        input {
+        leaf dashboardID {
+		description "ID of dashboard.";
+		type string;
+	       }
+        	leaf widgetID {
+		description "ID of widget.";
+		type string;
+	       }
+        }
+        output {
+        	 leaf message {
+		type string;
+	       }            
+        }
+    }
+
+   rpc set-widget {
+        description "Associate widget to dashboard";
+
+        input {
+        	uses widget;
+        }
+        output {
+        	uses widget;            
+        }
+    }
+
+    rpc get-dashboard {
+        description "Get specific dashboard rule";
+
+        input {
+        	leaf dashboardID {
+		description "ID of dashboard.";
+		type string;
+	       }
+        }
+        output {
+        	uses dashboard;            
+        }
+    }
+
+    rpc get-widget-message-count {
+        description "Get value of message count widget";
+
+        input {
+                leaf widgetID {
+		description "ID of widget.";
+		type string;
+	       }
+        	leaf dashboardID {
+		description "ID of dashboard.";
+		type string;
+	       }
+		       
+        }
+
+        output {
+                  
+                    leaf value {
+            		type int32;
+        	    }
+                    	
+	       }
+        	            
+        }
+    
+   
+       rpc get-widget-histogram {
+        description "Get value of widget";
+
+        input {
+                leaf widgetID {
+		description "ID of widget.";
+		type string;
+	       }
+        	leaf dashboardID {
+		description "ID of dashboard.";
+		type string;
+	       }
+		leaf fromTimestamp {
+			description "";
+		    		type string;
+			}
+		        leaf toTimestamp {
+		    		type string;
+			}
+		        leaf now {
+		             description "If true than tiTimestamp is replaced with current time";
+		    		type boolean;
+			}        
+                
+        }
+
+        output {
+                  list  values {
+		    leaf timestamp {
+            		type string;
+        	    }	
+                    leaf value {
+            		type int32;
+        	    }	
+	       }
+        	            
+        }
+    
+      
+}}

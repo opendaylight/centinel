@@ -1,0 +1,126 @@
+/*
+ * Copyright (c) 2015 Tata Consultancy services and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+module subscribe {
+  
+ 	yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:subscribe";
+    prefix "subs";
+  
+	revision "2015-01-05" {
+	        description "Initial revision of subscribe model";
+	    }
+	    
+	contact
+         "Sumit Kapoor <sumit.kapoor@tcs.com>";
+     
+        description
+         "YANG definition of Centinel Log Service Provider Data Model.";
+	    
+ 	grouping testsubscribe
+ 	{
+ 	
+	 	leaf streamID {
+		 type string;
+		 }
+		 
+		 leaf alertID {
+		 type string;
+		 }
+		 
+		 leaf message {
+		 type string;
+		 }
+		 
+ 	}
+ 	
+ 	
+ 	
+ 	
+ 	rpc subscribe-test {
+    		input {
+	           uses testsubscribe;
+		      }
+    
+    	output {
+    		leaf status {
+     			type string;
+     			    }
+     
+     		}
+  
+     	}
+ 	
+ 	grouping subscribe {
+	
+        
+          key "subscribeID";
+          leaf subscribeID {
+	             type string;
+	         }
+	         leaf userName {
+	             type string;
+	         }
+		 leaf mode {
+	             type enumeration {
+	                 enum stream;
+	                 enum alert;
+	             }
+	         }
+         leaf URL {
+             type string;
+         }
+        
+ 	 leaf streamID {
+             description
+                "ID of stream.";
+            type string;
+        }
+
+        leaf ruleID {
+            description
+                "The id of the rule data.";
+            type string;
+           
+        	     }
+ 	}
+     
+	container subscription{
+	 	list subscriptions{
+	 		uses subscribe;
+	 	}
+	 }
+	       
+	       
+	rpc subscribe-user {
+    		input {
+            		uses subscribe;
+	}
+    
+    	output {
+    		leaf status {
+     			type string;
+     			     }
+	        }
+     }
+     	
+    	rpc subscribe-delete {
+    		input {
+	
+            	leaf subscribeID {
+	             type string;
+	         }
+	}
+    
+    	output {
+    		leaf status {
+     		type string;
+     		            }	   
+		}
+     
+     }       
+}

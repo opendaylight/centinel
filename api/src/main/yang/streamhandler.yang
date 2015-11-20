@@ -1,0 +1,275 @@
+/*
+ * Copyright (c) 2015 Tata Consultancy services and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+
+module streamhandler {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:streamhandler";
+    prefix "streamhandler";
+    contact
+      "Sumit Kapoor <sumit.kapoor@tcs.com>";
+     
+    description
+      "YANG definition of Stream Handler Model.";
+
+    revision "2015-01-05" {
+        description "Initial revision of stream handler model";
+    }
+
+    
+      typedef  EventBodyType {
+        description
+            "Event body serialization type.";
+        type enumeration {
+            enum json;
+            enum avro;
+            enum thrift;
+            
+        }
+    }    
+
+    grouping field
+    {
+    	leaf fieldName {
+        	type string;
+        
+        }
+        leaf fieldValue {
+        	type string;
+        
+        }
+           
+    }
+     
+    grouping record
+    {
+        list fields{
+            	uses field;
+           }
+     } 
+
+
+    grouping genericEvent
+    {
+        
+        leaf eventType {
+            type string;
+        }
+        leaf eventBodyType {
+            type EventBodyType;
+        }
+        leaf-list eventKeys {
+            type string;
+        }
+        leaf eventBody {
+            type string;
+        }
+        
+        
+    }
+
+     rpc persist-event {
+        description "Persisiting event to DB";
+
+        input {
+            uses genericEvent;
+        }
+        
+    } 
+
+     rpc query-events {
+        description "Query events from DB";
+
+        input {
+            
+            leaf eventType {
+            type string;
+            }
+            leaf queryString {
+                    type string;
+           
+             }
+        }
+        output {
+            list events
+            {
+            	uses genericEvent;
+            }            
+        }
+    } 
+
+
+   rpc query-lucene-relative-api {
+        description "Query api to search events from DB";
+
+        input {
+            
+             leaf queryString {
+                    description "Query lucene";
+                    type string;
+           
+             }
+             leaf timeRange {
+                    description "time range minutes";
+                    type int16;
+           
+             }
+             leaf-list eventFields {
+                        description "list of field to return";
+                	type string;
+             }
+             leaf limit {
+                    description "number of messages to return";
+                    type int16;
+           
+             }
+   
+             
+        }
+        output {
+            list records
+            {
+            	uses record;
+            }            
+        }
+    } 
+    
+    rpc query-lucene-api {
+        description "Query api to search events from DB";
+
+        input {
+            
+             leaf queryString {
+                    description "Query lucene";
+                    type string;
+           
+             }
+             leaf fromTime {
+                    description "from time";
+                    type string;
+           
+             }
+             leaf toTime {
+                    description "to time";
+                    type string;
+           
+             }
+             leaf now {
+                    description "Replace to tiem with current time, if true";
+                    type boolean;
+           
+             }
+             leaf-list eventFields {
+                        description "list of field to return";
+                	type string;
+             }
+             leaf limit {
+                    description "number of messages to return";
+                    type int16;
+           
+             }
+   
+             
+        }
+        output {
+            list records
+            {
+            	uses record;
+            }            
+        }
+    } 
+ 
+      rpc query-sql-relative-api {
+        description "Query api to search events from DB";
+
+        input {
+            
+             leaf queryString {
+                    description "Query SQL";
+                    type string;
+           
+             }
+             leaf timeRange {
+                    description "time range minutes";
+                    type int16;
+           
+             }
+             leaf-list eventFields {
+                        description "list of field to return";
+                	type string;
+             }
+             leaf limit {
+                    description "number of messages to return";
+                    type int16;
+           
+             }
+                
+        }
+        output {
+            list records
+            {
+            	uses record;
+            }            
+        }
+    } 
+    
+    rpc query-sql-api {
+        description "Query api to search events from DB";
+
+        input {
+            
+             leaf queryString {
+                    description "Query SQL";
+                    type string;
+           
+             }
+             leaf fromTime {
+                    description "from time";
+                    type string;
+           
+             }
+             leaf toTime {
+                    description "to time";
+                    type string;
+           
+             }
+             leaf now {
+                    description "Replace to tiem with current time, if true";
+                    type boolean;
+           
+             }
+             leaf-list eventFields {
+                        description "list of field to return";
+                	type string;
+             }
+             leaf limit {
+                    description "number of messages to return";
+                    type int16;
+           
+             }
+   
+             
+        }
+        output {
+            list records
+            {
+            	uses record;
+            }            
+        }
+    } 
+ 
+    
+    notification eventNotified {
+        description "Indicates that event has been notified";
+        
+        uses genericEvent;
+    
+    }
+  
+   
+    
+} 
