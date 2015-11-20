@@ -10,21 +10,46 @@ module alertrule {
     namespace "urn:opendaylight:params:xml:ns:yang:alertrule";
     prefix "alertrule";
 
-    include logserviceprovider;
-    include basealert;
+    revision "2015-01-05" {
+        description "Initial revision of alertrule model";
+    }
+    
+
+     
+    import rule {prefix rule; revision-date "2015-01-05";}
     include alertfieldcontent;
     include alertfieldvalue;
     include alertmessagecount;
     include streamalertrules;
-    
-    contact
+           
+	    contact
       "Sumit Kapoor <sumit.kapoor@tcs.com>";
-     
-    description
-      "YANG definition of Centinel Data Model.";
+        description
+            "Category of types of Alert.";
       
-    revision "2015-01-05" {
-        description "Initial revision of alertrule model";
+         typedef  AlertType {
+
+        type enumeration {
+            enum alert-message-count;
+            enum alert-field-value;
+            enum alert-field-content;
+        }
+    }
+    grouping basealerts {
+	uses rule:rule;
+        description
+            "Attributes for base alert";
+	
+	leaf alertTypeClassifier {
+            description
+                "Name of the type of alert.";
+            type AlertType;
+        }
+        leaf streamID {
+            description
+                "ID of stream.";
+            type string;
+        }
     }
 
  

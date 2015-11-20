@@ -11,18 +11,21 @@ submodule alertfieldcontent {
      prefix "alertrule";
    }
    
-    include basealert;
-    
+   
     contact
       "Sumit Kapoor <sumit.kapoor@tcs.com>";
      
     description
-      "YANG definition of Centinel Log Service Provider Data Model.";
+      "YANG definition of Centinel Alert Content Data Model.";
       
     grouping alertfieldcontent{
-        uses basealerts;
+         uses alertrule:basealerts;
         description
             "alert field content";
+        leaf alertName {
+                    type string;
+           
+        }
         leaf fieldContentField {
                    type string;
            
@@ -64,7 +67,7 @@ submodule alertfieldcontent {
     }
     
     rpc update-alert-field-content-rule { 
-        description "updating rules for alert"; 
+        description "Updating rules for alert"; 
 
         input { 
             uses alertfieldcontent; 
@@ -75,7 +78,7 @@ submodule alertfieldcontent {
     } 
 
 	rpc delete-alert-field-content-rule { 
-        description "deleting rules for alert"; 
+        description "Deleting rules for alert"; 
 
         input { 
             uses alertfieldcontent; 

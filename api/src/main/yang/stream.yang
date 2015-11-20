@@ -1,0 +1,144 @@
+/*
+ * Copyright (c) 2015 Tata Consultancy services and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+module stream {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:stream";
+    prefix "stream";
+    contact
+      "Sumit Kapoor <sumit.kapoor@tcs.com>";
+     
+    description
+      "YANG definition of Stream Data Model.";
+
+    revision "2015-01-05" {
+        description "Initial revision of alertrule model";
+    }
+
+    include streamservice;
+
+    import rule {prefix rule; revision-date "2015-01-05";}
+
+    typedef  StreamType {
+        description
+            "Category of types of Stream Rules.";
+        type enumeration {
+            enum match-exactly;
+            enum match-reg-expression;
+            enum smaller-than;
+            enum greator-than;
+            enum field-presence;
+        }
+    }
+    
+    typedef  Protocol {
+        description
+            "Protocol of stream output.";
+        type enumeration {
+            enum tcp;
+            enum udp;
+            
+        }
+    }
+    grouping streamRule
+    {
+
+        leaf field {
+            type string;
+        }
+        leaf type {
+            type StreamType;
+        }
+        leaf inverted {
+            type boolean;
+        }
+        leaf value {
+             type string;
+        }
+        leaf streamRuleID
+        {
+              type string;
+        }
+    }
+  
+    grouping createStreamInput {
+
+        description
+            "Create Stream Input";
+ 
+        uses rule:rule;  
+
+        
+        leaf description {
+            type string;
+        }
+
+        leaf title {
+            type string;
+        }
+        leaf contentPack {
+            type string;
+        }
+
+        list streamRules
+        {
+            uses streamRule;
+        }
+
+    }
+    
+    grouping output {
+
+        description
+            "Output destination of Streams";
+ 
+        leaf id {
+            type string;
+        }
+        leaf title {
+            type string;
+        }
+        leaf type {
+            type string;
+        }
+        leaf port {
+            type int16;
+        }
+        leaf protocol {
+            type Protocol;
+        }
+        leaf hostname {
+            type string;
+        }
+        
+    }
+    grouping stream {
+
+        description
+            "Stream";
+ 
+        uses createStreamInput;  
+        
+        leaf streamID {
+            description
+                "ID of stream.";
+            type string;
+        }
+
+        leaf disabled {
+            type string;
+        }
+
+        list outputs
+        {
+            uses output;
+        }
+
+    }
+
+
+}

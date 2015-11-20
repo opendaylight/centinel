@@ -1,0 +1,234 @@
+/*
+ * Copyright (c) 2015 Tata Consultancy services and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+submodule streamservice {
+   
+   belongs-to "stream" {
+     prefix "stream";
+   }
+   contact
+      "Sumit Kapoor <sumit.kapoor@tcs.com>";
+     
+    description
+      "YANG definition of Stream Service";
+
+     
+   container streamRecord
+   {
+	   
+	list streamList
+	{
+                key configID;
+	 	uses stream;
+	}
+   
+   }
+
+
+   rpc set-stream {
+        description "Create stream";
+
+        input {
+        	uses createStreamInput;
+        }
+        output {
+        	uses stream;            
+        }
+    }
+
+
+   rpc update-stream {
+        description "Update stream";
+
+        input {
+
+	uses createStreamInput;
+
+           leaf streamID {
+            description
+                "ID of stream.";
+            type string;
+        }
+        
+        }
+        output {
+        	uses stream;            
+        }
+    }
+
+   rpc delete-stream {
+        description "Delete stream ";
+
+        input {
+		leaf streamID {
+		description "ID of stream.";
+		type string;
+	       }
+		leaf configID {
+		description "ID of stream.";
+		type string;
+	       }
+        }
+        output {
+            leaf message {
+		type string;
+	       }          
+        }
+    }
+
+   rpc get-stream {
+        description "Get specific stream";
+
+        input {
+		leaf streamID {
+		    description
+		        "ID of stream.";
+		    type string;
+		}
+            
+        }
+        output {
+        	uses stream;
+                         
+        }
+    }
+
+    rpc pause-stream {
+        description "pause stream";
+
+        input {
+		leaf streamID {
+		    description
+		        "ID of stream.";
+		    type string;
+		}
+            }
+          output {
+                   leaf disabled {
+		    description
+		        "stream status";
+		    type string;
+		}
+            
+        }
+        
+    }
+
+    rpc resume-stream {
+        description "resum stream";
+
+        input {
+		leaf streamID {
+		    description
+		        "ID of stream.";
+		    type string;
+		}
+              }
+          output {
+                   leaf disabled {
+		    description
+		        "stream status";
+		    type string;
+		}
+           
+          }
+            
+        }
+        
+    
+     rpc get-throughput{
+        description "througput stream";
+
+        input {
+		leaf streamID {
+		    description
+		        "ID of stream.";
+		    type string;
+		}
+            
+        }
+        output {
+		leaf throughput {
+		    description
+		        "Current throughput of this stream on this node in messages per seconm.";
+		    type int16;
+		}
+            
+        }
+       
+        
+    }
+    rpc set-output {
+        description "Assotiates output with stream";
+
+        input {
+
+           leaf streamID {
+            description
+                "ID of stream.";
+            type string;
+        }
+             list outputlist
+    {
+		leaf title {
+		    type string;
+		}
+		
+		leaf port {
+		    type int16;
+		}
+		leaf protocol {
+		    type Protocol;
+		}
+		leaf hostname {
+		    type string;
+		}
+     }
+        }
+        output {
+        	uses output;            
+        }
+    }
+   
+     rpc delete-output {
+        description "Delete output of stream ";
+
+        input {
+		leaf streamID {
+		description "ID of stream.";
+		type string;
+	       }
+               leaf outputID {
+		    type string;
+		}
+               
+        }
+        output {
+            leaf message {
+		type string;
+	       }          
+        }
+    }
+
+   rpc set-rule {
+        description "set new rule for stream";
+
+        input {
+                 leaf streamID {
+		    description
+		        "ID of stream.";
+		    type string;
+		}
+                uses streamRule;
+        }
+        output {
+        	uses streamRule;            
+        }
+    }
+    
+
+}

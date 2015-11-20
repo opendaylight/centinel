@@ -24,14 +24,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </prerequisites>
   <modules>
     <module>api</module>
+    <module>ui</module>
     <module>impl</module>
     <module>laas</module>
     <module>streamhandler</module>
-    <module>ui</module>
     <module>karaf</module>
     <module>features</module>
     <module>artifacts</module>
-    <module>model</module>
+    <module>plugins</module>
   </modules>
 
     <properties>
@@ -104,6 +104,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
   <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Export-Package>org.opendaylight.centinel.*;</Export-Package>
+                        <Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
+
+
+	                    </instructions>
+	                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>

@@ -11,7 +11,6 @@ submodule alertmessagecount {
      prefix "alertrule";
    }
 
-   include basealert; 
    contact
       "Sumit Kapoor <sumit.kapoor@tcs.com>";
      
@@ -20,9 +19,13 @@ submodule alertmessagecount {
 
 
     grouping alertmessagecount{
-        uses basealerts;
+        uses alertrule:basealerts;
         description
             "alert message count";
+        leaf alertName {
+                    type string;
+           
+        }
         leaf messageCountOperator {
                     type string;
            
@@ -65,7 +68,7 @@ submodule alertmessagecount {
     }
     
     rpc update-alert-message-count-rule { 
-        description "updating rules for alert"; 
+        description "Updating rules for alert"; 
 
         input { 
             uses alertmessagecount; 
@@ -76,7 +79,7 @@ submodule alertmessagecount {
     } 
 
    rpc delete-alert-message-count-rule { 
-        description "deleting rules for alert"; 
+        description "Deleting rules for alert"; 
 
         input { 
             uses alertmessagecount; 

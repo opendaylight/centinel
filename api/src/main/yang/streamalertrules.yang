@@ -10,24 +10,28 @@
 	belongs-to "alertrule" {
     	 prefix "alertrule";
    	}
-
-
- 	include alertmessagecount;
-   	include alertfieldvalue;
-   	include alertfieldcontent;
-   	include basealert;
-    
-    contact
+	
+	    contact
       "Sumit Kapoor <sumit.kapoor@tcs.com>";
      
     description
       "YANG definition of Centinel Stream Alert Rule Data Model.";
 
+
+ include alertmessagecount;
+ include alertfieldvalue;
+ include alertfieldcontent;
+
+
   	rpc get-all-alert-rule {
         description "Setting rules for alert";
 
         input {
-            uses basealerts;
+             leaf streamID {
+            description
+                "ID of stream.";
+            type string;
+        }
         }
         output {
            	 list streamAlertMessageCountRuleListSorted
