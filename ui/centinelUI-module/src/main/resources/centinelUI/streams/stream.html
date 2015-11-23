@@ -1,0 +1,123 @@
+<div class="col-md-12 col-lg-12">
+   
+      
+         <div class="col-md-12 col-lg-12">
+            <h3 class="ng-binding">
+             {{ 'CREATE_STREAM_PAGE' | translate }}
+            </h3>
+            <div class="col-md-12 col-lg-12" style=" padding-left: 600px;">
+      			<button class="btn btn-md btn-orange" ng-click="addStreamConfigDiv()" ng-disabled="submitting" type="submit" form="createForm" function="submit" disabled="disabled"><i class="icon-ok-sign"></i> {{'CREATE_STREAM' | translate}}</button> 
+     			<span class="error clearfix ng-binding"></span>
+   			</div>
+      	</div>
+  	 
+	<div style="margin-top: 110px;">
+	<div class="well well-sm" ng-show="enableCreateStreamForm" ng-disabled="submitting">
+		<div style="padding-bottom: 13px;">
+				<button class="alertButton iconCloseForm" ng-click="closeForm()" style="margin-bottom: 0px;"></button>
+		</div>
+		<form method="POST" ng-submit="createStream(streamForm,enableCreateButton)" ng-show="enableCreateStreamForm" class="alert-type-form alert-type-form-message-count form-inline ng-pristine ng-valid ng-scope" id="message-count"  style="display: block; width: 956px;">
+		    <div class="well well-sm">
+		        <label>{{'STREAM_TITLE'|translate}}</label> 
+		        <input name="streamName" ng-Model="streamForm.title" type="text" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" type="text" required="required" data-pluralsingular="threshold-descr" value="" style=" width: 940px;height: 27px;">
+		        <br><label>{{'STREAM_DESCRIPTION'|translate}}</label>  
+				<input name="StreamDescription" ng-Model="streamForm.description" type="text" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" type="text" required="required" data-pluralsingular="threshold-descr" value="" style=" width: 940px;height: 27px;">
+				<p style="margin-top: 5px; margin-bottom: 0px;">
+		    		<button type="submit" ng-Show="enableCreateButton" ng-disabled="submitting" class="btn btn-success" >{{'SAVE_STREAM'|translate}}</button>
+		    		<button type="submit" ng-Show="!enableCreateButton" ng-disabled="submitting" class="btn btn-success" >{{'EDIT_STREAM'|translate}}</button>
+				</p>
+			</div>
+		</form>
+	</div>
+	</div>
+
+			<div class="submittingForm" ng-show="submitting" style="height: 35px;"></div>
+			<div style="text-align: center;color: white;" ng-show="submitting">Please Wait...</div>
+
+	  <div class="well well-sm tableContainer" style="margin-top: 20px;">
+ 
+	        <form class="form-inline">
+				<div class="form-group">
+					<input type="text" ng-model="searchText" class="form-control" placeholder="Search"  type="search" ng-change="search()">
+				</div>
+				<div style="float: right;margin-right: 570px;margin-top: 7px;"> <span>{{NumberOfResults}}</span></div>
+			</form>
+			
+			<div class="div-table">
+					<div style="border:1px solid #A09B9B; border-spacing: 4px; width: 962px;">
+						<h3>Configured Streams</h3>
+		           </div>
+		             <div ng-repeat="stream in streamsByPage[currentPage]" style="border:1px solid #A09B9B; border-spacing: 4px;">
+			            <div class="div-table-row" >
+			            	<div class="div-table-col"style="width:200px;">{{stream.title}}</div>
+			                <div class="div-table-col " style="width:145px;"><button class="alertButton iconDetails" ng-mouseenter="showDetails(stream)" ng-mouseleave="hideDetails(stream)"></button></div>
+			                <div class="div-table-col " style="width:145px;"><button type="button" style="height: 28px;margin-left: 50px;padding-top: 3px;" ng-click="openStreamSubscriptionDiv(stream)" class="btn btn-success" >{{'SUBSCRIBE'|translate}}</button></div>
+			                <div class="div-table-col " style="width:145px;"><button type="button" style="height: 28px;margin-left: 20px;padding-top: 3px;" ng-click="editRuleClicked(stream)" class="btn btn-success" >{{'EDIT_ALERT_RULES' | translate}}</button></div>
+			                <div class="div-table-col " style="width:145px;"><button type="button" style="height: 28px;margin-left: 20px;padding-top: 3px;" ng-click="manageAlertClicked(stream)" class="btn btn-success" >{{ 'MANAGE_ALERTS' | translate }}</button></div>
+
+<!-- 			                <div class="div-table-col " style="width:145px;"><a href="#/centinelUI/editRulesFunction" class="stream-tbl-button ng-binding" style="padding-top: 3px;">{{'EDIT_ALERT_RULES' | translate}}</a></div>
+			                <div class="div-table-col " style="width:145px;"><a href="#/centinelUI/alertFunction/563725f0e4b03db01d9acaf7" class="stream-tbl-button ng-binding" style="padding-top: 3px;">{{ 'MANAGE_ALERTS' | translate }}</a></div> -->
+			                <div class="div-table-col " style="width:145px;">
+			                   <select id="selectbox1" class="form-control ng-pristine ng-untouched ng-valid" style="padding-left :5px; padding-right: 5px; height: 28px; margin-left: 10px;width: 126px;" ng-model="action.actionId" ng-options="action.actionId as action.actionName for action in moreActionValues" ng-Change="moreActionFunctions(action.actionId,stream)">
+								    <option value="" selected="selected">{{'MORE_ACTIONS' | translate}}</option>
+								</select>
+					        </div>
+			            </div>
+			            <div  class="div-table-row" ng-show="stream.streamID == hoverstreamId">{{stream.description}}</div>
+			            
+			            <div name="subscribe" ng-Show="subscribePressed && stream.streamID == subscribedStreamID" class="well well-sm" style="width: 960px;">
+			            	<div style="padding-bottom: 13px;">
+			            		<button class="alertButton iconCloseForm" ng-click="closeStreamSubscriptionForm()"></button>
+			            	</div>
+					    	<form method="POST" ng-submit="addStreamSubscription(subscriptionTypes.ID)" class="alert-type-form alert-type-form-message-count form-inline ng-pristine ng-valid ng-scope" style="display: block;">
+							    <div class="well well-sm">
+							    <h4 style="float: left;"> Subscribe for this stream</h4>
+							 		<span class="threshold-type" > 
+								        	<select id="selectbox1"  ng-model="subscriptionTypes.ID" class="form-control ng-pristine ng-untouched ng-valid" style="padding-left :5px; padding-right: 5px; height: 28px; margin-left: 10px;width: 166px;" ng-options="sub.ID as sub.type for sub in subscriptionTypes">
+											    <option value="">{{'SELECT_CONDITION' | translate}}</option>
+											</select>
+
+								        <button type="submit" ng-disabled="submitting" class="btn btn-success" >{{'SUBSCRIBE'|translate}}</button>
+							    	</span>
+							    </div>
+					    	</form>
+
+					    	<div ng-Show="streamSubscription" class="alert alert-info">
+					    		<div>
+					    			<h4>New Http Subscription</h4>
+					    			<form method="POST" ng-submit="makeNewStreamSubscription(streamSubscriptionForm)" class="alert-type-form alert-type-form-message-count form-inline ng-pristine ng-valid ng-scope" style="display: block;">
+							    		<input type="text" ng-Model="streamSubscriptionForm.URL" value="Enter the url like http://www.tcs.com/alerts" class="form-control ng-pristine ng-untouched ng-valid"  style="background-color: #5F5F5F; width: 340px;height: 27px; float: left;">
+							    		<input type="text" ng-Model="streamSubscriptionForm.userName" value="Enter the User Name" class="form-control ng-pristine ng-untouched ng-valid"  style="background-color: #5F5F5F; width: 340px;height: 27px; ">
+							    		<button type="submit" ng-disabled="submitting" class="btn btn-success" style="height: 28px;padding-top: 3px; margin-left: 8px;" >{{'NEW_HTTP_SUBSCRIBE'|translate}}</button>
+					    			</form>
+					    		</div>
+					    	</div>	  
+						</div>
+
+					</div>
+		      </div>
+		      
+				<ul class="pagination pagination-sm">
+		            <li ng-class="{active:0}"><a href="" ng-click="firstPage()">{{'FIRST' | translate}}</a>
+		
+		            </li>
+		            <li ng-repeat="n in range(streamsByPage.length)"> <a href="" ng-click="setPage()" ng-bind="n+1">1</a>
+		
+		            </li>
+		            <li><a href="" ng-click="lastPage()">{{'LAST' | translate}}</a>
+		
+		            </li>
+		        </ul>
+        
+    	</div>
+    	
+    	  
+  <div class="tab-pane fade in active" id="smart-green-demo" ng-Show="submitted">
+	<p ng-class="{'smart-green': submitSuccess, 'smart-red': !submitSuccess}">
+	<span>{{ successMsg }}</span>
+	 </p>
+	</div>
+
+  </div>
+
+   
