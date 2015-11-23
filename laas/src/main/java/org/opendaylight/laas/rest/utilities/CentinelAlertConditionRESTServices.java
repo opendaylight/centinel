@@ -41,10 +41,6 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
         super();
     }
 
-    /**
-     * Provide single instance of CentinelAlertConditionRESTServices across the
-     * application throughout its life cycle
-     */
     public static synchronized CentinelAlertConditionRESTServices getInstance() {
 
         if (singleton == null) {
@@ -54,11 +50,6 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
 
     }
 
-    /**
-     * @param dataObjectRuleList
-     * @return DataObject If successfully posted to Analysis server return the
-     *         Config object to create in Operational Data store
-     */
     public DataObject createFromConfigToOperational(DataObject dataObjectRuleList) {
 
         String streamId = "";
@@ -88,11 +79,6 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
         return newDataObjectRuleList;
     }
 
-    /**
-     * @param dataObj
-     * @return boolean returns true if successfully deleted the object from
-     *         Analysis server
-     */
     public boolean deleteFromOperational(DataObject dataObj) {
         boolean deletedSuccessfully = false;
         ClientResponse alertResponse = null;
@@ -121,10 +107,6 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
         return deletedSuccessfully;
     }
 
-    /**
-     * @param dataObj
-     * @return boolean returns true if Analysis object successfully updated
-     */
     public boolean updateToOperational(DataObject dataObj) {
 
         boolean isUpdated = false;
@@ -164,10 +146,6 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
         return isUpdated;
     }
 
-    /**
-     * @param dataObject
-     * @return JsonObject Utility method to create JSON from provided DataObject
-     */
     private JsonObject objectToJsonMapper(DataObject dataObject) {
 
         JsonObject setAlertJsonObject = null;
@@ -252,13 +230,6 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
         return setAlertJsonObject;
     }
 
-    /**
-     * @param createStreamResponse
-     * @param dataObjectRuleList
-     * @param streamId
-     * @return DataObject Utility method to generate DataObject from provided
-     *         JSON
-     */
     private DataObject jsonToObject(ClientResponse createStreamResponse, DataObject dataObjectRuleList, String streamId) {
 
         DataObject operationalDataObject = null;
