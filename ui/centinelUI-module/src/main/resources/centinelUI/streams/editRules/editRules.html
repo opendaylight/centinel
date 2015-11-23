@@ -1,0 +1,93 @@
+<div class="col-md-12 col-lg-12">
+   
+      
+         <div class="col-md-12 col-lg-12">
+            <h3 class="ng-binding">
+             {{ 'CREATE_RULES_PAGE' | translate }}
+            </h3>
+            <div class="col-md-12 col-lg-12" style=" padding-left: 600px;">
+      			<button class="btn btn-md btn-orange" ng-click="addStreamRuleDiv()" ng-disabled="submitting" type="submit" form="createForm" function="submit" disabled="disabled"><i class="icon-ok-sign"></i> {{'ADD_STREAM_RULE' | translate}}</button> 
+     			<span class="error clearfix ng-binding"></span>
+   			</div>
+      	</div>
+  	 
+	<div style="margin-top: 110px;">
+	<div class="well well-sm" ng-show="enableCreateStreamRuleForm">
+	<div style="padding-bottom: 13px;">
+			<button class="alertButton iconCloseForm" ng-click="closeForm()" style="margin-bottom: 0px;"></button>
+	</div>
+		<form method="POST" ng-submit="addStreamRule(ruleForm, type.value)" ng-show="enableCreateStreamRuleForm" class="alert-type-form alert-type-form-message-count form-inline ng-pristine ng-valid ng-scope" id="message-count"  style="display: block; width: 976px;">
+		   <h4>New Stream Rule</h4>
+		    <div class="well well-sm" style="width: 956px;">
+		        <label>{{'FIELD'|translate}}</label> 
+		        <input name="ruleField" ng-Model="ruleForm.field" type="text" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-pluralsingular="threshold-descr" value="" style=" width: 940px;height: 27px;">
+		        <br><label>{{'TYPE'|translate}}</label>  
+		        			    <select id="selectbox1" class="form-control ng-pristine ng-untouched ng-valid" style="padding-left :5px; padding-right: 5px; height: 27px;width: 940px;" ng-model="type.value" ng-options="type.key for type in matchingType" >
+								    <option ng-value="" selected="selected">{{'Select a Type' | translate}}</option>
+								</select>
+				<br><label>{{'VALUE'|translate}}</label> 
+				
+				<input name="fieldValue" ng-Model="ruleForm.value" type="text" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-validate="number" data-pluralsingular="threshold-descr" value="" style=" width: 940px;height: 27px;">
+				
+				<input name="inverted" ng-Model="ruleForm.inverted" type="checkbox" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-pluralsingular="threshold-descr" value="" style="float: left; width: 15px;height: 27px;"><label  style="margin-left: 10px;margin-top: 4px;">Inverted</label>
+					<p style="margin-top: 5px; margin-bottom: 0px;">
+		    		<button type="submit" ng-disabled="submitting" class="btn btn-success" >{{'SAVE_RULE'|translate}}</button>
+				</p>
+			</div>
+		</form>
+		</div>
+	</div>
+	
+			<div class="submittingForm" ng-show="submitting" style="height: 35px;"></div>
+			<div style="text-align: center;color: white;" ng-show="submitting">Please Wait...</div>
+	
+	 <div class="well well-sm tableContainer">
+ 
+        <form class="form-inline">
+			<div class="form-group">
+				<input type="text" ng-model="searchText" class="form-control" placeholder="Search"  type="search" ng-change="search()">
+			</div>
+			<div style="float: right;margin-right: 570px;margin-top: 7px;"> <span>{{NumberOfResults}}</span></div>
+		</form>
+		
+		<div class="div-table">
+			<div style="border:1px solid #A09B9B; border-spacing: 4px;">
+             <div class="div-table-row">
+                <div class="div-table-col" style="width:235px;" >{{'RULE_FIELD' |translate}}</div>
+                <div  class="div-table-col" style="width:235px;">{{'RULE_TYPE' | translate}}</div>
+                <div  class="div-table-col" style="width:235px;">{{'RULE_VALUE' | translate}}</div>
+                <div  class="div-table-col" style="width:235px;">{{'RULE_INVERTED' |translate}}</div>
+             </div>
+           </div>
+             <div ng-repeat="rule in rulesByPage[currentPage]" style="border:1px solid #A09B9B; border-spacing: 4px;">
+	            <div class="div-table-row" >
+	            	 <div class="div-table-col"style="width:235px;">{{rule.field}}</div>
+	                <div class="div-table-col " style="width:235px;">{{rule.type}}</div>
+	                <div class="div-table-col " style="width:235px;">{{rule.value}}</div>
+	                <div class="div-table-col " style="width:235px;">{{rule.inverted}}</div>
+	            </div>
+			</div>
+      </div>
+       
+        <ul class="pagination pagination-sm">
+            <li ng-class="{active:0}"><a href="" ng-click="firstPage()">{{'FIRST' | translate}}</a>
+
+            </li>
+            <li ng-repeat="n in range(rulesByPage.length)"> <a href="" ng-click="setPage()" ng-bind="n+1">1</a>
+
+            </li>
+            <li><a href="" ng-click="lastPage()">{{'LAST' | translate}}</a>
+
+            </li>
+        </ul>
+        
+    </div>
+	
+	
+	    	  
+  <div class="tab-pane fade in active" id="smart-green-demo" ng-Show="submitted">
+	<p ng-class="{'smart-green': submitSuccess, 'smart-red': !submitSuccess}">
+	<span>{{ successMsg }}</span>
+	 </p>
+	</div>
+</div>

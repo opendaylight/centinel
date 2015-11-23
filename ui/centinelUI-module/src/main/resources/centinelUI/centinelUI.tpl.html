@@ -1,0 +1,14 @@
+<link rel="stylesheet" type="text/css" href="/src/app/centinelUI/centinelUI-custom.css">
+
+<div class="menu ng-scope">
+    <ul class="nav nav-pills">
+        <li ng-class="{ active: isState('main.centinelUI.stream')|| isState('main.centinelUI.alert') || isState('main.centinelUI.editRules') }"><a href="#/centinelUI/streams" class="ng-binding">{{ 'STREAMS' | translate }}</a></li>
+  		<li ng-class="{ active: isState('main.centinelUI.dashboard')}"><a href="#/centinelUI/DashBoard" class="ng-binding">Dashboard</a></li>
+    	<li ng-class="{ active: isState('main.centinelUI.streamdata')}"><a href="#/centinelUI/streamdata" class="ng-binding">StreamingData</a></li>
+    </ul>
+    <!-- uiView: submenu --><div ui-view="submenu" class="ng-scope"></div>
+</div>
+
+
+ <!-- uiView:centinel main content page container -->
+<div class="main" ui-view="centinelContent"></div>
