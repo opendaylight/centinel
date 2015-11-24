@@ -59,18 +59,17 @@ public class ResetCounterThread implements Runnable {
         recordDashboard.put("widgetId", dashboardPojo.getWidgetId());
         recordDashboard.put("value", dashboardPojo.getValue());
 
-        System.out.println(recordDashboard);
+        //System.out.println(recordDashboard);
 
         JsonObject input_json = null;
-        input_json = factory
-                .createObjectBuilder()
+        input_json = factory.createObjectBuilder()
                 .add("input",
                         factory.createObjectBuilder().add("eventType", "dashboard").add("eventBodyType", "avro")
                                 .add("eventBody", recordDashboard.toString())
                                 .add("eventKeys", factory.createArrayBuilder().add("timestamp").add("widgetId")))
                 .build();
 
-        System.out.println(input_json);
+        //System.out.println(input_json);
     }
 
     public static class DashboardPojo {

@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class WidgetStreamCounterVO {
-    private static final Logger LOG = LoggerFactory.getLogger(WidgetStreamCounterVO.class);
 
     private String WidgetID;
     private String StreamID;
@@ -24,7 +23,6 @@ public class WidgetStreamCounterVO {
 
     @Override
     public boolean equals(Object obj) {
-        // TODO Auto-generated method stub
         if (obj instanceof WidgetStreamCounterVO) {
             return this.WidgetID.equals(((WidgetStreamCounterVO) obj).getWidgetID());
         } else
@@ -34,7 +32,6 @@ public class WidgetStreamCounterVO {
 
     @Override
     public int hashCode() {
-        // TODO Auto-generated method stub
         return (WidgetID + StreamID).hashCode();
     }
 
