@@ -51,7 +51,7 @@ public class CentinelCommonRESTServices {
         loadPropertiesValues();
     }
 
-    /**
+    /*
      * authenticates the access to Analysis server
      */
     public void authenticator() {
@@ -64,52 +64,60 @@ public class CentinelCommonRESTServices {
         });
     }
 
-    /**
-     * @param obj
-     * @param resource
+    /*
+     * @param obj JsonObject
+     * 
+     * @param resource String
+     * 
      * @return ClientResponse
      * 
-     *         Utility method to send HTTP POST request to Analysis Server
+     * Utility method to send HTTP POST request to Analysis Server
      */
     public ClientResponse graylogRESTPost(JsonObject obj, String resource) {
         WebResource webResource = client.resource(resource);
         return webResource.type(resourceType).post(ClientResponse.class, obj.toString());
     }
 
-    /**
-     * @param resource
+    /*
+     * @param resource String
+     * 
      * @return ClientResponse Utility method to send HTTP GET request to
-     *         Analysis Server
+     * Analysis Server
      */
     public ClientResponse graylogRESTGet(String resource) {
         WebResource webResource = client.resource(resource);
         return webResource.get(ClientResponse.class);
     }
 
-    /**
-     * @param obj
-     * @param resource
+    /*
+     * @param obj JsonObject
+     * 
+     * @param resource String
+     * 
      * @return ClientResponse Utility method to send HTTP PUT request to
-     *         Analysis Server
+     * Analysis Server
      */
     public ClientResponse graylogRESTPut(JsonObject obj, String resource) {
         WebResource webResource = client.resource(resource);
         return webResource.type(resourceType).put(ClientResponse.class, obj.toString());
     }
 
-    /**
-     * @param resource
+    /*
+     * @param resource String
+     * 
      * @return ClientResponse Utility method to send HTTP DELETE request to
-     *         Analysis Server
+     * Analysis Server
      */
     public ClientResponse graylogRESTDelete(String resource) {
         WebResource webResource = client.resource(resource);
         return webResource.delete(ClientResponse.class);
     }
 
-    /**
-     * @param response
+    /*
+     * @param response String
+     * 
      * @param key
+     * 
      * @return String Parsing the HTTP method response
      */
     public String fetchResponse(String response, String key) {
@@ -124,7 +132,7 @@ public class CentinelCommonRESTServices {
         return webResource.type(resourceType).post(ClientResponse.class);
     }
 
-    /**
+    /*
      * To load property file
      */
     public void loadPropertiesFiles() {
