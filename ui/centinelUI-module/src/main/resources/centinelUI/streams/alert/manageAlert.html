@@ -1,0 +1,255 @@
+
+   <div class="col-md-12 col-lg-12">
+      <div class="formElement form-horizontal ng-pristine ng-invalid ng-invalid-required ng-valid-parse" ng-form="f_appid">
+         <div class="col-md-12 col-lg-12">
+            <h3 class="ng-binding">
+             {{ 'ALERT_CONFIGURATION_PAGE_TITLE' | translate }}
+            </h3>
+         </div>
+         <div>
+        	<select id="selectbox1"  ng-model="conditionTypes.ID" class="form-control ng-pristine ng-untouched ng-valid" style="padding-left :5px; padding-right: 5px; height: 28px; margin-left: 10px;width: 166px;" ng-options="con.ID as con.conditionValue for con in conditionTypes">
+			    <option value="">{{'SELECT_CONDITION' | translate}}</option>
+			</select>
+		</div>
+      </div>
+   </div>
+   <div class="col-md-12 col-lg-12" style=" padding-left: 600px;">
+      <button class="btn btn-md btn-orange" ng-click="addAlertConfigDiv(conditionTypes.ID)" ng-disabled="submitting" type="submit" form="createForm" function="submit" disabled="disabled"><i class="icon-ok-sign"></i> {{'CONFIGURE_ALERT' | translate}}</button> 
+      <span class="error clearfix ng-binding"></span>
+   </div>
+
+     <div dynamic style="padding-top: 130px; ng-model="ngmodel"></div>
+     
+    <div class="submittingForm" ng-show="submitting" style="height: 35px;"></div>
+	<div style="text-align: center;color: white;" ng-show="submitting">Please Wait...</div>
+	
+    <div class="well well-sm tableContainer">
+ 
+        <form class="form-inline">
+			<div class="form-group">
+				<input type="text" ng-model="searchText" class="form-control" placeholder="Search"  type="search" ng-change="search()">
+			</div>
+			<div style="float: right;margin-right: 570px;margin-top: 7px;"> <span>{{NumberOfResults}}</span></div>
+		</form>
+		
+		<div class="div-table">
+			<div style="border:1px solid #A09B9B; border-spacing: 4px;">
+             <div class="div-table-row">
+                <div class="div-table-col" style="width:301px;" >{{'ALERT_NAME' |translate}}</div>
+                <div  class="div-table-col" style="width:201px;">{{'TYPE' | translate}}</div>
+                <div  class="div-table-col" style="width:145px;">{{'DETAILS' | translate}}</div>
+                <div  class="div-table-col" style="width:145px;">{{'EDIT' |translate}}</div>
+                <div  class="div-table-col" style="width:145px;">{{'DELETE' |translate}}</div>
+             </div>
+           </div>
+             <div ng-repeat="alert in alertsByPage[currentPage]" style="border:1px solid #A09B9B; border-spacing: 4px;">
+	            <div class="div-table-row" >
+	            	 <div class="div-table-col"style="width:301px;">{{alert.alertName}}</div>
+	                <div class="div-table-col " style="width:201px;">{{alert.alertTypeClassifier}}</div>
+	                <div class="div-table-col " style="width:145px;"><button class="alertButton iconDetails" ng-mouseenter="showDetails(alert)" ng-mouseleave="hideDetails(alert)"></button></div>
+	                <div class="div-table-col " style="width:145px;"><button class="alertButton iconEdit" ng-click="editAlertClicked(alert)"></button></div>
+	                <div class="div-table-col " style="width:145px;"><button class="alertButton iconClose" ng-disabled="submitting" ng-click="deleteAlert(alert)"></button></div>
+	            </div>
+	            <div  class="div-table-row" ng-show="alert.configID == hoverAlertConfigID">{{alertDetails}}</div>
+			</div>
+      </div>
+       
+        <ul class="pagination pagination-sm">
+            <li ng-class="{active:0}"><a href="" ng-click="firstPage()">{{'FIRST' | translate}}</a>
+
+            </li>
+            <li ng-repeat="n in range(alertsByPage.length)"> <a href="" ng-click="setPage()" ng-bind="n+1">1</a>
+
+            </li>
+            <li><a href="" ng-click="lastPage()">{{'LAST' | translate}}</a>
+
+            </li>
+        </ul>
+        
+    </div>
+    
+			            <div name="subscribe" class="well well-sm" style="width: 1005px;">
+					    	<form method="POST" ng-submit="addAlertSubscription(subscriptionTypes.ID)" class="alert-type-form alert-type-form-message-count form-inline ng-pristine ng-valid ng-scope" style="display: block;">
+							    <div class="well well-sm">
+							    <h4 style="float: left;"> Subscribe for this stream</h4>
+							 		<span class="threshold-type" > 
+								        	<select required id="selectbox1"  ng-model="subscriptionTypes.ID" class="form-control ng-pristine ng-untouched ng-valid" style="padding-left :5px; padding-right: 5px; height: 28px; margin-left: 10px;width: 166px;" ng-options="sub.ID as sub.type for sub in subscriptionTypes">
+											    <option value="">{{'SELECT_CONDITION' | translate}}</option>
+											</select>
+								        <button type="submit" class="btn btn-success" >{{'SUBSCRIBE'|translate}}</button>
+							    	</span>
+							    </div>
+					    	</form>
+
+					    	<div ng-Show="alertSubscription" class="alert alert-info">
+					    		<div>
+					    			<h4>New Http Subscription</h4>
+					    			<form method="POST" ng-submit="makeNewAlertSubscription(alertSubscriptionForm)" class="alert-type-form alert-type-form-message-count form-inline ng-pristine ng-valid ng-scope" style="display: block;">
+							    		<input required type="text" ng-Model="alertSubscriptionForm.URL" value="Enter the url like http://www.tcs.com/alerts" class="form-control ng-pristine ng-untouched ng-valid"  style="background-color: #5F5F5F; width: 340px;height: 27px; float: left;">
+							    		<input required type="text" ng-Model="alertSubscriptionForm.userName" value="Enter the User Name" class="form-control ng-pristine ng-untouched ng-valid"  style="background-color: #5F5F5F; width: 340px;height: 27px; ">
+							    		<button type="submit" ng-disabled="submitting" class="btn btn-success" style="height: 28px;padding-top: 3px; margin-left: 8px;" >{{'NEW_HTTP_SUBSCRIBE'|translate}}</button>
+					    			</form>
+					    		</div>
+					    		
+					    	</div>	  
+						</div>
+
+     
+   
+
+<div class="tab-pane fade in active" id="svcMsg" ng-Show="submitted" style="padding-top: 0px;">
+	<p ng-class="{'smart-green': submitSuccess, 'smart-red': !submitSuccess}">
+	<span>{{ successMsg }}</span>
+	 </p>
+</div>
+
+     
+<script type="text/ng-template" id="messageCount.html">
+<div class="well well-sm" ng-show="enableConfig">
+<div style="padding-bottom: 13px;">
+		<button class="alertButton iconCloseForm" ng-click="closeForm()" style="margin-bottom: 0px;"></button>
+</div>
+<form method="POST" name="messageForm" ng-submit="addAlertCondition(conditionTypes.ID,alertMessageCountConfigForm)" ng-show="enableConfig" class="alert-type-form alert-type-form-message-count form-inline ng-pristine ng-valid ng-scope" id="message-count" style="display: block;  padding-top: 0px;">
+    <div class="well well-sm">
+        Fire an alert whenever there are
+ 		<span class="threshold-type" >
+		<select ng-required="enableConfig" name="messageCountOperator" class="form-control ng-pristine ng-untouched ng-valid" ng-model="alertMessageCountConfigForm.messageCountOperator">
+        	<option value="more" selected="more==alertMessageCountConfigForm.messageCountOperator">More</option>
+        	<option value="less" selected="less==alertMessageCountConfigForm.messageCountOperator">Less</option>
+        </select>
+		 <span ng-show="messageForm.messageCountOperator.$error.required" style="color: red;">(* fill this field!  )</span>
+ 		</span>
+		 than
+        <input ng-required="enableConfig" name="messageCountCount" type="number" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-validate="number" ng-model="alertMessageCountConfigForm.messageCountCount" data-pluralsingular="threshold-descr" value="">
+        <span class="threshold-descr"  data-plural="messages" data-singular="message">messages
+        </span>
+        in the last
+		<input ng-required="enableConfig" name="timeStamp" type="number" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-validate="positive_number" data-pluralsingular="time-descr" ng-model="alertMessageCountConfigForm.timeStamp" value="0">
+        <span class="time-descr" data-plural="minutes" data-singular="minute">minutes</span>
+		and  then wait at least
+		<input ng-required="enableConfig" name="grace" type="number" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-pluralsingular="grace-descr" data-validate="not_negative_number" ng-model="alertMessageCountConfigForm.messageCountGrace" value="0">
+		<span class="grace-descr"  data-plural="minutes" data-singular="minute">minutes</span> until triggering <br> a new alert (grace time period).
+			While sending an alert, include the last
+		<input ng-required="enableConfig" name="backlog" type="number" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-pluralsingular="backlog-descr" data-validate="not_negative_number" ng-model="alertMessageCountConfigForm.messageCountBacklog" value="0">
+		<span class="backlog-descr" data-plural="messages" data-singular="message">messages</span> of the stream evaluated for this alert condition.
+
+		<p style="margin-top: 5px; margin-bottom: 0px;">
+		<div class="form-group">
+			<input type="text" style=" width: 157px;height: 32px;" ng-model="alertMessageCountConfigForm.alertName" class="form-control" placeholder="Alert Name" ng-required="enableConfig">
+		</div>
+    		<button type="submit" class="btn btn-success" ng-disabled="submitting" ng-Show="enableAddButton">{{'ADD_ALERT'|translate}}</button>
+			<button type="submit" class="btn btn-success" ng-disabled="submitting" ng-Show="enableEditButton">{{'EDIT_ALERT'|translate}}</button>
+		</p>
+	</div>
+</form>
+</div>
+</script>
+
+<script type="text/ng-template" id="fieldValue.html">
+<div class="well well-sm" ng-show="enableConfig">
+<div style="padding-bottom: 13px;">
+		<button class="alertButton iconCloseForm" ng-click="closeForm()" style="margin-bottom: 0px;"></button>
+</div>
+<form name="fldValForm"  ng-submit="addAlertCondition(conditionTypes.ID,alertFieldValueConfigForm)" method="POST" ng-show="enableConfig"  class="alert-type-form alert-type-form-field-value form-inline ng-pristine ng-scope ng-invalid ng-invalid-required" id="field-value" style="display: block; display: block;padding-top: 0px;">
+    <div class="well well-sm">
+        Fire an alert whenever the field
+        <span class="twitter-typeahead" style="position: relative; display: inline-block;">
+			<input type="text" class="form-control typeahead-fields tt-hint" autocomplete="off" value="" readonly="" spellcheck="false" tabindex="-1" dir="ltr" style="position: absolute; top: 4px; left: 0px; border-color: transparent; box-shadow: none; opacity: 1; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+			<input ng-required="enableConfig" ng-model="alertFieldValueConfigForm.fieldValueField" name="field" type="text" class="form-control typeahead-fields tt-input ng-pristine ng-untouched ng-invalid ng-invalid-required" autocomplete="off" value="" spellcheck="false" dir="auto" novalidate style="color: #858585; position: relative; vertical-align: top; background-color: transparent; top: 4px;">
+			<pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre>
+			<div class="tt-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;">
+				<div class="tt-dataset tt-dataset-fields"></div>
+			</div>
+		</span>
+        has a
+		<span class="threshold-type" >
+        <select ng-required="enableConfig" name="fieldValueType" class="form-control ng-pristine ng-untouched ng-valid" ng-model="alertFieldValueConfigForm.fieldValueType">
+        	<option value="mean value" selected="selected">mean value</option>
+        	<option value="minimum value">minimum value</option><option value="maximum value">maximum value</option>
+        	<option value="sum">sum</option><option value="standard deviation">standard deviation</option>
+        </select>
+		<span ng-show="fldValForm.fieldValueType.$error.required" style="color: red;">(* fill this field!  )</span>
+		</span>
+        that was
+        <span class="threshold-type">
+		<select ng-required="enableConfig" name="fieldValueThreshholdType" class="form-control ng-pristine ng-untouched ng-valid" ng-model="alertFieldValueConfigForm.fieldValueThreshholdType">
+        	<option value="higher" selected="selected">Higher</option>
+        	<option value="lower">Lower</option>
+        </select>
+		<span ng-show="fldValForm.fieldValueThreshholdType.$error.required" style="color: red;">(* fill this field!  )</span>
+	   </span>
+        than
+		<input ng-required="enableConfig" ng-model="alertFieldValueConfigForm.fieldValueThreshhold" name="fieldValueThreshhold" type="number" class="form-control validatable ng-pristine ng-untouched ng-valid" data-validate="number" value="">
+        in the last
+		<input ng-required="enableConfig" ng-model="alertFieldValueConfigForm.timeStamp" name="timeStamp" type="number" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-pluralsingular="time-descr" data-validate="positive_number" value="">
+        <span class="time-descr" data-plural="minutes" data-singular="minute" style="color:white;">minutes</span>
+		and then wait at least
+		<input ng-required="enableConfig" ng-model="alertFieldValueConfigForm.fieldValueGrace" name="fieldValueGrace" type="number" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-pluralsingular="grace-descr" data-validate="not_negative_number" value="">
+		<span class="grace-descr" data-plural="minutes" data-singular="minute" style="color:white;">minutes</span> until triggering a new alert (grace period).
+		When sending an alert, include the last
+		<input ng-required="enableConfig" ng-model="alertFieldValueConfigForm.fieldValueBacklog" name="fieldValueBacklog" type="number" class="form-control pluralsingular validatable" data-pluralsingular="backlog-descr" data-validate="not_negative_number" value="0">
+		<span class="backlog-descr" data-plural="messages" data-singular="message">messages</span> of the stream evaluated for this alert condition.
+		<p style="margin-top: 5px; margin-bottom: 0px;">
+		<div class="form-group">
+			<input type="text" style=" width: 157px;height: 32px;" ng-model="alertFieldValueConfigForm.alertName" class="form-control alert-Name-Form" placeholder="Alert Name" ng-required="enableConfig">
+		</div>
+    		<button type="submit" class="btn btn-success" ng-disabled="submitting" ng-Show="enableAddButton">{{'ADD_ALERT'|translate}}</button>
+			<button type="submit" class="btn btn-success" ng-disabled="submitting" ng-Show="enableEditButton">{{'EDIT_ALERT'|translate}}</button>
+		</p>
+    </div>
+</form>
+</div>
+</script>
+
+<script type="text/ng-template" id="fieldContent.html">
+<div class="well well-sm" ng-show="enableConfig">
+<div style="padding-bottom: 13px;">
+		<button class="alertButton iconCloseForm" ng-click="closeForm()" style="margin-bottom: 0px;"></button>
+</div>
+<form ng-submit="addAlertCondition(conditionTypes.ID,alertFieldContentConfigForm)" method="POST" ng-show="enableConfig"  class="alert-type-form alert-type-form-field-content-value form-inline ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-parse" id="field-content-value" style="display: block; display: block;padding-top: 0px;">
+    <div class="well well-sm">
+        Trigger alert when a message arrives that has the field
+        <span class="twitter-typeahead" style="position: relative; display: inline-block;">
+			<input type="text" class="form-control typeahead-fields tt-hint" autocomplete="off" value="" readonly="" spellcheck="false" tabindex="-1" dir="ltr" style="color :#858585; position: absolute; top: 4px; left: 0px; border-color: transparent; box-shadow: none; opacity: 1; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+			<input ng-required="enableConfig" ng-model="alertFieldContentConfigForm.fieldContentField" name="fieldContentField" type="text" class="form-control typeahead-fields tt-input ng-pristine ng-untouched ng-invalid ng-invalid-required" autocomplete="off" value="" spellcheck="false" dir="auto" style="position: relative; vertical-align: top; background-color: transparent; color :#858585;top: 4px;">
+			<pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre>
+			<div class="tt-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;">
+				<div class="tt-dataset tt-dataset-fields"></div>
+			</div>
+		</span>
+        set to
+        <input ng-required="enableConfig" ng-model="alertFieldContentConfigForm.fieldContentCompareToValue" name="fieldContentCompareToValue" type="text" class="form-control ng-touched ng-dirty ng-valid-parse ng-valid ng-valid-required" value="" style="background-color:#F6F7F9; color :#858585;">
+		and then wait at least
+		<input ng-required="enableConfig" ng-model="alertFieldContentConfigForm.fieldContentGrace" name="fieldContentGrace" type="number" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-pluralsingular="grace-descr" data-validate="not_negative_number" value="0">
+		<span class="grace-descr" data-plural="minutes" data-singular="minute">minutes</span> until triggering
+		a new alert(grace timr period) When sending an alert, include the last
+		<input ng-required="enableConfig" ng-model="alertFieldContentConfigForm.fieldContentBacklog" name="fieldContentBacklog" type="number" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-pluralsingular="backlog-descr" data-validate="not_negative_number" value="0">
+		<span class="backlog-descr" data-plural="messages" data-singular="message">messages</span> of the stream evaluated for this alert condition.
+		
+		<p style="margin-top: 5px; margin-bottom: 0px;">
+		<div class="form-group">
+			<input type="text" style="width: 157px;height: 32px;" ng-model="alertFieldContentConfigForm.alertName" class="form-control alert-Name-Form" placeholder="Alert Name" ng-required="enableConfig">
+		</div>
+    		<button type="submit" class="btn btn-success" ng-disabled="submitting" ng-Show="enableAddButton">{{'ADD_ALERT'|translate}}</button>
+			<button type="submit" class="btn btn-success" ng-disabled="submitting" ng-Show="enableEditButton">{{'EDIT_ALERT'|translate}}</button>
+		</p>
+
+    </div>
+</form>
+</div>
+</script>
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
