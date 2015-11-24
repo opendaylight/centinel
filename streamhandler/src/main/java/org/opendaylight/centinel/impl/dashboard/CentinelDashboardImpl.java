@@ -64,13 +64,12 @@ import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
-
 public class CentinelDashboardImpl implements DashboardruleService, AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(CentinelDashboardImpl.class);
 
-    public static final InstanceIdentifier<DashboardRecord> dashboardRecordRecordId = InstanceIdentifier.builder(
-            DashboardRecord.class).build();
+    public static final InstanceIdentifier<DashboardRecord> dashboardRecordRecordId = InstanceIdentifier
+            .builder(DashboardRecord.class).build();
 
     private DataBroker dataProvider;
     private final ExecutorService executor;
@@ -99,11 +98,9 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
     }
 
-  
     @Override
     public Future<RpcResult<SetWidgetOutput>> setWidget(SetWidgetInput input) {
 
-        // TODO Auto-generated method stub
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetWidgetOutput>> futureResult = SettableFuture.create();
         final SetWidgetOutputBuilder setWidgetOutputBuilder = new SetWidgetOutputBuilder();
@@ -113,10 +110,10 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
             if (input.getDashboardID() == null) {
                 ErrorType errorType = ErrorType.APPLICATION;
-                futureResult.set(RpcResultBuilder.<SetWidgetOutput> failed()
-                        .withError(errorType, "Dashboard cannot be empty")
+                futureResult.set(
+                        RpcResultBuilder.<SetWidgetOutput> failed().withError(errorType, "Dashboard cannot be empty")
 
-                        .build());
+                .build());
                 return futureResult;
             }
             if (input.getMode() == null) {
@@ -148,10 +145,10 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
             List<DashboardList> Listofmerge = new ArrayList<DashboardList>();
             Listofmerge.add(newitem);
             try {
-                tx.merge(LogicalDatastoreType.OPERATIONAL, dashboardRecordRecordId, new DashboardRecordBuilder()
-                        .setDashboardList(Listofmerge)
+                tx.merge(LogicalDatastoreType.OPERATIONAL, dashboardRecordRecordId,
+                        new DashboardRecordBuilder().setDashboardList(Listofmerge)
 
-                        .build(), false);
+                .build(), false);
                 tx.submit();
             } catch (Exception ex) {
                 futureResult.set(RpcResultBuilder.<SetWidgetOutput> failed()
@@ -166,11 +163,13 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
             futureResult.set(RpcResultBuilder.<SetWidgetOutput> success(setWidgetOutputBuilder.build()).build());
             if (input.getMode() == WidgetMode.Stream)
-                createCounterForStream(newitem.getWidgets().get(0).getWidgetID(), newitem.getWidgets().get(0)
-                        .getStreamID(), newitem.getWidgets().get(0).getTimeRange(), input.getMode());
+                createCounterForStream(newitem.getWidgets().get(0).getWidgetID(),
+                        newitem.getWidgets().get(0).getStreamID(), newitem.getWidgets().get(0).getTimeRange(),
+                        input.getMode());
             if (input.getMode() == WidgetMode.Alert)
-                createCounterForStream(newitem.getWidgets().get(0).getWidgetID(), newitem.getWidgets().get(0)
-                        .getAlertID(), newitem.getWidgets().get(0).getTimeRange(), input.getMode());
+                createCounterForStream(newitem.getWidgets().get(0).getWidgetID(),
+                        newitem.getWidgets().get(0).getAlertID(), newitem.getWidgets().get(0).getTimeRange(),
+                        input.getMode());
             LOG.info("Dashboard Widget created/modified:" + newitem.getWidgets().get(0).getWidgetID());
 
         } catch (Exception ex) {
@@ -179,7 +178,7 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
             futureResult.set(RpcResultBuilder.<SetWidgetOutput> failed()
                     .withError(errorType, "Exception Caught at Widget Creation:" + ex.getMessage())
 
-                    .build());
+            .build());
 
         }
 
@@ -204,7 +203,6 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
     @Override
     public Future<RpcResult<DeleteDashboardOutput>> deleteDashboard(DeleteDashboardInput input) {
-        // TODO Auto-generated method stub
 
         String dashBoardID = input.getDashboardID();
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
@@ -235,7 +233,7 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
             futureResult.set(RpcResultBuilder.<DeleteDashboardOutput> failed()
                     .withError(errorType, "Exception Caught at Dashboard read/deletion:" + readEx.getMessage())
 
-                    .build());
+            .build());
             return futureResult;
 
         }
@@ -259,7 +257,7 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
             futureResult.set(RpcResultBuilder.<DeleteDashboardOutput> failed()
                     .withError(errorType, "Exception Caught at Dashboard deletion:" + Ex.getMessage())
 
-                    .build());
+            .build());
             return futureResult;
 
         }
@@ -268,14 +266,11 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
     @Override
     public Future<RpcResult<GetDashboardOutput>> getDashboard(GetDashboardInput input) {
-        // TODO Auto-generated method stub
         return null;
     }
 
-  
     @Override
     public Future<RpcResult<SetDashboardOutput>> setDashboard(SetDashboardInput input) {
-        // TODO Auto-generated method stub
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetDashboardOutput>> futureResult = SettableFuture.create();
         final SetDashboardOutputBuilder setDashboardOutputBuilder = new SetDashboardOutputBuilder();
@@ -287,10 +282,10 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
             List<DashboardList> Listofmerge = new ArrayList<DashboardList>();
             Listofmerge.add(newitem);
 
-            tx.merge(LogicalDatastoreType.OPERATIONAL, dashboardRecordRecordId, new DashboardRecordBuilder()
-                    .setDashboardList(Listofmerge)
+            tx.merge(LogicalDatastoreType.OPERATIONAL, dashboardRecordRecordId,
+                    new DashboardRecordBuilder().setDashboardList(Listofmerge)
 
-                    .build(), true);
+            .build(), true);
             tx.submit();
 
             setDashboardOutputBuilder.setDashboardID(newitem.getDashboardID());
@@ -315,7 +310,6 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
     @Override
     public Future<RpcResult<GetWidgetMessageCountOutput>> getWidgetMessageCount(GetWidgetMessageCountInput input) {
 
-        // TODO Auto-generated method stub
         final SettableFuture<RpcResult<GetWidgetMessageCountOutput>> futureResult = SettableFuture.create();
         final GetWidgetMessageCountOutputBuilder setDashboardOutputBuilder = new GetWidgetMessageCountOutputBuilder();
         try {
@@ -326,8 +320,8 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
             setDashboardOutputBuilder.setValue(value);
 
-            futureResult.set(RpcResultBuilder.<GetWidgetMessageCountOutput> success(setDashboardOutputBuilder.build())
-                    .build());
+            futureResult.set(
+                    RpcResultBuilder.<GetWidgetMessageCountOutput> success(setDashboardOutputBuilder.build()).build());
 
         } catch (Exception e) {
             LOG.error(e.getMessage());
@@ -341,7 +335,6 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
     @Override
     public Future<RpcResult<GetWidgetHistogramOutput>> getWidgetHistogram(GetWidgetHistogramInput input) {
-        // TODO Auto-generated method stub
         StreamCounterInfoCache streamCounterInfoCache = StreamCounterInfoCache.getInstance();
         List<WidgetStreamCounterVO> listofwidgets = streamCounterInfoCache.getListofcounter();
         for (WidgetStreamCounterVO widgetStreamCounterVO : listofwidgets) {
@@ -359,8 +352,8 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
                 // set the values here
                 setWidgetHistogramOutputBuilder.setValues(value);
 
-                futureResult.set(RpcResultBuilder.<GetWidgetHistogramOutput> success(
-                        setWidgetHistogramOutputBuilder.build()).build());
+                futureResult.set(RpcResultBuilder
+                        .<GetWidgetHistogramOutput> success(setWidgetHistogramOutputBuilder.build()).build());
 
             }
         }
@@ -370,9 +363,7 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
     @Override
     public Future<RpcResult<DeleteWidgetOutput>> deleteWidget(DeleteWidgetInput input) {
-        // TODO Auto-generated method stub
-
-        // TODO Auto-generated method stub
+      
         String dashboardID = input.getDashboardID();
 
         String widgetID = input.getWidgetID();
@@ -387,8 +378,7 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
         Widgets widgettodelete = new WidgetsBuilder().setWidgetID(widgetID).build();
 
         try {
-            tx.delete(
-                    LogicalDatastoreType.OPERATIONAL,
+            tx.delete(LogicalDatastoreType.OPERATIONAL,
                     dashboardRecordRecordId.child(DashboardList.class, dashboardtodelete.getKey()).child(Widgets.class,
                             widgettodelete.getKey()));
             tx.submit();
@@ -404,7 +394,7 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
             futureResult.set(RpcResultBuilder.<DeleteWidgetOutput> failed()
                     .withError(errorType, "Exception Caught at widget deletion:" + Ex.getMessage())
 
-                    .build());
+            .build());
         }
         return futureResult;
     }

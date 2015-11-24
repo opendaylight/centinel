@@ -2,15 +2,18 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centine
 
 import org.opendaylight.centinel.impl.dashboard.CentinelDashboardImpl;
 import org.opendaylight.centinel.impl.dashboard.StreamCounterInfoCache;
+import org.opendaylight.centinel.impl.subscribe.SubscriberImpl;
+import org.opendaylight.centinel.impl.subscribe.SubscriberInfoCache;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
+import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
 import org.opendaylight.streamhandler.impl.StreamhandlerProvider;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardruleService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.SubscribeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StreamhandlerModule
-        extends
+public class StreamhandlerModule extends
         org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centinel.streamhandler.impl.rev141210.AbstractStreamhandlerModule {
     private static final Logger LOG = LoggerFactory.getLogger(StreamhandlerModule.class);
 
@@ -19,8 +22,7 @@ public class StreamhandlerModule
         super(identifier, dependencyResolver);
     }
 
-    public StreamhandlerModule(
-            org.opendaylight.controller.config.api.ModuleIdentifier identifier,
+    public StreamhandlerModule(org.opendaylight.controller.config.api.ModuleIdentifier identifier,
             org.opendaylight.controller.config.api.DependencyResolver dependencyResolver,
             org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centinel.streamhandler.impl.rev141210.StreamhandlerModule oldModule,
             java.lang.AutoCloseable oldInstance) {
@@ -34,7 +36,6 @@ public class StreamhandlerModule
 
     @Override
     public java.lang.AutoCloseable createInstance() {
-        // TODO:implement
 
         LOG.info("module StreamHandler Initiated");
 
@@ -52,10 +53,23 @@ public class StreamhandlerModule
         centinelDashboardImpl.setDataProvider(dataBrokerService);
         final BindingAwareBroker.RpcRegistration<DashboardruleService> rpcDashboardruleServiceRegistration = getRpcRegistryDependency()
                 .addRpcImplementation(DashboardruleService.class, centinelDashboardImpl);
-        /**
-         * end of CentinelDashboardImpl
-         */
+                /**
+                 * end of CentinelDashboardImpl
+                 */
+                /**
+                 * load the subscriber cache in memory initalize Impl
+                 */
+        SubscriberInfoCache subscriberInfoCache = SubscriberInfoCache.getInstance();
 
+        final SubscriberImpl subscriberImpl = new SubscriberImpl();
+        subscriberImpl.setDataProvider(dataBrokerService);
+
+        final RpcRegistration<SubscribeService> rpcSubscribeRegistration = getRpcRegistryDependency()
+                .addRpcImplementation(SubscribeService.class, subscriberImpl);
+
+        /**
+         * end of subscribe module
+         */
         LOG.info("module StreamHandler done");
 
         getBrokerDependency().registerProvider(streamhandlerProvider);
@@ -69,7 +83,8 @@ public class StreamhandlerModule
                  */
                 rpcDashboardruleServiceRegistration.close();
                 closeQuietly(rpcDashboardruleServiceRegistration);
-
+                rpcSubscribeRegistration.close();
+                closeQuietly(subscriberImpl);
                 /**
                  * close all resources for subscribe and dashboard:end
                  */
