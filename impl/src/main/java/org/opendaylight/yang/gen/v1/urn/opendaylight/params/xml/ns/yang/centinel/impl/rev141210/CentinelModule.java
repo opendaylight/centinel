@@ -46,7 +46,7 @@ public class CentinelModule extends
         CentinelProvider provider = new CentinelProvider();
         DataBroker dataBrokerService = getDataBrokerDependency();
 
-        System.out.println("dataBrokerService created:" + dataBrokerService);
+        log.info("dataBrokerService created:" + dataBrokerService);
         streamImpl.setDataProvider(dataBrokerService);
 
         alertImpl.setDataProvider(dataBrokerService);
