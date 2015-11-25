@@ -79,7 +79,7 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
     }
 
     public void setDataProvider(final DataBroker salDataProvider) {
-        System.out.println(" Entered to Data Provider");
+        LOG.info(" Entered to Data Provider");
         this.dataProvider = salDataProvider;
         LOG.info("data provider set");
     }
