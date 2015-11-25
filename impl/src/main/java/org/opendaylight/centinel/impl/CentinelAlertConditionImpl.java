@@ -393,7 +393,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetAlertMessageCountRuleOutput>> futureResult = SettableFuture.create();
-        final String configId = mockConfigId();
+        final String configId = generateConfigId();
         LOG.info("setAlertMessageCountRule: " + input);
         final SetAlertMessageCountRuleOutputBuilder setAlertMessageCountRuleOutputBuilder = new SetAlertMessageCountRuleOutputBuilder();
         setAlertMessageCountRuleOutputBuilder.setMessageCountOperator(input.getMessageCountOperator());
@@ -444,7 +444,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
         return futureResult;
     }
 
-    public String mockConfigId() {
+    public String generateConfigId() {
         final String configId = String.format("%x", (int) (Math.random() * 10000));
         return configId;
     }
@@ -457,7 +457,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             final SetAlertFieldContentRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetAlertFieldContentRuleOutput>> futureResult = SettableFuture.create();
-        final String configId = mockConfigId();
+        final String configId = generateConfigId();
         final SetAlertFieldContentRuleOutputBuilder setAlertFieldContentRuleOutputBuilder = new SetAlertFieldContentRuleOutputBuilder();
         setAlertFieldContentRuleOutputBuilder.setAlertTypeClassifier(input.getAlertTypeClassifier());
         setAlertFieldContentRuleOutputBuilder.setFieldContentBacklog(input.getFieldContentBacklog());
@@ -519,7 +519,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetAlertFieldValueRuleOutput>> futureResult = SettableFuture.create();
-        final String configId = mockConfigId();
+        final String configId = generateConfigId();
         final SetAlertFieldValueRuleOutputBuilder setAlertFieldValueRuleOutputBuilder = new SetAlertFieldValueRuleOutputBuilder();
 
         setAlertFieldValueRuleOutputBuilder.setAlertTypeClassifier(input.getAlertTypeClassifier());
@@ -586,6 +586,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
     @Override
     public Future<RpcResult<UpdateAlertMessageCountRuleOutput>> updateAlertMessageCountRule(
             final UpdateAlertMessageCountRuleInput input) {
+        boolean idMatches = false;
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<UpdateAlertMessageCountRuleOutput>> futureResult = SettableFuture.create();
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
@@ -638,15 +639,18 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                                 && operationalObject.getStreamID().equalsIgnoreCase(input.getStreamID())) {
 
                             configId = operationalObject.getConfigID();
+                            idMatches = true;
 
-                        } else if (!input.getStreamID().equals(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
                         }
+                    }
+                    if (!idMatches) {
+                        return Futures
+                                .immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                        "invalid-input",
+                                        RpcResultBuilder
+                                                .newError(ErrorType.APPLICATION, "invalid-input",
+                                                        "Invalid Stream/Rule id or The stream/Rule is not present in operational data store")));
+
                     }
 
                 }
@@ -735,6 +739,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             final UpdateAlertFieldContentRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<UpdateAlertFieldContentRuleOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
                 || input.getRuleID() == null || input.getRuleID().isEmpty() || input.getRuleID().trim().isEmpty()) {
             LOG.debug("Invalid Parameters for UpdateAlertFieldContentRule");
@@ -780,15 +785,19 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                         if (operationalObject.getRuleID().equalsIgnoreCase(input.getRuleID())
                                 && operationalObject.getStreamID().equalsIgnoreCase(input.getStreamID())) {
                             configId = operationalObject.getConfigID();
+                            idMatches = true;
 
-                        } else if (!input.getStreamID().equals(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
                         }
+                    }
+
+                    if (!idMatches) {
+                        return Futures
+                                .immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                        "invalid-input",
+                                        RpcResultBuilder
+                                                .newError(ErrorType.APPLICATION, "invalid-input",
+                                                        "Invalid Stream/Rule id or The stream/rule is not present in operational data store")));
+
                     }
 
                 }
@@ -872,6 +881,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             final UpdateAlertFieldValueRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<UpdateAlertFieldValueRuleOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
                 || input.getRuleID() == null || input.getRuleID().isEmpty() || input.getRuleID().trim().isEmpty()) {
             LOG.debug("Invalid Parameters for UpdateAlertFieldValueRule");
@@ -919,15 +929,18 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                         if (operationalObject.getRuleID().equalsIgnoreCase(input.getRuleID())
                                 && operationalObject.getStreamID().equalsIgnoreCase(input.getStreamID())) {
                             configId = operationalObject.getConfigID();
+                            idMatches = true;
 
-                        } else if (!input.getStreamID().equals(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
                         }
+                    }
+                    if (!idMatches) {
+                        return Futures
+                                .immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                        "invalid-input",
+                                        RpcResultBuilder
+                                                .newError(ErrorType.APPLICATION, "invalid-input",
+                                                        "Invalid Stream/Rule id or The stream/rule is not present in operational data store")));
+
                     }
 
                 }
@@ -1011,6 +1024,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             DeleteAlertMessageCountRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<DeleteAlertMessageCountRuleOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
                 || input.getRuleID() == null || input.getRuleID().isEmpty() || input.getRuleID().trim().isEmpty()) {
             LOG.debug("Invalid Parameters for DeleteAlertMessageCountRule");
@@ -1063,15 +1077,18 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                                 && operationalObject.getStreamID().equalsIgnoreCase(input.getStreamID())) {
 
                             configId = operationalObject.getConfigID();
+                            idMatches = true;
 
-                        } else if (!input.getStreamID().equals(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
                         }
+                    }
+                    if (!idMatches) {
+                        return Futures
+                                .immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                        "invalid-input",
+                                        RpcResultBuilder
+                                                .newError(ErrorType.APPLICATION, "invalid-input",
+                                                        "Invalid Stream/Rule id or The stream/rule is not present in operational data store")));
+
                     }
 
                 }
@@ -1154,6 +1171,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             DeleteAlertFieldContentRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<DeleteAlertFieldContentRuleOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
                 || input.getRuleID() == null || input.getRuleID().isEmpty() || input.getRuleID().trim().isEmpty()) {
             LOG.debug("Invalid Parameters for DeleteAlertFieldContentRule");
@@ -1205,15 +1223,18 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                                 && operationalObject.getStreamID().equalsIgnoreCase(input.getStreamID())) {
 
                             configId = operationalObject.getConfigID();
+                            idMatches = true;
 
-                        } else if (!input.getStreamID().equals(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
                         }
+                    }
+                    if (!idMatches) {
+                        return Futures
+                                .immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                        "invalid-input",
+                                        RpcResultBuilder
+                                                .newError(ErrorType.APPLICATION, "invalid-input",
+                                                        "Invalid Stream/Rule id or The stream/rule is not present in operational data store")));
+
                     }
 
                 }
@@ -1296,6 +1317,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             final DeleteAlertFieldValueRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<DeleteAlertFieldValueRuleOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
                 || input.getRuleID() == null || input.getRuleID().isEmpty() || input.getRuleID().trim().isEmpty()) {
             LOG.debug("Invalid Parameters for DeleteAlertFieldValueRule");
@@ -1331,15 +1353,18 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                         if (operationalObject.getRuleID().equalsIgnoreCase(input.getRuleID())
                                 && operationalObject.getStreamID().equalsIgnoreCase(input.getStreamID())) {
                             configId = operationalObject.getConfigID();
+                            idMatches = true;
 
-                        } else if (!input.getStreamID().equals(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
                         }
+                    }
+                    if (!idMatches) {
+                        return Futures
+                                .immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                        "invalid-input",
+                                        RpcResultBuilder
+                                                .newError(ErrorType.APPLICATION, "invalid-input",
+                                                        "Invalid Stream/Rule id or The stream/rule is not present in operational data store")));
+
                     }
 
                 }
@@ -1421,6 +1446,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<GetAllAlertRuleOutput>> futureResult = SettableFuture.create();
+        boolean isMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()) {
             LOG.debug("Invalid Parameters for GetAllAlertRule");
             return Futures
@@ -1458,7 +1484,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             while (iterator.hasNext()) {
                 StreamAlertMessageCountRuleList streamAlertMessageObj = iterator.next();
                 if (streamAlertMessageObj.getStreamID().equals(input.getStreamID())) {
-
+                    isMatches = true;
                     streamAlertMessageCountRuleListSortedBuilder.setStreamID(streamAlertMessageObj.getStreamID());
                     streamAlertMessageCountRuleListSortedBuilder.setMessageCountOperator(streamAlertMessageObj
                             .getMessageCountOperator());
@@ -1483,10 +1509,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                     allAlertRuleOutputBuilder
                             .setStreamAlertMessageCountRuleListSorted(streamAlertMessageCountRuleListSortedList);
 
-                } else if (!input.getStreamID().equals(streamAlertMessageObj.getStreamID())) {
-                    return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
-                            RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
-                                    "Invalid Stream id or The stream is not present in operational data store")));
                 }
             }
 
@@ -1508,6 +1530,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                 StreamAlertFieldContentRuleList streamAlertFieldContentObj = iterator.next();
 
                 if (streamAlertFieldContentObj.getStreamID().equals(input.getStreamID())) {
+                    isMatches = true;
                     streamAlertFieldContentRuleListSortedBuilder.setConfigID(streamAlertFieldContentObj.getConfigID());
                     streamAlertFieldContentRuleListSortedBuilder
                             .setTimeStamp(streamAlertFieldContentObj.getTimeStamp());
@@ -1534,10 +1557,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                     allAlertRuleOutputBuilder
                             .setStreamAlertFieldContentRuleListSorted(streamAlertFieldContentRuleListSorted);
 
-                } else if (!input.getStreamID().equals(streamAlertFieldContentObj.getStreamID())) {
-                    return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
-                            RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
-                                    "Invalid Stream id or The stream is not present in operational data store")));
                 }
             }
         } catch (InterruptedException | ExecutionException ex) {
@@ -1559,6 +1578,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             while (iterator.hasNext()) {
                 StreamAlertFieldValueRuleList streamAlertFieldValueRuleObj = iterator.next();
                 if (streamAlertFieldValueRuleObj.getStreamID().equals(input.getStreamID())) {
+                    isMatches = true;
                     streamAlertFieldValueRuleListSortedBuilder.setAlertTypeClassifier(streamAlertFieldValueRuleObj
                             .getAlertTypeClassifier());
                     streamAlertFieldValueRuleListSortedBuilder.setConfigID(streamAlertFieldValueRuleObj.getConfigID());
@@ -1588,11 +1608,12 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                                     .build());
                     allAlertRuleOutputBuilder
                             .setStreamAlertFieldValueRuleListSorted(streamAlertFieldValueRuleListSorted);
-                } else if (!input.getStreamID().equals(streamAlertFieldValueRuleObj.getStreamID())) {
-                    return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
-                            RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
-                                    "Invalid Stream id or The stream is not present in operational data store")));
                 }
+            }
+            if (!isMatches) {
+                return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
+                        RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
+                                "Invalid Stream id or The stream is not present in operational data store")));
             }
             futureResult.set(RpcResultBuilder.<GetAllAlertRuleOutput> success(allAlertRuleOutputBuilder.build())
                     .build());

@@ -303,7 +303,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
             while (it.hasNext()) {
                 StreamRuleListObj = it.next();
                 streamRuleList.add(StreamRuleListObj);
-
             }
             streamRuleList.add(StreamRuleListObj);
         }
@@ -326,6 +325,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
 
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<DeleteStreamOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()) {
             LOG.debug("STREAM ID CANNOT BE NULL");
             return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
@@ -353,19 +353,16 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
 
                     while (iterator.hasNext()) {
                         StreamList operationalObject = iterator.next();
-                        if (!input.getStreamID().equals(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
-                        } else if (operationalObject.getStreamID().equals(input.getStreamID())) {
+                        if (operationalObject.getStreamID().equals(input.getStreamID())) {
                             configId = operationalObject.getConfigID();
-
+                            idMatches = true;
                         }
                     }
-
+                    if (!idMatches) {
+                        return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                "invalid-input", RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
+                                        "Invalid Stream id or The stream is not present in operational data store")));
+                    }
                 }
             } else {
                 return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
@@ -431,6 +428,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
     public Future<RpcResult<GetStreamOutput>> getStream(GetStreamInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<GetStreamOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()) {
             LOG.debug("STREAM ID CANNOT BE NULL");
             return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
@@ -459,7 +457,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                 while (iterator.hasNext()) {
                     StreamList streamListObj = iterator.next();
                     if (streamListObj.getStreamID().equals(input.getStreamID())) {
-
+                        idMatches = true;
                         getStreamOutputBuilder.setConfigID(streamListObj.getConfigID())
                                 .setContentPack(streamListObj.getContentPack())
                                 .setDescription(streamListObj.getDescription())
@@ -479,11 +477,12 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                             }
                             getStreamOutputBuilder.setStreamRules(streamRule);
                         }
-                    } else if (!input.getStreamID().equalsIgnoreCase(streamListObj.getStreamID())) {
-                        return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                "invalid-input", RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
-                                        "Invalid Stream id or The stream is not present in operational data store")));
                     }
+                }
+                if (!idMatches) {
+                    return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
+                            RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
+                                    "Invalid Stream id or The stream is not present in operational data store")));
                 }
                 futureResult.set(RpcResultBuilder.<GetStreamOutput> success(getStreamOutputBuilder.build()).build());
             }
@@ -499,6 +498,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
     public Future<RpcResult<UpdateStreamOutput>> updateStream(final UpdateStreamInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<UpdateStreamOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()) {
             LOG.debug("STREAM ID CANNOT BE NULL");
             return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
@@ -528,15 +528,14 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                         StreamList operationalObject = iterator.next();
                         if (operationalObject.getStreamID().equals(input.getStreamID())) {
                             configId = operationalObject.getConfigID();
-
-                        } else if (!input.getStreamID().equals(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
+                            idMatches = true;
                         }
+                    }
+                    if (!idMatches) {
+
+                        return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                "invalid-input", RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
+                                        "Invalid Stream id or The stream is not present in operational data store")));
                     }
                 }
             } else {
@@ -653,6 +652,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
     public Future<RpcResult<PauseStreamOutput>> pauseStream(final PauseStreamInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<PauseStreamOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()) {
             LOG.debug("STREAM ID CANNOT BE NULL");
             return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
@@ -688,15 +688,15 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                         if (operationalObject.getStreamID().equals(input.getStreamID())) {
                             configId = operationalObject.getConfigID();
                             opStreamId = operationalObject.getStreamID();
+                            idMatches = true;
 
-                        } else if (!input.getStreamID().equalsIgnoreCase(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
                         }
+                    }
+                    if (!idMatches) {
+                        return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                "invalid-input", RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
+                                        "Invalid Stream id or The stream is not present in operational data store")));
+
                     }
 
                 }
@@ -786,6 +786,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
     public Future<RpcResult<ResumeStreamOutput>> resumeStream(final ResumeStreamInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<ResumeStreamOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()) {
             LOG.debug("STREAM ID CANNOT BE NULL");
             return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
@@ -821,15 +822,15 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                         if (operationalObject.getStreamID().equals(input.getStreamID())) {
                             configId = operationalObject.getConfigID();
                             OpStrmId = operationalObject.getStreamID();
+                            idMatches = true;
 
-                        } else if (!input.getStreamID().equalsIgnoreCase(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
                         }
+                    }
+                    if (!idMatches) {
+                        return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                "invalid-input", RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
+                                        "Invalid Stream id or The stream is not present in operational data store")));
+
                     }
                 }
             } else {
@@ -915,6 +916,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
     public Future<RpcResult<SetRuleOutput>> setRule(final SetRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetRuleOutput>> futureResult = SettableFuture.create();
+        boolean idMatches = false;
         final String streamRuleId = String.format("%x", (int) (Math.random() * 10000));
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
                 || input.getField() == null || input.getField().isEmpty() || input.getField().trim().isEmpty()
@@ -956,15 +958,14 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                         if (operationalObject.getStreamID().equals(input.getStreamID())) {
                             configIdOp = operationalObject.getConfigID();
                             streamIdOp = operationalObject.getStreamID();
+                            idMatches = true;
 
-                        } else if (!input.getStreamID().equals(operationalObject.getStreamID())) {
-                            return Futures
-                                    .immediateFailedCheckedFuture(new TransactionCommitFailedException(
-                                            "invalid-input",
-                                            RpcResultBuilder
-                                                    .newError(ErrorType.APPLICATION, "invalid-input",
-                                                            "Invalid Stream id or The stream is not present in operational data store")));
                         }
+                    }
+                    if (!idMatches) {
+                        return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException(
+                                "invalid-input", RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
+                                        "Invalid Stream id or The stream is not present in operational data store")));
                     }
 
                 }
