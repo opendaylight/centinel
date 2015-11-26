@@ -171,9 +171,9 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             streamAlertMessageCountRuleListBuilder.setMessageCountCount(obj.getMessageCountCount());
 
         if (input.getMessageCountGrace() != null)
-            streamAlertMessageCountRuleListBuilder.setMessageCountCount(input.getMessageCountGrace());
+            streamAlertMessageCountRuleListBuilder.setMessageCountGrace(input.getMessageCountGrace());
         else
-            streamAlertMessageCountRuleListBuilder.setMessageCountCount(obj.getMessageCountGrace());
+            streamAlertMessageCountRuleListBuilder.setMessageCountGrace(obj.getMessageCountGrace());
 
         if (input.getMessageCountOperator() != null)
             streamAlertMessageCountRuleListBuilder.setMessageCountOperator(input.getMessageCountOperator());
@@ -203,8 +203,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
         if (input.getStreamID() != null)
             streamAlertMessageCountRuleListBuilder.setStreamID(input.getStreamID());
 
-        streamAlertMessageCountRuleListBuilder.setConfigID(obj.getConfigID());
-
         if (input.getAlertName() != null)
             streamAlertMessageCountRuleListBuilder.setAlertName(input.getAlertName());
         else
@@ -214,6 +212,8 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             streamAlertMessageCountRuleListBuilder.setNodeType(input.getNodeType());
         else
             streamAlertMessageCountRuleListBuilder.setNodeType(obj.getNodeType());
+
+        streamAlertMessageCountRuleListBuilder.setConfigID(obj.getConfigID());
 
         return streamAlertMessageCountRuleListBuilder.build();
     }
