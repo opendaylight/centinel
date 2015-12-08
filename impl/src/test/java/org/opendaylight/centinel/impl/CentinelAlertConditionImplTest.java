@@ -38,12 +38,12 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrul
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.DeleteAlertFieldContentRuleInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.DeleteAlertFieldContentRuleOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.DeleteAlertFieldValueRuleInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.DeleteAlertFieldValueRuleInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.DeleteAlertFieldValueRuleOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.DeleteAlertMessageCountRuleInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.DeleteAlertMessageCountRuleOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.GetAllAlertRuleInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.GetAllAlertRuleOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.GetAllAlertRuleOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.SetAlertFieldContentRuleInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.SetAlertFieldContentRuleOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.SetAlertFieldValueRuleInput;
@@ -129,8 +129,8 @@ public class CentinelAlertConditionImplTest {
                 .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
 
         Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
 
         Future<RpcResult<SetAlertMessageCountRuleOutput>> futureOutput = myMock.setAlertMessageCountRule(input);
 
@@ -170,8 +170,8 @@ public class CentinelAlertConditionImplTest {
                 .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
 
         Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
@@ -207,8 +207,8 @@ public class CentinelAlertConditionImplTest {
                 .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
 
         Optional<AlertFieldContentRuleRecord> expected = Optional.of(alertFieldContentRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
@@ -251,8 +251,8 @@ public class CentinelAlertConditionImplTest {
                 .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
 
         Optional<AlertFieldContentRuleRecord> expected = Optional.of(alertFieldContentRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
@@ -293,8 +293,8 @@ public class CentinelAlertConditionImplTest {
                 .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
 
         Optional<AlertFieldValueRuleRecord> expected = Optional.of(alertFieldValueRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
@@ -337,8 +337,8 @@ public class CentinelAlertConditionImplTest {
                 .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
 
         Optional<AlertFieldValueRuleRecord> expected = Optional.of(alertFieldValueRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
@@ -375,24 +375,23 @@ public class CentinelAlertConditionImplTest {
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
         List<StreamAlertMessageCountRuleList> streamAlertMessageCountRuleList = new ArrayList<StreamAlertMessageCountRuleList>();
-        streamAlertMessageCountRuleList.add(myMock.buildUpdateAlertMessageCountRuleRecord(input,
-                streamAlertMessageCountRuleListObj));
+        streamAlertMessageCountRuleList
+                .add(myMock.buildUpdateAlertMessageCountRuleRecord(input, streamAlertMessageCountRuleListObj));
 
         AlertMessageCountRuleRecord alertMessageCountRuleRecord = new AlertMessageCountRuleRecordBuilder()
                 .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
 
         Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
 
         doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
                 MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
 
-        doNothing().when(mockReadWriteTx).merge(
-                LogicalDatastoreType.CONFIGURATION,
-                MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId,
-                new AlertMessageCountRuleRecordBuilder().setStreamAlertMessageCountRuleList(
-                        streamAlertMessageCountRuleList).build(), false);
+        doNothing().when(mockReadWriteTx).merge(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId, new AlertMessageCountRuleRecordBuilder()
+                        .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build(),
+                false);
         doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
         Future<RpcResult<UpdateAlertMessageCountRuleOutput>> futureOutput = myMock.updateAlertMessageCountRule(input);
 
@@ -416,8 +415,8 @@ public class CentinelAlertConditionImplTest {
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
         List<StreamAlertMessageCountRuleList> streamAlertMessageCountRuleList = new ArrayList<StreamAlertMessageCountRuleList>();
-        streamAlertMessageCountRuleList.add(myMock.buildUpdateAlertMessageCountRuleRecord(input,
-                streamAlertMessageCountRuleListObj));
+        streamAlertMessageCountRuleList
+                .add(myMock.buildUpdateAlertMessageCountRuleRecord(input, streamAlertMessageCountRuleListObj));
 
         AlertMessageCountRuleRecord alertMessageCountRuleRecord = new AlertMessageCountRuleRecordBuilder()
                 .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
@@ -441,6 +440,96 @@ public class CentinelAlertConditionImplTest {
     }
 
     /**
+     * Test method for UpdateAlertMessageCountRule when IdDoesNotMatch
+     */
+
+    @Test
+    public void testUpdateAlertMessageCountRuleIfIdDoesNotMatch() {
+        // build dummy input
+        UpdateAlertMessageCountRuleInput input = centinelAlertConditionImplFactory.updateInputForAlertMessageCount();
+        StreamAlertMessageCountRuleList streamAlertMessageCountRuleListObj = centinelAlertConditionImplFactory
+                .mockStreamAlertMessageCountRuleObjectBuilder();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertMessageCountRuleList> streamAlertMessageCountRuleList = new ArrayList<StreamAlertMessageCountRuleList>();
+        streamAlertMessageCountRuleList.add(streamAlertMessageCountRuleListObj);
+
+        AlertMessageCountRuleRecord alertMessageCountRuleRecord = new AlertMessageCountRuleRecordBuilder()
+                .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
+
+        Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+
+        doNothing().when(mockReadWriteTx).merge(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId, new AlertMessageCountRuleRecordBuilder()
+                        .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build(),
+                false);
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<UpdateAlertMessageCountRuleOutput>> futureOutput = myMock.updateAlertMessageCountRule(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * Test method for UpdateAlertMessageCountRule when Record not present in
+     * Operational DataStore
+     */
+
+    @Test
+    public void testUpdateAlertMessageCountRuleIfNoRecordInOperationalDataStore() {
+        // build dummy input
+        UpdateAlertMessageCountRuleInput input = centinelAlertConditionImplFactory.updateInputForAlertMessageCount();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertMessageCountRuleList> streamAlertMessageCountRuleList = new ArrayList<StreamAlertMessageCountRuleList>();
+
+        AlertMessageCountRuleRecord alertMessageCountRuleRecordConf = new AlertMessageCountRuleRecordBuilder()
+                .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
+
+        Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecordConf);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(Optional.absent())).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.OPERATIONAL, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+
+        doNothing().when(mockReadWriteTx).merge(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId, new AlertMessageCountRuleRecordBuilder()
+                        .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build(),
+                false);
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<UpdateAlertMessageCountRuleOutput>> futureOutput = myMock.updateAlertMessageCountRule(input);
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
      * Test method to update AlertFieldValueRule on valid inputs
      */
 
@@ -458,24 +547,23 @@ public class CentinelAlertConditionImplTest {
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
         List<StreamAlertFieldValueRuleList> streamAlertFieldValueRuleList = new ArrayList<StreamAlertFieldValueRuleList>();
-        streamAlertFieldValueRuleList.add(myMock.buildUpdateAlertFieldValueRuleRecord(input,
-                streamAlertFieldValueRuleListObj));
+        streamAlertFieldValueRuleList
+                .add(myMock.buildUpdateAlertFieldValueRuleRecord(input, streamAlertFieldValueRuleListObj));
 
         AlertFieldValueRuleRecord alertFieldValueRuleRecord = new AlertFieldValueRuleRecordBuilder()
                 .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
 
         Optional<AlertFieldValueRuleRecord> expected = Optional.of(alertFieldValueRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
 
         doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
                 MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
 
-        doNothing().when(mockReadWriteTx).merge(
-                LogicalDatastoreType.CONFIGURATION,
-                MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId,
-                new AlertFieldValueRuleRecordBuilder().setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList)
-                        .build(), false);
+        doNothing().when(mockReadWriteTx).merge(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId, new AlertFieldValueRuleRecordBuilder()
+                        .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build(),
+                false);
         doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
         Future<RpcResult<UpdateAlertFieldValueRuleOutput>> futureOutput = myMock.updateAlertFieldValueRule(input);
 
@@ -499,15 +587,15 @@ public class CentinelAlertConditionImplTest {
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
         List<StreamAlertFieldValueRuleList> streamAlertFieldValueRuleList = new ArrayList<StreamAlertFieldValueRuleList>();
-        streamAlertFieldValueRuleList.add(myMock.buildUpdateAlertFieldValueRuleRecord(input,
-                streamAlertFieldValueRuleListObj));
+        streamAlertFieldValueRuleList
+                .add(myMock.buildUpdateAlertFieldValueRuleRecord(input, streamAlertFieldValueRuleListObj));
 
         AlertFieldValueRuleRecord alertFieldValueRuleRecord = new AlertFieldValueRuleRecordBuilder()
                 .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
 
         Optional<AlertFieldValueRuleRecord> expected = Optional.of(alertFieldValueRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
@@ -518,6 +606,98 @@ public class CentinelAlertConditionImplTest {
             futureOutput.get().getErrors();
 
         } catch (ExecutionException | InterruptedException e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * Test method for UpdateAlertFieldValueRule when IdDoesNotMatch
+     */
+
+    @Test
+    public void testUpdateAlertFieldValueRuleIfIdDoesNotMatch() {
+        // build dummy input
+        UpdateAlertFieldValueRuleInput input = centinelAlertConditionImplFactory
+                .updateInputWithValidValuesForAlertFieldValueRule();
+        StreamAlertFieldValueRuleList streamAlertFieldValueRuleListObj = centinelAlertConditionImplFactory
+                .mockStreamFieldValueRuleObjectBuilder();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertFieldValueRuleList> streamAlertFieldValueRuleList = new ArrayList<StreamAlertFieldValueRuleList>();
+        streamAlertFieldValueRuleList.add(streamAlertFieldValueRuleListObj);
+
+        AlertFieldValueRuleRecord alertFieldValueRuleRecord = new AlertFieldValueRuleRecordBuilder()
+                .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
+
+        Optional<AlertFieldValueRuleRecord> expected = Optional.of(alertFieldValueRuleRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+
+        doNothing().when(mockReadWriteTx).merge(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId, new AlertFieldValueRuleRecordBuilder()
+                        .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build(),
+                false);
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<UpdateAlertFieldValueRuleOutput>> futureOutput = myMock.updateAlertFieldValueRule(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * Test method for UpdateAlertFieldValueRule when Record not present in
+     * Operational DataStore
+     */
+
+    @Test
+    public void testUpdateAlertFieldValueRuleIfNoRecordInOperationalDataStore() {
+        // build dummy input
+        UpdateAlertFieldValueRuleInput input = centinelAlertConditionImplFactory
+                .updateInputWithValidValuesForAlertFieldValueRule();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertFieldValueRuleList> streamAlertFieldValueRuleList = new ArrayList<StreamAlertFieldValueRuleList>();
+
+        AlertFieldValueRuleRecord alertFieldValueRuleRecordConf = new AlertFieldValueRuleRecordBuilder()
+                .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
+
+        Optional<AlertFieldValueRuleRecord> expected = Optional.of(alertFieldValueRuleRecordConf);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(Optional.absent())).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.OPERATIONAL, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+
+        doNothing().when(mockReadWriteTx).merge(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId, new AlertFieldValueRuleRecordBuilder()
+                        .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build(),
+                false);
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<UpdateAlertFieldValueRuleOutput>> futureOutput = myMock.updateAlertFieldValueRule(input);
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
             caught = true;
         }
         assertTrue(caught);
@@ -540,24 +720,23 @@ public class CentinelAlertConditionImplTest {
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
         List<StreamAlertFieldContentRuleList> streamAlertFieldContentRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
-        streamAlertFieldContentRuleList.add(myMock.buildUpdateAlertFieldContentRuleRecord(input,
-                streamAlertFieldContentRuleListObj));
+        streamAlertFieldContentRuleList
+                .add(myMock.buildUpdateAlertFieldContentRuleRecord(input, streamAlertFieldContentRuleListObj));
 
         AlertFieldContentRuleRecord alertFieldContentRuleRecord = new AlertFieldContentRuleRecordBuilder()
                 .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
 
         Optional<AlertFieldContentRuleRecord> expected = Optional.of(alertFieldContentRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
 
         doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
                 MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
 
-        doNothing().when(mockReadWriteTx).merge(
-                LogicalDatastoreType.CONFIGURATION,
-                MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId,
-                new AlertFieldContentRuleRecordBuilder().setStreamAlertFieldContentRuleList(
-                        streamAlertFieldContentRuleList).build(), false);
+        doNothing().when(mockReadWriteTx).merge(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId, new AlertFieldContentRuleRecordBuilder()
+                        .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build(),
+                false);
         doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
         Future<RpcResult<UpdateAlertFieldContentRuleOutput>> futureOutput = myMock.updateAlertFieldContentRule(input);
 
@@ -581,15 +760,15 @@ public class CentinelAlertConditionImplTest {
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
         List<StreamAlertFieldContentRuleList> streamAlertFieldContentRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
-        streamAlertFieldContentRuleList.add(myMock.buildUpdateAlertFieldContentRuleRecord(input,
-                streamAlertFieldContentRuleListObj));
+        streamAlertFieldContentRuleList
+                .add(myMock.buildUpdateAlertFieldContentRuleRecord(input, streamAlertFieldContentRuleListObj));
 
         AlertFieldContentRuleRecord alertFieldContentRuleRecord = new AlertFieldContentRuleRecordBuilder()
                 .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
 
         Optional<AlertFieldContentRuleRecord> expected = Optional.of(alertFieldContentRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
@@ -604,6 +783,98 @@ public class CentinelAlertConditionImplTest {
         }
         assertTrue(caught);
 
+    }
+
+    /**
+     * Test method for UpdateAlertFieldContentRule when IdDoesNotMatch
+     */
+
+    @Test
+    public void testUpdateAlertFieldContentRuleIfIdDoesNotMatch() {
+        // build dummy input
+        UpdateAlertFieldContentRuleInput input = centinelAlertConditionImplFactory
+                .updateInputWithValidValuesForAlertFieldContentRule();
+        StreamAlertFieldContentRuleList streamAlertFieldContentRuleListObj = centinelAlertConditionImplFactory
+                .mockStreamAlertFieldContentRuleObjectBuilder();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertFieldContentRuleList> streamAlertFieldContentRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
+        streamAlertFieldContentRuleList.add(streamAlertFieldContentRuleListObj);
+
+        AlertFieldContentRuleRecord alertFieldContentRuleRecord = new AlertFieldContentRuleRecordBuilder()
+                .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
+
+        Optional<AlertFieldContentRuleRecord> expected = Optional.of(alertFieldContentRuleRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+
+        doNothing().when(mockReadWriteTx).merge(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId, new AlertFieldContentRuleRecordBuilder()
+                        .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build(),
+                false);
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<UpdateAlertFieldContentRuleOutput>> futureOutput = myMock.updateAlertFieldContentRule(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * Test method for UpdateAlertFieldContentRule when Record not present in
+     * Operational DataStore
+     */
+
+    @Test
+    public void testUpdateAlertFieldContentRuleIfNoRecordInOperationalDataStore() {
+        // build dummy input
+        UpdateAlertFieldContentRuleInput input = centinelAlertConditionImplFactory
+                .updateInputWithValidValuesForAlertFieldContentRule();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertFieldContentRuleList> streamAlertFieldContentRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
+
+        AlertFieldContentRuleRecord alertFieldContentRuleRecordConf = new AlertFieldContentRuleRecordBuilder()
+                .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
+
+        Optional<AlertFieldContentRuleRecord> expected = Optional.of(alertFieldContentRuleRecordConf);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(Optional.absent())).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.OPERATIONAL, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+
+        doNothing().when(mockReadWriteTx).merge(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId, new AlertFieldContentRuleRecordBuilder()
+                        .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build(),
+                false);
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<UpdateAlertFieldContentRuleOutput>> futureOutput = myMock.updateAlertFieldContentRule(input);
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
+            caught = true;
+        }
+        assertTrue(caught);
     }
 
     /**
@@ -643,6 +914,63 @@ public class CentinelAlertConditionImplTest {
     }
 
     /**
+     * Test method to GetAllAlertRule on valid inputs
+     */
+
+    @Test
+    public void testGetAllAlertRuleFailureDueToValidInput() {
+        // build dummy input
+        GetAllAlertRuleInput input = centinelAlertConditionImplFactory.getAllRulesInputWithValidValues();
+        StreamAlertMessageCountRuleList streamAlertMessageCountRuleListObj = centinelAlertConditionImplFactory
+                .mockStreamAlertMessageCountRuleObjectBuilder();
+        StreamAlertFieldContentRuleList streamAlertFieldContentRuleListObj = centinelAlertConditionImplFactory
+                .mockStreamAlertFieldContentRuleObjectBuilder();
+        StreamAlertFieldValueRuleList streamAlertFieldValueRuleListObj = centinelAlertConditionImplFactory
+                .mockStreamFieldValueRuleObjectBuilder();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertMessageCountRuleList> streamAlertMessageCountRuleList = new ArrayList<StreamAlertMessageCountRuleList>();
+        streamAlertMessageCountRuleList.add(streamAlertMessageCountRuleListObj);
+
+        List<StreamAlertFieldContentRuleList> streamAlertFieldContentRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
+        streamAlertFieldContentRuleList.add(streamAlertFieldContentRuleListObj);
+
+        List<StreamAlertFieldValueRuleList> streamAlertFieldValueRuleList = new ArrayList<StreamAlertFieldValueRuleList>();
+        streamAlertFieldValueRuleList.add(streamAlertFieldValueRuleListObj);
+
+        AlertMessageCountRuleRecord alertMessageCountRuleRecord = new AlertMessageCountRuleRecordBuilder()
+                .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
+
+        AlertFieldContentRuleRecord alertFieldContentRuleRecord = new AlertFieldContentRuleRecordBuilder()
+                .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
+
+        AlertFieldValueRuleRecord alertFieldValueRuleRecord = new AlertFieldValueRuleRecordBuilder()
+                .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
+
+        Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecord);
+
+        Optional<AlertFieldContentRuleRecord> expected1 = Optional.of(alertFieldContentRuleRecord);
+
+        Optional<AlertFieldValueRuleRecord> expected2 = Optional.of(alertFieldValueRuleRecord);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected1)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(expected2)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+
+        Future<RpcResult<GetAllAlertRuleOutput>> futureOutput = myMock.getAllAlertRule(input);
+
+        assertNotNull(futureOutput);
+
+    }
+
+    /**
      * Test method to deleteAlertMessageCountRule on valid inputs
      */
 
@@ -664,16 +992,15 @@ public class CentinelAlertConditionImplTest {
 
         Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecord);
 
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
         doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
                 MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
-        doNothing().when(mockReadWriteTx).delete(
-                LogicalDatastoreType.CONFIGURATION,
-                MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId.child(
-                        StreamAlertMessageCountRuleList.class, streamAlertMessageCountRuleListObj.getKey()));
+        doNothing().when(mockReadWriteTx).delete(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId
+                        .child(StreamAlertMessageCountRuleList.class, streamAlertMessageCountRuleListObj.getKey()));
         doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
 
         Future<RpcResult<DeleteAlertMessageCountRuleOutput>> futureOutput = myMock.deleteAlertMessageCountRule(input);
@@ -696,8 +1023,8 @@ public class CentinelAlertConditionImplTest {
         AlertMessageCountRuleRecord alertMessageCountRuleRecord = new AlertMessageCountRuleRecordBuilder()
                 .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
         Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
@@ -707,6 +1034,90 @@ public class CentinelAlertConditionImplTest {
             futureOutput.get().getErrors();
 
         } catch (ExecutionException | InterruptedException e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * Test method for DeleteAlertMessageCountRule when IdDoesNotMatch
+     */
+
+    @Test
+    public void testDeleteAlertMessageCountRuleIfIdDoesNotMatch() {
+        // build dummy input
+        DeleteAlertMessageCountRuleInput input = centinelAlertConditionImplFactory
+                .deleteInputWithInvalidValuesForAlertMessageCount();
+        StreamAlertMessageCountRuleList streamAlertMessageCountRuleListObj = centinelAlertConditionImplFactory
+                .mockStreamAlertMessageCountRuleObjectBuilder();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertMessageCountRuleList> streamAlertMessageCountRuleList = new ArrayList<StreamAlertMessageCountRuleList>();
+        streamAlertMessageCountRuleList.add(streamAlertMessageCountRuleListObj);
+
+        AlertMessageCountRuleRecord alertMessageCountRuleRecord = new AlertMessageCountRuleRecordBuilder()
+                .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
+
+        Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<DeleteAlertMessageCountRuleOutput>> futureOutput = myMock.deleteAlertMessageCountRule(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * Test method for DeleteAlertMessageCountRule when Record not present in
+     * Operational DataStore
+     */
+
+    @Test
+    public void testDeleteAlertMessageCountIfNoRecordInOperationalDataStore() {
+        // build dummy input
+        DeleteAlertMessageCountRuleInput input = centinelAlertConditionImplFactory
+                .deleteInputValidValuesForAlertMessageCount();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertMessageCountRuleList> streamAlertMessageCountRuleList = new ArrayList<StreamAlertMessageCountRuleList>();
+
+        AlertMessageCountRuleRecord alertMessageCountRuleRecordConf = new AlertMessageCountRuleRecordBuilder()
+                .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
+
+        Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecordConf);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(Optional.absent())).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.OPERATIONAL, MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
+
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<DeleteAlertMessageCountRuleOutput>> futureOutput = myMock.deleteAlertMessageCountRule(input);
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
             caught = true;
         }
         assertTrue(caught);
@@ -734,14 +1145,13 @@ public class CentinelAlertConditionImplTest {
 
         Optional<AlertFieldValueRuleRecord> expected = Optional.of(alertFieldValueRuleRecord);
 
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
         doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
                 MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
-        doNothing().when(mockReadWriteTx).delete(
-                LogicalDatastoreType.CONFIGURATION,
+        doNothing().when(mockReadWriteTx).delete(LogicalDatastoreType.CONFIGURATION,
                 MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId.child(StreamAlertFieldValueRuleList.class,
                         streamAlertFieldValueRuleListObj.getKey()));
         doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
@@ -766,8 +1176,8 @@ public class CentinelAlertConditionImplTest {
         AlertFieldValueRuleRecord alertFieldValueRuleRecord = new AlertFieldValueRuleRecordBuilder()
                 .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
         Optional<AlertFieldValueRuleRecord> expected = Optional.of(alertFieldValueRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
@@ -777,6 +1187,92 @@ public class CentinelAlertConditionImplTest {
             futureOutput.get().getErrors();
 
         } catch (ExecutionException | InterruptedException e) {
+
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * Test method for DeleteAlertFieldValueRule when IdDoesNotMatch
+     */
+
+    @Test
+    public void testDeleteAlertFieldValueRuleIfIdDoesNotMatch() {
+        // build dummy input
+        DeleteAlertFieldValueRuleInput input = centinelAlertConditionImplFactory
+                .deleteInputValidValuesForAlertFieldValue();
+        StreamAlertFieldValueRuleList streamAlertFieldValueRuleListObj = centinelAlertConditionImplFactory
+                .mockStreamFieldValueRuleObjectBuilder();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertFieldValueRuleList> streamAlertFieldValueRuleList = new ArrayList<StreamAlertFieldValueRuleList>();
+        streamAlertFieldValueRuleList.add(streamAlertFieldValueRuleListObj);
+
+        AlertFieldValueRuleRecord alertFieldValueRuleRecord = new AlertFieldValueRuleRecordBuilder()
+                .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
+
+        Optional<AlertFieldValueRuleRecord> expected = Optional.of(alertFieldValueRuleRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<DeleteAlertFieldValueRuleOutput>> futureOutput = myMock.deleteAlertFieldValueRule(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
+
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * Test method for DeleteAlertFieldValueRule when Record not present in
+     * Operational DataStore
+     */
+
+    @Test
+    public void testDeleteAlertFieldValueRuleIfNoRecordInOperationalDataStore() {
+        // build dummy input
+        DeleteAlertFieldValueRuleInput input = centinelAlertConditionImplFactory
+                .deleteInputValidValuesForAlertFieldValue();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertFieldValueRuleList> streamAlertFieldValueRuleList = new ArrayList<StreamAlertFieldValueRuleList>();
+
+        AlertFieldValueRuleRecord alertFieldValueRuleRecordConf = new AlertFieldValueRuleRecordBuilder()
+                .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
+
+        Optional<AlertFieldValueRuleRecord> expected = Optional.of(alertFieldValueRuleRecordConf);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(Optional.absent())).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.OPERATIONAL, MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
+
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<DeleteAlertFieldValueRuleOutput>> futureOutput = myMock.deleteAlertFieldValueRule(input);
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
             caught = true;
         }
         assertTrue(caught);
@@ -804,16 +1300,15 @@ public class CentinelAlertConditionImplTest {
 
         Optional<AlertFieldContentRuleRecord> expected = Optional.of(alertFieldContentRuleRecord);
 
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
         doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
                 MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
-        doNothing().when(mockReadWriteTx).delete(
-                LogicalDatastoreType.CONFIGURATION,
-                MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId.child(
-                        StreamAlertFieldContentRuleList.class, streamAlertFieldContentRuleListObj.getKey()));
+        doNothing().when(mockReadWriteTx).delete(LogicalDatastoreType.CONFIGURATION,
+                MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId
+                        .child(StreamAlertFieldContentRuleList.class, streamAlertFieldContentRuleListObj.getKey()));
         doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
 
         Future<RpcResult<DeleteAlertFieldContentRuleOutput>> futureOutput = myMock.deleteAlertFieldContentRule(input);
@@ -836,8 +1331,8 @@ public class CentinelAlertConditionImplTest {
         AlertFieldContentRuleRecord alertFieldContentRuleRecord = new AlertFieldContentRuleRecordBuilder()
                 .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
         Optional<AlertFieldContentRuleRecord> expected = Optional.of(alertFieldContentRuleRecord);
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
-                LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
 
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
@@ -848,9 +1343,94 @@ public class CentinelAlertConditionImplTest {
 
         } catch (ExecutionException | InterruptedException e) {
             caught = true;
+
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * Test method for DeleteAlertFieldValueRule when IdDoesNotMatch
+     */
+
+    @Test
+    public void testDeleteAlertFieldContentRuleIfIdDoesNotMatch() {
+        // build dummy input
+        DeleteAlertFieldContentRuleInput input = centinelAlertConditionImplFactory
+                .deleteInputValidValuesForAlertFieldContent();
+        StreamAlertFieldContentRuleList streamAlertFieldContentRuleListObj = centinelAlertConditionImplFactory
+                .mockStreamAlertFieldContentRuleObjectBuilder();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertFieldContentRuleList> streamAlertFieldContentRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
+        streamAlertFieldContentRuleList.add(streamAlertFieldContentRuleListObj);
+
+        AlertFieldContentRuleRecord alertFieldContentRuleRecord = new AlertFieldContentRuleRecordBuilder()
+                .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
+
+        Optional<AlertFieldContentRuleRecord> expected = Optional.of(alertFieldContentRuleRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<DeleteAlertFieldContentRuleOutput>> futureOutput = myMock.deleteAlertFieldContentRule(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * Test method for DeleteAlertFieldValueRule when Record not present in
+     * Operational DataStore
+     */
+
+    @Test
+    public void testDeleteAlertFieldContentRuleIfNoRecordInOperationalDataStore() {
+        // build dummy input
+        DeleteAlertFieldContentRuleInput input = centinelAlertConditionImplFactory
+                .deleteInputValidValuesForAlertFieldContent();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamAlertFieldContentRuleList> streamAlertFieldContentRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
+
+        AlertFieldContentRuleRecord alertFieldContentRuleRecordConf = new AlertFieldContentRuleRecordBuilder()
+                .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
+
+        Optional<AlertFieldContentRuleRecord> expected = Optional.of(alertFieldContentRuleRecordConf);
+
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.CONFIGURATION, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+
+        doReturn(Futures.immediateCheckedFuture(Optional.absent())).when(mockReadWriteTx)
+                .read(LogicalDatastoreType.OPERATIONAL, MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
+
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<DeleteAlertFieldContentRuleOutput>> futureOutput = myMock.deleteAlertFieldContentRule(input);
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (Exception e) {
+
+            caught = true;
         }
         assertTrue(caught);
     }
 
 }
-
