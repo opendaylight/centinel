@@ -146,8 +146,12 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                 .setNodeType(input.getNodeType()).setRuleID(input.getRuleID())
                 .setRuleTypeClassifier(input.getRuleTypeClassifier()).setStreamRules(streamRuleList)
                 .setConfigID(configId).setTimeStamp(input.getTimeStamp()).setTitle(input.getTitle())
-                .setStreamID(String.format("%x", (int) (Math.random() * 10000))).setDisabled("true").build();
+                .setStreamID(generateRandomId()).setDisabled("true").build();
 
+    }
+
+    public String generateRandomId() {
+        return String.format("%x", (int) (Math.random() * 10000));
     }
 
     /**
@@ -609,7 +613,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
 
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetStreamOutput>> futureResult = SettableFuture.create();
-        final String configId = String.format("%x", (int) (Math.random() * 10000));
+        final String configId = generateRandomId();
         if (input.getDescription() == null || input.getTitle() == null || input.getDescription().isEmpty()
                 || input.getTitle().isEmpty() || input.getDescription().trim().isEmpty()
                 || input.getTitle().trim().isEmpty()) {
@@ -917,7 +921,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetRuleOutput>> futureResult = SettableFuture.create();
         boolean idMatches = false;
-        final String streamRuleId = String.format("%x", (int) (Math.random() * 10000));
+        final String streamRuleId = generateRandomId();
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
                 || input.getField() == null || input.getField().isEmpty() || input.getField().trim().isEmpty()
                 || input.getValue() == null || input.getValue().isEmpty() || input.getValue().trim().isEmpty()) {
