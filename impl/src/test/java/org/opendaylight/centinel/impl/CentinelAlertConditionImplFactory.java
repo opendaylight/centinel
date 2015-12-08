@@ -16,6 +16,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrul
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.DeleteAlertMessageCountRuleInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.GetAllAlertRuleInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.GetAllAlertRuleInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.GetAllAlertRuleOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.GetAllAlertRuleOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.SetAlertFieldContentRuleInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.SetAlertFieldContentRuleInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.SetAlertFieldContentRuleOutput;
@@ -322,7 +324,7 @@ public class CentinelAlertConditionImplFactory {
         streamAlertMessageCountRuleListObj.setMessageCountOperator("hello");
         streamAlertMessageCountRuleListObj.setNodeType("more");
         streamAlertMessageCountRuleListObj.setRuleID("E99uI");
-        streamAlertMessageCountRuleListObj.setStreamID("stream1");
+        streamAlertMessageCountRuleListObj.setStreamID("stream4");
         streamAlertMessageCountRuleListObj.setAlertTypeClassifier(AlertType.AlertMessageCount);
         streamAlertMessageCountRuleListObj.setMessageCountBacklog((short) 18);
         streamAlertMessageCountRuleListObj.setMessageCountCount((short) 15);
@@ -341,7 +343,7 @@ public class CentinelAlertConditionImplFactory {
         streamAlertFieldValueRuleListObj.setConfigID("1000");
         streamAlertFieldValueRuleListObj.setNodeType("more");
         streamAlertFieldValueRuleListObj.setRuleID("E99uI");
-        streamAlertFieldValueRuleListObj.setStreamID("stream1");
+        streamAlertFieldValueRuleListObj.setStreamID("str");
         streamAlertFieldValueRuleListObj.setAlertTypeClassifier(AlertType.AlertMessageCount);
         streamAlertFieldValueRuleListObj.setRuleTypeClassifier(RuleType.BaseAlert);
         streamAlertFieldValueRuleListObj.setTimeStamp((short) 4);
@@ -442,8 +444,18 @@ public class CentinelAlertConditionImplFactory {
 
     public GetAllAlertRuleInput getAllRulesInputWithValidValues() {
         GetAllAlertRuleInputBuilder getallAlertRuleInputBuilder = new GetAllAlertRuleInputBuilder();
-        getallAlertRuleInputBuilder.setStreamID("stream4");
+        getallAlertRuleInputBuilder.setStreamID("stream1");
         return getallAlertRuleInputBuilder.build();
+    }
+
+    /**
+     * Mocking params of GetAllRule
+     */
+
+    public GetAllAlertRuleOutput mockGetAllAlertRuleOutputObjectBuilder() {
+        GetAllAlertRuleOutputBuilder getAllAlertRuleOutputBuilderObj = new GetAllAlertRuleOutputBuilder();
+
+        return getAllAlertRuleOutputBuilderObj.build();
     }
 
     /**
@@ -508,11 +520,10 @@ public class CentinelAlertConditionImplFactory {
 
     public DeleteAlertFieldContentRuleInput deleteInputValidValuesForAlertFieldContent() {
         DeleteAlertFieldContentRuleInputBuilder deleteAlertFieldContentRuleInputBuilder = new DeleteAlertFieldContentRuleInputBuilder();
-        deleteAlertFieldContentRuleInputBuilder.setStreamID("stream1");
+        deleteAlertFieldContentRuleInputBuilder.setStreamID("strea1");
         deleteAlertFieldContentRuleInputBuilder.setRuleID("E99uI");
         deleteAlertFieldContentRuleInputBuilder.setConfigID("1000");
         return deleteAlertFieldContentRuleInputBuilder.build();
     }
 
 }
-
