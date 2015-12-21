@@ -15,41 +15,41 @@ Author: Abhishek Sharma <abhishek.abhi@tcs.com>
 <features name="odl-centinel-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0">
-  <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/${mdsal.model.version}/xml/features</repository>
-  <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
-  <repository>mvn:org.opendaylight.netconf/features-restconf/${restconf.version}/xml/features</repository>
-  <repository>mvn:org.opendaylight.dlux/features-dlux/${feature.dlux.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/{{VERSION}}/xml/features</repository>
+  <repository>mvn:org.opendaylight.controller/features-mdsal/{{VERSION}}/xml/features</repository>
+  <repository>mvn:org.opendaylight.netconf/features-restconf/{{VERSION}}/xml/features</repository>
+  <repository>mvn:org.opendaylight.dlux/features-dlux/{{VERSION}}/xml/features</repository>
   <feature name='odl-centinel-api' version='${project.version}' description='OpenDaylight :: centinel :: api'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
-    <bundle>mvn:org.opendaylight.centinel/centinel-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.centinel/centinel-api/{{VERSION}}</bundle>
   </feature>
   <feature name='odl-centinel-core' version='${project.version}' description='OpenDaylight :: centinel'>
     <feature version="${restconf.version}">odl-restconf-all</feature>
     <feature version='${mdsal.version}'>odl-mdsal-all</feature>
-    <bundle>mvn:org.opendaylight.centinel/centinel-api/${project.version}</bundle>
-    <bundle>mvn:org.opendaylight.centinel/centinel-impl/${project.version}</bundle>
-    <bundle>mvn:com.sun.jersey/jersey-client/${jersey.version}</bundle>
-    <bundle>mvn:com.sun.jersey/jersey-core/${jersey.version}</bundle>
+    <bundle>mvn:org.opendaylight.centinel/centinel-api/{{VERSION}}</bundle>
+    <bundle>mvn:org.opendaylight.centinel/centinel-impl/{{VERSION}}</bundle>
+    <bundle>mvn:com.sun.jersey/jersey-client/{{VERSION}}</bundle>
+    <bundle>mvn:com.sun.jersey/jersey-core/{{VERSION}}</bundle>
     <bundle>mvn:org.glassfish/javax.json/1.0.4</bundle>
-    <bundle>wrap:mvn:org.json/json/${org.json.version}</bundle>
-    <configfile finalname="${configfile.directory}/centinel.xml">mvn:org.opendaylight.centinel/centinel-impl/${project.version}/xml/config</configfile>
+    <bundle>wrap:mvn:org.json/json/{{VERSION}}</bundle>
+    <configfile finalname="${configfile.directory}/centinel.xml">mvn:org.opendaylight.centinel/centinel-impl/{{VERSION}}/xml/config</configfile>
   </feature>
 
   <feature name='odl-centinel-laas' version='${project.version}' description='OpenDaylight :: centinel :: laas'>
-    <bundle>mvn:org.opendaylight.centinel/centinel-laas/${project.version}</bundle>
-    <bundle>mvn:com.sun.jersey/jersey-client/${jersey.version}</bundle>
-    <bundle>mvn:com.sun.jersey/jersey-core/${jersey.version}</bundle>
+    <bundle>mvn:org.opendaylight.centinel/centinel-laas/{{VERSION}}</bundle>
+    <bundle>mvn:com.sun.jersey/jersey-client/{{VERSION}}</bundle>
+    <bundle>mvn:com.sun.jersey/jersey-core/{{VERSION}}</bundle>
     <bundle>mvn:org.glassfish/javax.json/1.0.4</bundle>
-    <bundle>wrap:mvn:org.json/json/${org.json.version}</bundle>
+    <bundle>wrap:mvn:org.json/json/{{VERSION}}</bundle>
     <feature version="${project.version}">odl-centinel-core</feature>
-    <configfile finalname="${configfile.directory}/centinellaas.xml">mvn:org.opendaylight.centinel/centinel-laas/${project.version}/xml/config</configfile>
+    <configfile finalname="${configfile.directory}/centinellaas.xml">mvn:org.opendaylight.centinel/centinel-laas/{{VERSION}}/xml/config</configfile>
     
   </feature>
 
   <feature name='odl-centinel-streamhandler' version='${project.version}' description='OpenDaylight :: centinel :: stream-handler'>
-    <bundle>mvn:org.opendaylight.centinel/centinel-streamhandler/${project.version}</bundle>
-    <bundle>mvn:com.sun.jersey/jersey-client/${jersey.version}</bundle>
-    <bundle>mvn:com.sun.jersey/jersey-core/${jersey.version}</bundle>
+    <bundle>mvn:org.opendaylight.centinel/centinel-streamhandler/{{VERSION}}</bundle>
+    <bundle>mvn:com.sun.jersey/jersey-client/{{VERSION}}</bundle>
+    <bundle>mvn:com.sun.jersey/jersey-core/{{VERSION}}</bundle>
     <bundle>mvn:org.glassfish/javax.json/1.0.4</bundle>
     <bundle>wrap:mvn:org.apache.flume/flume-ng-sdk/1.6.0</bundle>
     <bundle>wrap:mvn:org.apache.avro/avro/1.7.4</bundle>
@@ -62,12 +62,12 @@ Author: Abhishek Sharma <abhishek.abhi@tcs.com>
     <bundle>wrap:mvn:org.slf4j/slf4j-api/1.6.1</bundle> 
     <bundle>wrap:mvn:org.slf4j/slf4j-log4j12/1.6.1</bundle> 
     
-    <bundle>mvn:org.codehaus.jettison/jettison/${jettison.version}</bundle> 
+    <bundle>mvn:org.codehaus.jettison/jettison/{{VERSION}}</bundle>
     <bundle>mvn:log4j/log4j/1.2.17</bundle> 
-    <bundle>wrap:mvn:org.json/json/${org.json.version}</bundle>
+    <bundle>wrap:mvn:org.json/json/{{VERSION}}</bundle>
     <feature version="${project.version}">odl-centinel-core</feature>
     
-  <configfile finalname="${configfile.directory}/centinelstream.xml">mvn:org.opendaylight.centinel/centinel-streamhandler/${project.version}/xml/config</configfile>
+  <configfile finalname="${configfile.directory}/centinelstream.xml">mvn:org.opendaylight.centinel/centinel-streamhandler/{{VERSION}}/xml/config</configfile>
     
   </feature>
  
@@ -77,7 +77,7 @@ Author: Abhishek Sharma <abhishek.abhi@tcs.com>
     <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
     <feature>http</feature>
     <feature>webconsole</feature>
-    <bundle>mvn:org.opendaylight.centinel/centinelUI-bundle/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.centinel/centinelUI-bundle/{{VERSION}}</bundle>
   </feature>
 
 
