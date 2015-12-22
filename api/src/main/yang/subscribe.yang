@@ -58,7 +58,6 @@ module subscribe {
  	grouping subscribe {
 	
         
-          key "subscribeID";
           leaf subscribeID {
 	             type string;
 	         }
@@ -91,6 +90,7 @@ module subscribe {
      
 	container subscription{
 	 	list subscriptions{
+			key "subscribeID";
 	 		uses subscribe;
 	 	}
 	 }
