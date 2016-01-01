@@ -35,41 +35,15 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </modules>
 
     <properties>
-
-
-        <!-- Build Plugin Versions -->
-        <maven.helper.version>1.8</maven.helper.version>
-        <maven.exec.version>1.3.2</maven.exec.version>
-        <karaf.maven.version>3.0.1</karaf.maven.version>
-        <maven.compiler.version>3.1</maven.compiler.version>
-        <maven.dependency.version>2.8</maven.dependency.version>
-        <maven.info.reports.version>2.7</maven.info.reports.version>
-        <maven.jar.version>2.4</maven.jar.version>
-        <maven.javadoc.version>2.9.1</maven.javadoc.version>
-        <maven.shade.version>2.1</maven.shade.version>
-        <maven.site.version>3.3</maven.site.version>
-        <maven.source.version>2.2.1</maven.source.version>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <nexusproxy>http://nexus.opendaylight.org/content</nexusproxy>
-        <centinel.version>0.1.0-SNAPSHOT</centinel.version>
-        <build.helper.version>1.8</build.helper.version>
 
         <jmxGeneratorPath>src/main/yang-gen-config</jmxGeneratorPath>
         <salGeneratorPath>src/main/yang-gen-sal</salGeneratorPath>
-
-        <controller.distribution.version>0.3.0-SNAPSHOT</controller.distribution.version>
-        <features.test.version>1.6.0-SNAPSHOT</features.test.version>
-        <karaf.distro.empty.version>1.6.0-SNAPSHOT</karaf.distro.empty.version>
-        <dlux.version>0.3.0-SNAPSHOT</dlux.version>
 
         <config.version>0.4.0-SNAPSHOT</config.version>
         <mdsal.version>1.3.0-SNAPSHOT</mdsal.version>
         <yangtools.version>0.8.0-SNAPSHOT</yangtools.version>
         <yangtools.binding.version>0.8.0-SNAPSHOT</yangtools.binding.version>
-
-        <branding.version>1.2.0-SNAPSHOT</branding.version>
-        <karaf.resources.version>1.6.0-SNAPSHOT</karaf.resources.version>
     </properties>
 
     <dependencyManagement>
@@ -172,7 +146,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>${build.helper.version}</version>
                     <executions>
                         <execution>
                             <id>add-source</id>
