@@ -20,6 +20,13 @@
 "SUBSCRIBE_SERVICE":"operations/subscribe:subscribe-user",
 "SET_STREAM_RULE_SERVICE":"operations/stream:set-rule",
 "GET_ALL_STREAM_RULE_SERVICE":"operations/stream:get-stream",
-"":"",
+"SET_DASHBOARD_SERVICE":"operations/dashboardrule:set-dashboard",
+"DELETE_DASHBOARD_SERVICE":"operations/dashboardrule:delete-dashboard",
+"GET_ALL_DASHBOARD_SERVICE":"operational/dashboardrule:dashboardRecord/",
+"SET_WIDGET_SERVICE":"operations/dashboardrule:set-widget",
+"GET_WIDGET_MESSAGE_COUNT":"operations/dashboardrule:get-widget-message-count",
+"GET_WIDGET_HISTOGRAM":"operations/dashboardrule:get-widget-histogram",
+"DELETE_WIDGET_SERVICE":"operations/dashboardrule:delete-widget",
+"GET_EVENTS_SERVICE":"operations/streamhandler:query-sql-relative-api",
 "":""
 }

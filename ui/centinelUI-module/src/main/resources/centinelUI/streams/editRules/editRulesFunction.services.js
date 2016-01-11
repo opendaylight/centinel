@@ -16,10 +16,8 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			getAllRules: function(postJson) {
 					 var defer = $q.defer();
 					 var ruleArr =[];
-					 centinelUISvc.getSeviceApi().then(function(data) {
-							
-							return Restangular.all(data.GET_ALL_STREAM_RULE_SERVICE).post(('streamsRules',postJson)).then(function(res) {
-				    			 _.each(res.data.output.streamRules, function(rule) {
+						 centinelUISvc.postService('GET_ALL_STREAM_RULE_SERVICE',postJson).then(function(res) {
+				    			 _.each(res.streamRules, function(rule) {
 				    					  ruleArr.push(rule);
 								});
 					    		  defer.resolve(ruleArr);
@@ -27,18 +25,15 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 					    	    console.log("Error with status code", response.status);
 					    	    defer.reject(response);
 					      });
-							 defer.resolve(ruleArr);
-						});
 						return defer.promise;
-				},
-					
+				}
+	/*				
 					createStreamRule: function(setStreamRuleJson) {
 						requestStatus = '';
 						var dummy = '';
 						 var defer = $q.defer();
 						 var stream ='';
-						 centinelUISvc.getSeviceApi().then(function(data) {
-
+							 centinelUISvc.postService('SET_STREAM_RULE_SERVICE',setStreamRuleJson)
 								return Restangular.all(data.SET_STREAM_RULE_SERVICE).post(('streamRule',setStreamRuleJson)).then(function(res) {
 									stream = res.data.output;
 						    		  defer.resolve(stream);
@@ -48,9 +43,8 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 						    	    defer.reject(response);
 						      });
 
-						});
 						return defer.promise;
-					}
+					}*/
 		}
 		
 	}]);

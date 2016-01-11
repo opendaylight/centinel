@@ -10,19 +10,105 @@
  */
  
  
+ /** line chart css */
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+ 
+ 
  /** streaming data template css */
+
+ .autocomplete-holder {
+    position: relative;
+}
+
+.autocomplete-dropdown {
+    border-color: #ececec;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    width: 250px;
+    padding: 6px;
+    cursor: pointer;
+    z-index: 9999;
+    position: absolute;
+    /*top: 32px;
+    left: 0px;
+    */
+    margin-top: -6px;
+    background-color: #5F5F5F;
+}
+
+.autocomplete-searching {
+    color: #acacac;
+    font-size: 14px;
+}
+
+.autocomplete-description {
+    font-size: 14px;
+}
+
+.autocomplete-row {
+    padding: 5px;
+    color: #E8D9D9;
+    margin-bottom: 4px;
+
+}
+
+.autocomplete-selected-row, .autocomplete-row:hover {
+    background-color: orange;
+    color: #ffffff;
+}
+
+.autocomplete-image-holder {
+    padding-top: 2px;
+    float: left;
+    height: 34px;
+    width: 34px;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.autocomplete-image {
+    height: 34px;
+    width: 34px;
+    border-radius: 50%;
+    border-color: #ececec;
+    border-style: solid;
+    border-width: 1px;
+}
+ 
+ 
+ 
+ /** streaming data template css
+ 
+*/
 
 .field-Select-container {
 	border:2px solid #ccc;
-	 width:960px; 
-	 height: 60px; 
+	 width:962px; 
+	 height: 160px; 
 	 overflow-y: scroll; 
 	 }
 	 
 .checkbox-grid li {
     display: block;
     float: left;
-    width: 25%;
+    width: 33.3%;
 }
 
 
@@ -94,6 +180,20 @@
 		    zoom: 1;
 		    *display: inline;
 
+		}
+		
+		button.iconStop {
+			opacity: 1;
+		    width: 24px;
+		    float : right;
+		    background: transparent url('/src/app/centinelUI/assets/images/icon-stop.png') no-repeat center top;
+		}
+		
+		button.iconRun {
+			opacity: 1;
+		    width: 24px;
+		    float : right;
+		    background: transparent url('/src/app/centinelUI/assets/images/icon-run.png') no-repeat center top;
 		}
 		
 		button.iconCloseForm {
@@ -305,7 +405,6 @@
 		
 		.fade.in {
 		    opacity: 1;
-		    padding-top: 30px;
 		}
 		
 		.tab-content > .active {
@@ -409,3 +508,74 @@
 		.grace-descr .backlog-descr{
 			color : white;
 		}
+		
+		/**
+		 * dashboard related css here
+		 */
+
+td{
+  padding: 7px;
+}
+label{
+	color: white;
+	font-weight: normal;
+}
+
+.hyperlink {
+	color: white !important;
+}
+.chart {
+   background: #eee;
+    padding: 3px;
+}
+
+.chart rect {
+  width: 0;
+  transition: all 1s ease-out;
+  -moz-transition: all 1s ease-out;
+  -webkit-transition: all 1s ease-out;
+}
+
+.chart rect {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: right;
+  padding: 3px;
+  margin: 5px;
+  color: white;
+  box-shadow: 2px 2px 2px #666;
+}
+
+        .axis path, .axis line
+        {
+            fill: none;
+            stroke: #777;
+            shape-rendering: crispEdges;
+        }
+        
+        .axis text
+        {
+            font-family: 'Arial';
+            font-size: 13px;
+        }
+        .tick
+        {
+            stroke-dasharray: 1, 2;
+        }
+        .bar
+        {
+            fill: FireBrick;
+        }
+  rect {
+   -moz-transition: all 0.3s;
+   -o-transition: all 0.3s;
+   -webkit-transition: all 0.8s;
+   transition: all 0.8s;
+}
+  svg {
+   -moz-transition: all 0.3s;
+   -o-transition: all 0.3s;
+   -webkit-transition: all 0.8s;
+   transition: all 0.8s;
+}
+  

@@ -10,7 +10,7 @@
 
 define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 
-	centinelUIApp.register.controller('centinelUIStreamCtrl',['$scope','$state','$filter','$timeout','$translate','filteredListService','streamServiceFactory',function($scope,$state,$filter,$timeout,$translate,filteredListService,streamServiceFactory){
+	centinelUIApp.register.controller('centinelUIStreamCtrl',['$scope','$state','$filter','$timeout','$translate','filteredListService','streamServiceFactory','centinelUISvc',function($scope,$state,$filter,$timeout,$translate,filteredListService,streamServiceFactory,centinelUISvc){
 		
 		$scope.submitted = false;
 		$scope.enableCreateStreamForm=false;
@@ -27,11 +27,10 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		$scope.NumberOfResults ='';
 		$scope.subscriptionTypeSelected='';
 		$scope.searchText ='';
-		
 		$scope.makeAllStreamCall = function() {
-			streamServiceFactory.getAllStreams().then(function(res) {
+			centinelUISvc.getService("GET_ALL_STREAM_SERVICE").then(function(res) {
 		    	if(res != '' && res!=undefined && res !=null )
-		    		$scope.streamList = res;
+		    		$scope.streamList = res.streamRecord.streamList;
 		    	else
 		    		$scope.streamList = [];
 		    		
@@ -95,15 +94,14 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 				
 		};
 		
-		$scope.moreActionValues = [{"actionId":"Start" , "actionName" : "Start Stream"},
-		                           {"actionId":"Delete" , "actionName" : "Delete Stream"},
-		                           {"actionId":"Edit" , "actionName" : "Edit Stream"},
-		                           {"actionId":"Pause" , "actionName" : "Pause Stream"}
+		$scope.moreActionValues = [{"actionId":"Start" , "actionName" : "Start Rule"},
+		                           {"actionId":"Delete" , "actionName" : "Delete Rule"},
+		                           {"actionId":"Edit" , "actionName" : "Edit Rule"},
+		                           {"actionId":"Pause" , "actionName" : "Pause Rule"}
 		                           ];
 		
 	     $scope.subscriptionTypes = [
-			                         {'ID': 'http' ,'type':'Http Subscription'},
-			                         {'ID': 'snmp' ,'type':'Snmp Subscription'}
+			                         {'ID': 'http' ,'type':'Http Subscription'}
 			                      ];
 	     
 	     $scope.streamSubscriptionForm = {
@@ -117,8 +115,13 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			$scope.reset();
 			if(action == "Start")
 				$scope.resumeStream(stream);
-			if(action == "Delete")
-				$scope.deleteStream(stream);
+			if(action == "Delete"){
+			    if (confirm("Are you sure, you want to delete this stream!") == true) {
+			    	$scope.deleteStream(stream);
+			    } else {
+			        return;
+			    }
+			}
 			if(action == "Edit")
 				$scope.enableEditStream(stream);
 			if(action == "Pause")
@@ -146,13 +149,13 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			$scope.submitting = true;
 			if(enableCreateButton){
 					var createStreamJson = "{\"input\": {\"description\":\""+streamForm.description+"\",\"title\":\""+streamForm.title+"\",\"streamRules\": []}}";
-					streamServiceFactory.createStream(createStreamJson).then(function(createStreamRes) {
+					centinelUISvc.postService("SET_STREAM_SERVICE",createStreamJson).then(function(createStreamRes) {
 						var configIDForThis = createStreamRes.configID;
 						$timeout(function(){
 							 var newStreamList = [];
-							 streamServiceFactory.getAllStreams().then(function(res) {
-							    	if(res != '' && res!=undefined && res !=null )
-							    		newStreamList = res;
+							 centinelUISvc.getService("GET_ALL_STREAM_SERVICE").then(function(res) {
+							    	if(res.streamRecord.streamList != '' && res.streamRecord.streamList!=undefined && res.streamRecord.streamList !=null )
+							    		newStreamList = res.streamRecord.streamList;
 							    		
 								 if(_.where(newStreamList, {"configID": configIDForThis}).length>0 ){
 									 $scope.streamList =[];
@@ -198,12 +201,12 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			$scope.submitting = true;
 			var editStreamJson = "{\"input\": {\"description\":\""+streamForm.description+"\",\"streamID\":\""+streamForm.streamID+"\",\"configID\":\""+streamForm.configID+"\",\"title\":\""+streamForm.title+"\"}}";
 			var streamIDForThis = streamForm.streamID;
-			streamServiceFactory.updateStream(editStreamJson).then(function(updateStream) {
+			centinelUISvc.postService("UPDATE_STREAM_SERVICE",editStreamJson).then(function(updateStream) {
 				$timeout(function(){
-					 streamServiceFactory.getAllStreams().then(function(res) {
+					centinelUISvc.getService("GET_ALL_STREAM_SERVICE").then(function(res) {
 						 var newStreamList = [];
-					    	if(res != '' && res!=undefined && res !=null )
-					    		newStreamList = res
+					    	if(res.streamRecord.streamList != '' && res.streamRecord.streamList!=undefined && res.streamRecord.streamList !=null )
+					    		newStreamList = res.streamRecord.streamList;
 					
 					    if(_.where(newStreamList, {"streamID": streamIDForThis}).length == 1){
 							$scope.streamList =[];
@@ -223,16 +226,16 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 						}
 					    	$scope.submitting = false;
 					    	 $scope.search();
+								
+						        if($scope.streamList.length<5)
+							       	 $translate('NO_OF_RESULTS', { firstPageResults: $scope.streamList.length, total: $scope.streamList.length }).then(function (translations) {
+							       		$scope.NumberOfResults =  translations;
+							    	 });
+						        else
+						        	$translate('NO_OF_RESULTS', { firstPageResults: $scope.pageSize, total: $scope.streamList.length }).then(function (translations) {
+							       		$scope.NumberOfResults =  translations;
+							    	 });
 					});
-					
-			        if($scope.streamList.length<5)
-				       	 $translate('NO_OF_RESULTS', { firstPageResults: $scope.streamList.length, total: $scope.streamList.length }).then(function (translations) {
-				       		$scope.NumberOfResults =  translations;
-				    	 });
-			        else
-			        	$translate('NO_OF_RESULTS', { firstPageResults: $scope.pageSize, total: $scope.streamList.length }).then(function (translations) {
-				       		$scope.NumberOfResults =  translations;
-				    	 });
 						
 				}, 5000);
 
@@ -252,12 +255,12 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			var streamForm = filteredListService.searchItem($scope.streamList, streamFormObj.streamID,"streamID");
 			var deleteStreamJson = "{\"input\": {\"streamID\":\""+streamForm.streamID+"\"}}";
 			var streamIDForThis = streamForm.streamID;
-			streamServiceFactory.deleteStream(deleteStreamJson).then(function(deleteStreamRes) {
+			centinelUISvc.postService("DELETE_STREAM_SERVICE",deleteStreamJson).then(function(deleteStreamRes) {
 				$timeout(function(){
-					 streamServiceFactory.getAllStreams().then(function(res) {
+					centinelUISvc.getService("GET_ALL_STREAM_SERVICE").then(function(res) {
 						 var newStreamList = [];
-					    	if(res != '' && res!=undefined && res !=null )
-					    		newStreamList = res
+					    	if(res.streamRecord.streamList != '' && res.streamRecord.streamList!=undefined && res.streamRecord.streamList !=null )
+					    		newStreamList = res.streamRecord.streamList;
 					
 					    if(_.where(newStreamList, {"streamID": streamIDForThis}).length == 0){
 							$scope.streamList =[];
@@ -276,16 +279,16 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 						}	
 					    	$scope.submitting = false;
 					    	 $scope.search();
+								
+						        if($scope.streamList.length<5)
+							       	 $translate('NO_OF_RESULTS', { firstPageResults: $scope.streamList.length, total: $scope.streamList.length }).then(function (translations) {
+							       		$scope.NumberOfResults =  translations;
+							    	 });
+						        else
+						        	$translate('NO_OF_RESULTS', { firstPageResults: $scope.pageSize, total: $scope.streamList.length }).then(function (translations) {
+							       		$scope.NumberOfResults =  translations;
+							    	 });
 					});
-					
-			        if($scope.streamList.length<5)
-				       	 $translate('NO_OF_RESULTS', { firstPageResults: $scope.streamList.length, total: $scope.streamList.length }).then(function (translations) {
-				       		$scope.NumberOfResults =  translations;
-				    	 });
-			        else
-			        	$translate('NO_OF_RESULTS', { firstPageResults: $scope.pageSize, total: $scope.streamList.length }).then(function (translations) {
-				       		$scope.NumberOfResults =  translations;
-				    	 });
 						
 				}, 5000);
 	     	},function(response) {
@@ -303,11 +306,23 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			$scope.submitting = true;
 			var streamForm = filteredListService.searchItem($scope.streamList, streamFormObj.streamID,"streamID");
 			var resumeStreamJson = "{\"input\": {\"streamID\":\""+streamForm.streamID+"\"}}";
-			streamServiceFactory.resumeStream(resumeStreamJson).then(function(res) {
-		       	 $translate('STREAM_ADD_EDIT_DELETE_SUCCESS', { crud: 'resumed' }).then(function (translations) {
-		    		 $scope.successMsg =  translations;
-		    	 });
-					$scope.submitSuccess =true;
+			centinelUISvc.postService("START_STREAM_SERVICE",resumeStreamJson).then(function(res) {
+				if(res!=null && res!=undefined && res!=""){
+					var matchedStream = _.find($scope.streamList, function(stream) { return stream.streamID === streamForm.streamID })
+					if (matchedStream) {
+						matchedStream.disabled = res.disabled;
+					}
+					$translate('STREAM_ADD_EDIT_DELETE_SUCCESS', { crud: 'resumed' }).then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+						$scope.resumed = true;
+						$scope.submitSuccess =true;
+				}else{
+					$translate('STREAM_ADD_EDIT_DELETE_SUCCESS', { crud: 'resumed' }).then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+						$scope.submitSuccess =false;
+				}
 					$scope.submitted = true;
 					$scope.submitting = false;
 			},function(response) {
@@ -326,11 +341,23 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			$scope.submitting = true;
 			var streamForm = filteredListService.searchItem($scope.streamList, streamFormObj.streamID,"streamID");
 			var pauseStreamJson = "{\"input\": {\"streamID\":\""+streamForm.streamID+"\"}}";
-			streamServiceFactory.pauseStream(pauseStreamJson).then(function(res) {
-		       	 $translate('STREAM_ADD_EDIT_DELETE_SUCCESS', { crud: 'paused' }).then(function (translations) {
-		    		 $scope.successMsg =  translations;
-		    	 });
+			centinelUISvc.postService("PAUSE_STREAM_SERVICE",pauseStreamJson).then(function(res) {
+				if(res!=null && res!=undefined && res!=""){
+					var matchedStream = _.find($scope.streamList, function(stream) { return stream.streamID === streamForm.streamID })
+					if (matchedStream) {
+						matchedStream.disabled = res.disabled;
+					}
+					$translate('STREAM_ADD_EDIT_DELETE_SUCCESS', { crud: 'paused' }).then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
 					$scope.submitSuccess =true;
+				}else{
+					$translate('STREAM_ADD_EDIT_DELETE_SUCCESS', { crud: 'not paused' }).then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+					$scope.resumed = false
+					$scope.submitSuccess =false;
+				}
 					$scope.submitting = false;
 					$scope.submitted = true;
 			},function(response) {
@@ -347,7 +374,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		
 		$scope.getStream = function(streamForm) {  // to be called when edit rule is called
 			var getStreamJson = "{\"input\": {\"streamID\":\""+streamForm.streamID+"\"}}";
-			streamServiceFactory.getStream(getStreamJson).then(function(res) {
+			centinelUISvc.postService("GET_STREAM_SERVICE",getStreamJson).then(function(res) {
 				$translate('GET_STREAM_SUCCESS', { crud: 'Got' }).then(function (translations) {
 		    		 $scope.successMsg =  translations;
 		    	 });
@@ -383,12 +410,20 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		$scope.makeNewStreamSubscription = function(formObj) {
 			$scope.submitting=true;
 			var subscribeSvcJson = "{\"input\":{\"userName\":\""+formObj.userName+"\",\"mode\":\""+formObj.mode+"\",\"URL\":\""+formObj.URL+"\"}}";
-			streamServiceFactory.makeStreamSubscription(subscribeSvcJson).then(function(res) {
+			centinelUISvc.postService("SUBSCRIBE_SERVICE",subscribeSvcJson).then(function(res) {
+				if(res!=null && res!=undefined && res!=""){
 		       	 $translate('STREAM_SUBSCRIBE_ADD_SUCCESS', { crud: 'Subscribed' }).then(function (translations) {
 		    		 $scope.successMsg =  translations;
 		    	 });
 		       	$scope.closeStreamSubscriptionForm();
 				$scope.submitSuccess =true;
+				}else{
+			       	 $translate('STREAM_SUBSCRIBE_ADD_SUCCESS', { crud: 'Not Subscribed' }).then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+			       	$scope.closeStreamSubscriptionForm();
+					$scope.submitSuccess =false;
+				}
 				$scope.submitting=false;
 				$scope.submitted = true;
 			},function(response) {
@@ -464,6 +499,10 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		        }
 		        return ret;
 		    };
+		    
+			  $scope.refresh = function(){
+				  $state.transitionTo('main.centinelUI.stream');
+			  };
 		
 		
 	}]);
