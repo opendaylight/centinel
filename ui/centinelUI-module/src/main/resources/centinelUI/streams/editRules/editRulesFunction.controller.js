@@ -10,7 +10,7 @@
 
 define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 
-	centinelUIApp.register.controller('editRulesFunCtrl', ['$scope','$stateParams','$filter','$timeout','$translate','filteredListService','streamRuleSvcFactory', function ($scope,$stateParams,$filter,$timeout,$translate,filteredListService,streamRuleSvcFactory) {
+	centinelUIApp.register.controller('editRulesFunCtrl', ['$scope','$stateParams','$filter','$timeout','$translate','filteredListService','streamRuleSvcFactory','centinelUISvc', function ($scope,$stateParams,$filter,$timeout,$translate,filteredListService,streamRuleSvcFactory,centinelUISvc) {
 		$scope.successMsg ='';
 		$scope.submitSuccess = false;
 		$scope.submitted = false;
@@ -26,7 +26,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		        	"streamID": "",
 		            "field": "",
 		            "type": "Match Exactly",
-		            "inverted": true,
+		            "inverted": false,
 		            "value": ""
 		        
 		};
@@ -36,7 +36,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		        	"streamID": "",
 		            "field": "",
 		            "type": "Match Exactly",
-		            "inverted": true,
+		            "inverted": false,
 		            "value": ""
 		        
 		};
@@ -55,7 +55,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		$scope.addStreamRule = function(ruleForm , type){
 	    	$scope.submitting=true;
 			var setStreamRuleJson = "{\"input\": {\"streamID\":\""+$scope.streamForThisRule+"\",\"field\":\""+ruleForm.field+"\",\"type\":\""+ type.value+"\",\"inverted\":\""+ ruleForm.inverted+"\",\"value\":\""+ ruleForm.value+"\"}}";
-			streamRuleSvcFactory.createStreamRule(setStreamRuleJson).then(function(createStreamRuleRes) {
+			centinelUISvc.postService('SET_STREAM_RULE_SERVICE',setStreamRuleJson).then(function(createStreamRuleRes) {
 	     		var streamRuleIdForThis = createStreamRuleRes.streamRuleID;
 	     		$timeout(function(){
 		    			var getAllRuleSvcJson = "{\"input\": {\"streamID\":\""+$scope.streamForThisRule+"\" } }";
@@ -171,6 +171,10 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 	        }
 	        return ret;
 	    };
+	    
+		$scope.refresh = function(){
+			$state.transitionTo('main.centinelUI.editRules', {streamID: stream.streamID});
+		};
 
 	    $scope.getAllRulesForThisStream();
 	    

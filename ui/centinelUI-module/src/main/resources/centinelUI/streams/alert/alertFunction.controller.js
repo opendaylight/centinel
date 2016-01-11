@@ -9,7 +9,7 @@
  */
 define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 
-	centinelUIApp.register.controller('centinelUIAlertCtrl', ['$scope','$filter','$stateParams','$timeout','$translate','filteredListService','addAlertServiceFactory', function ($scope,$filter,$stateParams,$timeout,$translate,filteredListService,addAlertServiceFactory) {
+	centinelUIApp.register.controller('centinelUIAlertCtrl', ['$scope','$filter','$stateParams','$timeout','$translate','filteredListService','addAlertServiceFactory','centinelUISvc', function ($scope,$filter,$stateParams,$timeout,$translate,filteredListService,addAlertServiceFactory,centinelUISvc) {
 		
 			$scope.selectedCondition ="";
 			$scope.submitted = false;
@@ -54,7 +54,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			$scope.makeNewAlertSubscription = function(formObj) {
 		    	$scope.submitting=true;
 				var subscribeSvcJson = "{\"input\":{\"userName\":\""+formObj.userName+"\",\"mode\":\""+formObj.mode+"\",\"URL\":\""+formObj.URL+"\"}}";
-				addAlertServiceFactory.makeAlertSubscription(subscribeSvcJson).then(function(res) {
+				centinelUISvc.postService('SUBSCRIBE_SERVICE',subscribeSvcJson).then(function(res) {
 			       	 $translate('ALERT_SUBSCRIBE_ADD_SUCCESS', { crud: 'Subscribed' }).then(function (translations) {
 			    		 $scope.successMsg =  translations;
 			    	 });
@@ -143,8 +143,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		                      ];
 		     
 		     $scope.subscriptionTypes = [
-				                         {'ID': 'http' ,'type':'Http Subscription'},
-				                         {'ID': 'snmp' ,'type':'Snmp Subscription'}
+				                         {'ID': 'http' ,'type':'Http Subscription'}
 				                      ];
 		     
 		     $scope.alertSubscriptionForm = {
@@ -290,57 +289,60 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 	};
 		      
 		     $scope.deleteAlert = function(alert) {
-			    	$scope.submitting=true;
-		    	 $scope.reset();
-				var formObject = filteredListService.searchItem($scope.alertList, alert.ruleID,"ruleID");
-		     	var deleteAlertSvcJson = "{\"input\": {\"streamID\":\"" + formObject.streamID+"\",\"configID\":\"" + formObject.configID + "\",\"ruleID\":\""+ formObject.ruleID+ "\"}}" ;																																																																																																																																																																							     																																																																																																																																										     	
-		     	var ruleIDForThis = formObject.ruleID;
-		     	addAlertServiceFactory.deleteAlertConfiguration(alert,deleteAlertSvcJson).then(function(deleteAlertRes) {
-		     		$timeout(function(){
-					    addAlertServiceFactory.getAllAlerts($scope.streamIDForTheseAlerts).then(function(res) {
-					    	var newAlertList =[];
-					    	if(res != '' && res!=undefined && res !=null )
-					    		newAlertList = res;
-					    	
-						    if(_.where(newAlertList, {"ruleID": ruleIDForThis}).length == 0 || _.where(newAlertList, {"ruleID": ruleIDForThis}) == []){
-					     		$scope.alertList = [];
-					     		$scope.alertList = newAlertList;
-				     			$translate('ALERT_ADD_EDIT_DELETE_SUCCESS', { crud: 'deleted' }).then(function (translations) {
-						    		 $scope.successMsg =  translations;
-						    	 });
-								$scope.submitSuccess =true;
-								$scope.submitted = true;
-				     		}else{
-				     			$translate('ALERT_ADD_EDIT_DELETE_SUCCESS', { crud: 'not deleted' }).then(function (translations) {
-						    		 $scope.successMsg =  translations;
-						    	 });
-								$scope.submitSuccess =false;
-								$scope.submitted = true;
-				     		}
-			     			
-						        if($scope.alertList.length<5)
-							       	 $translate('NO_OF_RESULTS', { firstPageResults: $scope.alertList.length, total: $scope.alertList.length }).then(function (translations) {
-							       		$scope.NumberOfResults =  translations;
+		    	if (confirm("Are you sure, you want to delete this Alert!") == true) {
+				    $scope.submitting=true;
+			    	$scope.reset();
+					var formObject = filteredListService.searchItem($scope.alertList, alert.ruleID,"ruleID");
+			     	var deleteAlertSvcJson = "{\"input\": {\"streamID\":\"" + formObject.streamID+"\",\"configID\":\"" + formObject.configID + "\",\"ruleID\":\""+ formObject.ruleID+ "\"}}" ;																																																																																																																																																																							     																																																																																																																																										     	
+			     	var ruleIDForThis = formObject.ruleID;
+			     	addAlertServiceFactory.deleteAlertConfiguration(alert,deleteAlertSvcJson).then(function(deleteAlertRes) {
+			     		$timeout(function(){
+						    addAlertServiceFactory.getAllAlerts($scope.streamIDForTheseAlerts).then(function(res) {
+						    	var newAlertList =[];
+						    	if(res != '' && res!=undefined && res !=null )
+						    		newAlertList = res;
+						    	
+							    if(_.where(newAlertList, {"ruleID": ruleIDForThis}).length == 0 || _.where(newAlertList, {"ruleID": ruleIDForThis}) == []){
+						     		$scope.alertList = [];
+						     		$scope.alertList = newAlertList;
+					     			$translate('ALERT_ADD_EDIT_DELETE_SUCCESS', { crud: 'deleted' }).then(function (translations) {
+							    		 $scope.successMsg =  translations;
 							    	 });
-						        else
-						        	$translate('NO_OF_RESULTS', { firstPageResults: $scope.pageSize, total: $scope.alertList.length }).then(function (translations) {
-							       		$scope.NumberOfResults =  translations;
+									$scope.submitSuccess =true;
+									$scope.submitted = true;
+					     		}else{
+					     			$translate('ALERT_ADD_EDIT_DELETE_SUCCESS', { crud: 'not deleted' }).then(function (translations) {
+							    		 $scope.successMsg =  translations;
 							    	 });
-						        $scope.search();
-						    	$scope.submitting=false;
-
-					    });
-		     		},5000);
-
-		     	},function(response) {
-		    	    console.log("Error with status code in controller", response.status);
-					$translate('ALERT_ADD_EDIT_DELETE_SUCCESS', { crud: 'not deleted' }).then(function (translations) {
-			    		 $scope.successMsg =  translations;
-			    	 });
-					$scope.submitSuccess =false;
-			    	$scope.submitting=false;
-				$scope.submitted = true;
-		      });
+									$scope.submitSuccess =false;
+									$scope.submitted = true;
+					     		}
+				     			
+							        if($scope.alertList.length<5)
+								       	 $translate('NO_OF_RESULTS', { firstPageResults: $scope.alertList.length, total: $scope.alertList.length }).then(function (translations) {
+								       		$scope.NumberOfResults =  translations;
+								    	 });
+							        else
+							        	$translate('NO_OF_RESULTS', { firstPageResults: $scope.pageSize, total: $scope.alertList.length }).then(function (translations) {
+								       		$scope.NumberOfResults =  translations;
+								    	 });
+							        $scope.search();
+							    	$scope.submitting=false;
+	
+						    });
+			     		},5000);
+	
+			     	},function(response) {
+			    	    console.log("Error with status code in controller", response.status);
+						$translate('ALERT_ADD_EDIT_DELETE_SUCCESS', { crud: 'not deleted' }).then(function (translations) {
+				    		 $scope.successMsg =  translations;
+				    	 });
+						$scope.submitSuccess =false;
+				    	$scope.submitting=false;
+					$scope.submitted = true;
+			      });
+		    	}else
+		    		return;
 
 			};
 			
@@ -451,7 +453,11 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			 $scope.closeForm = function() {
 				 $scope.enableConfig = false;
 				 $scope.resetConfigFormValues();
-			}
+			};
+			
+			$scope.refresh = function(){
+				  $state.transitionTo('main.centinelUI.alert', {streamID: stream.streamID});
+			};
 			
 		}]);
 	

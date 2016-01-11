@@ -1,17 +1,20 @@
-<div class="col-md-12 col-lg-12">
+<script type="text/javascript">
+ window.onbeforeunload = function (evt) {
+	 angular.element(document.getElementById('editRulePage')).scope().refresh();
+	}; 
+</script>
+<div id="editRulePage" class="col-md-12 col-lg-12">
    
-      
-         <div class="col-md-12 col-lg-12">
-            <h3 class="ng-binding">
-             {{ 'CREATE_RULES_PAGE' | translate }}
+      	 <div class="well well-sm">
+            <h3 class="ng-binding" style="float:left;">
+				{{ 'CREATE_RULES_PAGE' | translate }}
             </h3>
-            <div class="col-md-12 col-lg-12" style=" padding-left: 600px;">
-      			<button class="btn btn-md btn-orange" ng-click="addStreamRuleDiv()" ng-disabled="submitting" type="submit" form="createForm" function="submit" disabled="disabled"><i class="icon-ok-sign"></i> {{'ADD_STREAM_RULE' | translate}}</button> 
-     			<span class="error clearfix ng-binding"></span>
-   			</div>
-      	</div>
+    		<button class="btn btn-md btn-orange" style="margin-top:10px; float:right;" ng-click="addStreamRuleDiv()" ng-disabled="submitting" type="submit" form="createForm" function="submit" disabled="disabled"><i class="icon-ok-sign"></i> {{'ADD_STREAM_RULE' | translate}}</button> 
+   			<span class="error clearfix ng-binding"></span>
+ 			
+		</div>
   	 
-	<div style="margin-top: 110px;">
+	<div>
 	<div class="well well-sm" ng-show="enableCreateStreamRuleForm">
 	<div style="padding-bottom: 13px;">
 			<button class="alertButton iconCloseForm" ng-click="closeForm()" style="margin-bottom: 0px;"></button>
@@ -23,7 +26,7 @@
 		        <input name="ruleField" ng-Model="ruleForm.field" type="text" class="form-control pluralsingular validatable ng-pristine ng-untouched ng-valid" data-pluralsingular="threshold-descr" value="" style=" width: 940px;height: 27px;">
 		        <br><label>{{'TYPE'|translate}}</label>  
 		        			    <select id="selectbox1" class="form-control ng-pristine ng-untouched ng-valid" style="padding-left :5px; padding-right: 5px; height: 27px;width: 940px;" ng-model="type.value" ng-options="type.key for type in matchingType" >
-								    <option ng-value="" selected="selected">{{'Select a Type' | translate}}</option>
+								    <option value="" selected="selected">{{'Select a Type' | translate}}</option>
 								</select>
 				<br><label>{{'VALUE'|translate}}</label> 
 				

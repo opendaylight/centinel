@@ -14,7 +14,7 @@ define(['app/centinelUI/centinelUI.module','app/centinelUI/centinelUI.services']
 
     $rootScope['section_logo'] = '/src/app/centinelUI/assets/images/centinel.png'; 
     $scope.centinelUIInfo = {};
-    $scope.data = "centinelUI";
+    $scope.data = "Centinel";
 
   }]);
 

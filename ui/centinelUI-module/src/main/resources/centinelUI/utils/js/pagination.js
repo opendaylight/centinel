@@ -52,7 +52,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		
 		function searchUtil(item, toSearch) {
 			if(item.alertName != '' && item.alertName !=undefined && item.alertName !=null )
-				return ((item.alertName).toLowerCase().indexOf(toSearch.toLowerCase()) > -1 || (item.alertTypeClassifier).toLowerCase().indexOf(toSearch.toLowerCase()) > -1) ? true : false;
+				return ((item.alertName).toLowerCase().indexOf(toSearch.toLowerCase()) >  -1) ? true : false;
 			if(item.title != '' && item.title !=undefined && item.title !=null )
 			    return ((item.title).toLowerCase().indexOf(toSearch.toLowerCase()) > -1 ) ? true : false;
 			if(item.field != '' && item.field !=undefined && item.field !=null )

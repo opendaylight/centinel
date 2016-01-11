@@ -8,7 +8,7 @@
  * @description : This js registers and configure all modules in CentinelUI 
 */
 
-define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/config/env.module'], function(ng) {
+define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/config/env.module','d3'], function(ng) {
   var centinelUIApp = angular.module('app.centinelUI', 
 		  ['app.core', 'ui.router.state','config','pascalprecht.translate','restangular']);
 
@@ -22,7 +22,10 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
         'app/centinelUI/streamingData/streamdata.controller',
         'app/centinelUI/streams/stream.controller',
         'app/centinelUI/streams/alert/alertFunction.controller',
-        'app/centinelUI/streams/editRules/editRulesFunction.controller'
+        'app/centinelUI/streams/editRules/editRulesFunction.controller'/*,
+	'app/centinelUI/dashboards/dashboard.controller',
+        'app/centinelUI/dashboards/widgets/widget.controller',
+        'app/centinelUI/dashboards/createWidgets/createWidget.controller'*/
         ];
       var services = [
 		'app/centinelUI/centinelUI.services',
@@ -30,10 +33,17 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
 		'app/centinelUI/streams/alert/alertFunction.services',
 		'app/centinelUI/streams/editRules/editRulesFunction.services',
 		'app/centinelUI/streamingData/streamdata.services',
-		'src/app/centinelUI/utils/js/pagination.js'
+		'src/app/centinelUI/utils/js/pagination.js'/*,
+		'src/app/centinelUI/utils/js/dashboard.pagination.js',
+		'app/centinelUI/dashboards/dashboard.services',
+		'app/centinelUI/dashboards/createWidgets/createWidget.services',
+		'app/centinelUI/dashboards/widgets/widget.services'*/
         ];
       var directive = [
-		'app/centinelUI/streams/alert/alertFunction.directive'
+		'app/centinelUI/streams/alert/alertFunction.directive',
+		//'app/centinelUI/dashboards/widgets/widget.directive',
+		'app/centinelUI/streamingData/streamdata.directive',
+		'app/centinelUI/utils/js/autocomplete'
       ];
   
       var loaded = $q.defer();
@@ -67,11 +77,11 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
     NavHelperProvider.addToMenu('CentinelUI', {
      "link" : "#/centinelUI",
      "active" : "main.centinelUI",
-     "title" : "centinelUI",
+     "title" : "Centinel",
      "icon" : "",  // Add navigation icon css class here
      "page" : {
-        "title" : "centinelUI",
-        "description" : "centinelUI"
+        "title" : "Centinel",
+        "description" : "Centinel"
      }
     });
 
@@ -142,7 +152,41 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
         },
 		params: {streamID: null}
     });
+    $stateProvider.state('main.centinelUI.dashboards', {
+        url: '/dashboards',
+        access: access.public,
+        views : {
+            'centinelContent' : {
+                templateUrl: 'src/app/centinelUI/dashboards/dashboard.html',
+                controller: 'centinelUIDashboardCtrl'
+                
+            }
+        }
+    });
     
+    $stateProvider.state('main.centinelUI.widgets', {
+    	url : '/dashboards/widgets',
+    	access : access.public,
+    	views : {
+    		'centinelContent' : {
+    			templateUrl: 'src/app/centinelUI/dashboards/widgets/widget.html',
+                controller: 'centinelUIWidgetsCtrl'
+    		}
+    	},
+		params: {dashboard: null}
+    });
+
+    $stateProvider.state('main.centinelUI.createWidgets', {
+    	url : '/dashboards/createWidgets',
+    	access : access.public,
+    	views : {
+    		'centinelContent' : {
+    			templateUrl: 'src/app/centinelUI/dashboards/createWidgets/createWidget.html',
+                controller: 'centinelUICreateWidgetsCtrl'
+    		}
+    	},
+		params: {dashboard: null,streams: null}
+    });
 
     RestangularProvider.setBaseUrl('http://localhost:8181/restconf/');
     RestangularProvider.setDefaultHeaders({'Authorization': 'Basic YWRtaW46YWRtaW4='});
