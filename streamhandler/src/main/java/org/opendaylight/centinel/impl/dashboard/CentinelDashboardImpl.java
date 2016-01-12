@@ -223,10 +223,11 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
             Optional<DashboardList> dashboardList = (Optional<DashboardList>) readobject.checkedGet(1000,
                     TimeUnit.MILLISECONDS);
-
-            for (Widgets widget : dashboardList.get().getWidgets()) {
-                widgetIDs.add(widget.getWidgetID());
-            }
+		if (null != dashboardList.get().getWidgets()){
+		    for (Widgets widget : dashboardList.get().getWidgets()) {
+		        widgetIDs.add(widget.getWidgetID());
+		    }
+		}
 
         } catch (Exception readEx) {
             ErrorType errorType = ErrorType.APPLICATION;

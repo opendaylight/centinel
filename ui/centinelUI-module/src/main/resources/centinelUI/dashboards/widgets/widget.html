@@ -1,0 +1,25 @@
+<script type="text/javascript">
+ window.onbeforeunload = function (evt) {
+	 angular.element(document.getElementById('widgetPage')).scope().refresh();
+	}; 
+</script>
+<div id="widgetPage">
+<div class="ng-scope well well-sm">
+	<h3 class="ng-binding" style="float:left;">Widgets for dashboard {{dashboardName}}</h3>
+	<button class="btn btn-md btn-orange" style="margin-top:10px; float:right;" ng-click="addWidget()"><i class="icon-ok-sign"></i>&nbsp;Add Widgets</button>
+	<span class="error clearfix ng-binding"></span>
+</div>
+<div class="tab-pane fade in active" id="smart-green-demo" ng-Show="submitted">
+	<p ng-class="{'smart-green': submitSuccess, 'smart-red': !submitSuccess}">
+		<span>{{ errorMsg }}</span>
+	 </p>
+</div>
+<div style="margin-top: 30px;">
+<div ng-if="msgWidgetCount==widgetValuesForMsgCount.length">
+<msg-count data-ng-repeat="vl in widgetValuesForMsgCount track by $index" val="vl" index="{{$index}}" widgetvalue="widgetCounterValue"></msg-count>
+</div>
+<div ng-if="histogramWidgetCount==widgetValuesForHistogram.length">
+<bar-chart data-ng-repeat="vl in widgetValuesForHistogram track by $index" val1="vl" index="{{$index}}"></bar-chart>
+</div>
+</div>
+</div>

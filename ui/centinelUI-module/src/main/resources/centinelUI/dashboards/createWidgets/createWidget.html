@@ -1,0 +1,90 @@
+<script type="text/javascript">
+ window.onbeforeunload = function (evt) {
+	 angular.element(document.getElementById('createWidgetPage')).scope().refresh();
+	}; 
+</script>
+<div id="createWidgetPage">
+<div class="well well-sm"><h3>Create Widgets for dashboard {{dashboardName}}</h3></div>
+<div class="well well-sm" ng-disabled="submitting">
+<form method="POST" ng-submit="addWidget(createWidgetForm)" class="alert-type-form alert-type-form-message-count form-inline ng-pristine ng-valid ng-scope" id="createWidgetForm" style="display: block;">
+
+<table>
+<tr>
+<td>
+<label>Widget Type</label>
+</td>
+<td>
+<span class="threshold-type" >
+<select id="widgetType" name="widgetType" class="form-control ng-pristine ng-untouched ng-valid" style="width: 200px;" ng-model="createWidgetForm.type">
+		<option value="" selected=true>Select</option>
+     	<option value="message_count">Message Count</option>
+     	<option value="histogram">Histogram</option>
+</select>
+</span>
+</td>
+</tr>
+<tr>
+<td>
+<label>Mode</label>
+</td>
+<td>
+<label for="stream" style="" >Stream</label>
+<input type="radio" name="mode" id="stream" value="stream" checked="checked" ng-model="createWidgetForm.mode" ng-click="showAlertDropdown()"/>
+<label for="alert">Alert</label>
+<input type="radio" name="mode" id="alert" value="alert" ng-model="createWidgetForm.mode" ng-click="showAlertDropdown()"/>
+</td>
+</tr>
+<tr>
+<td>
+<label for="streammode">Streams</label>
+</td>
+<td>
+<!-- <input type="text" name="modeId" id="modeId" style="width: 200px;" ng-model="createWidgetForm.streamID" required class="form-control ng-pristine ng-untouched ng-valid"> -->
+<select id="streammode" ng-model="createWidgetForm.streamID" ng-options="stream.streamID as stream.title for stream in streamList" class="form-control ng-pristine ng-untouched ng-valid" style="width: 200px;" ng-change="populateAlertBox()">
+        <option value="" selected=true>Select</option>
+        </select>
+</td>
+</tr>
+<tr ng-show = "alertBoxShow">
+<td>
+<label for="alertmode">Alerts</label>
+</td>
+<td>
+<select id="alertmode" ng-model="createWidgetForm.alertID" ng-options="alert.ruleID as alert.alertName for alert in alertList" class="form-control ng-pristine ng-untouched ng-valid" style="width: 200px;">
+        <option value="" selected=true>Select</option>
+        </select>
+</td>
+</tr>
+<tr>
+<td>
+<label for="timeRange" title="Set time range for statistic historic display">Time Range (min)</label>
+</td>
+<td>
+<select id="timeRange" name="timeRange" class="form-control ng-pristine ng-untouched ng-valid" style="width: 200px;" ng-model="createWidgetForm.time_range">
+		<option value="" selected=true>Select</option>
+		<option value="60">1</option>
+     	<option value="300">5</option>
+     	<option value="600">10</option>
+     	<option value="900">15</option>
+     	<option value="1200">20</option>
+     	<option value="1500">25</option>
+</select>
+</td>
+</tr>
+</table>
+	<div style="float:left; margin-right:10px;">
+		<button type="submit" class="btn btn-success" ng-disabled="submitting" style="margin-top: 8px;">{{'SAVE_WIDGET'|translate}}</button>
+	</div>
+</form>
+<div>
+	<button ng-click="closeForm()" class="btn btn-success" ng-disabled="submitting" style="margin-top: 8px;">{{'CANCEL'|translate}}</button>
+</div>
+</div>
+<div class="submittingForm" ng-show="submitting" style="height: 35px;"></div>
+<div style="text-align: center;color: white;" ng-show="submitting">Please Wait...</div>
+<div class="tab-pane fade in active" id="smart-green-demo" ng-Show="submitted">
+	<p ng-class="{'smart-green': submitSuccess, 'smart-red': !submitSuccess}">
+		<span>{{ successMsg }}</span>
+	 </p>
+</div>
+</div>
