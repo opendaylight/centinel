@@ -22,10 +22,10 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
         'app/centinelUI/streamingData/streamdata.controller',
         'app/centinelUI/streams/stream.controller',
         'app/centinelUI/streams/alert/alertFunction.controller',
-        'app/centinelUI/streams/editRules/editRulesFunction.controller'/*,
+        'app/centinelUI/streams/editRules/editRulesFunction.controller',
 	'app/centinelUI/dashboards/dashboard.controller',
         'app/centinelUI/dashboards/widgets/widget.controller',
-        'app/centinelUI/dashboards/createWidgets/createWidget.controller'*/
+        'app/centinelUI/dashboards/createWidgets/createWidget.controller'
         ];
       var services = [
 		'app/centinelUI/centinelUI.services',
@@ -33,15 +33,15 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
 		'app/centinelUI/streams/alert/alertFunction.services',
 		'app/centinelUI/streams/editRules/editRulesFunction.services',
 		'app/centinelUI/streamingData/streamdata.services',
-		'src/app/centinelUI/utils/js/pagination.js'/*,
+		'src/app/centinelUI/utils/js/pagination.js',
 		'src/app/centinelUI/utils/js/dashboard.pagination.js',
 		'app/centinelUI/dashboards/dashboard.services',
 		'app/centinelUI/dashboards/createWidgets/createWidget.services',
-		'app/centinelUI/dashboards/widgets/widget.services'*/
+		'app/centinelUI/dashboards/widgets/widget.services'
         ];
       var directive = [
 		'app/centinelUI/streams/alert/alertFunction.directive',
-		//'app/centinelUI/dashboards/widgets/widget.directive',
+		'app/centinelUI/dashboards/widgets/widget.directive',
 		'app/centinelUI/streamingData/streamdata.directive',
 		'app/centinelUI/utils/js/autocomplete'
       ];
