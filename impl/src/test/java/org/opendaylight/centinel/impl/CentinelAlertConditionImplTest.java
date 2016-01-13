@@ -913,63 +913,7 @@ public class CentinelAlertConditionImplTest {
         assertTrue(caught);
     }
 
-    /**
-     * Test method to GetAllAlertRule on valid inputs
-     */
-
-    @Test
-    public void testGetAllAlertRuleFailureDueToValidInput() {
-        // build dummy input
-        GetAllAlertRuleInput input = centinelAlertConditionImplFactory.getAllRulesInputWithValidValues();
-        StreamAlertMessageCountRuleList streamAlertMessageCountRuleListObj = centinelAlertConditionImplFactory
-                .mockStreamAlertMessageCountRuleObjectBuilder();
-        StreamAlertFieldContentRuleList streamAlertFieldContentRuleListObj = centinelAlertConditionImplFactory
-                .mockStreamAlertFieldContentRuleObjectBuilder();
-        StreamAlertFieldValueRuleList streamAlertFieldValueRuleListObj = centinelAlertConditionImplFactory
-                .mockStreamFieldValueRuleObjectBuilder();
-
-        // to mock the tx object
-        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
-        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
-
-        List<StreamAlertMessageCountRuleList> streamAlertMessageCountRuleList = new ArrayList<StreamAlertMessageCountRuleList>();
-        streamAlertMessageCountRuleList.add(streamAlertMessageCountRuleListObj);
-
-        List<StreamAlertFieldContentRuleList> streamAlertFieldContentRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
-        streamAlertFieldContentRuleList.add(streamAlertFieldContentRuleListObj);
-
-        List<StreamAlertFieldValueRuleList> streamAlertFieldValueRuleList = new ArrayList<StreamAlertFieldValueRuleList>();
-        streamAlertFieldValueRuleList.add(streamAlertFieldValueRuleListObj);
-
-        AlertMessageCountRuleRecord alertMessageCountRuleRecord = new AlertMessageCountRuleRecordBuilder()
-                .setStreamAlertMessageCountRuleList(streamAlertMessageCountRuleList).build();
-
-        AlertFieldContentRuleRecord alertFieldContentRuleRecord = new AlertFieldContentRuleRecordBuilder()
-                .setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList).build();
-
-        AlertFieldValueRuleRecord alertFieldValueRuleRecord = new AlertFieldValueRuleRecordBuilder()
-                .setStreamAlertFieldValueRuleList(streamAlertFieldValueRuleList).build();
-
-        Optional<AlertMessageCountRuleRecord> expected = Optional.of(alertMessageCountRuleRecord);
-
-        Optional<AlertFieldContentRuleRecord> expected1 = Optional.of(alertFieldContentRuleRecord);
-
-        Optional<AlertFieldValueRuleRecord> expected2 = Optional.of(alertFieldValueRuleRecord);
-
-        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
-                MockCentinelAlertConditionImpl.alertMessageCountRuleRecordId);
-        doReturn(Futures.immediateCheckedFuture(expected1)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
-                MockCentinelAlertConditionImpl.alertFeildContentRuleRecordId);
-
-        doReturn(Futures.immediateCheckedFuture(expected2)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
-                MockCentinelAlertConditionImpl.alertFieldValueRuleRecordId);
-
-        Future<RpcResult<GetAllAlertRuleOutput>> futureOutput = myMock.getAllAlertRule(input);
-
-        assertNotNull(futureOutput);
-
-    }
-
+   
     /**
      * Test method to deleteAlertMessageCountRule on valid inputs
      */

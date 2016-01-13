@@ -146,12 +146,8 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                 .setNodeType(input.getNodeType()).setRuleID(input.getRuleID())
                 .setRuleTypeClassifier(input.getRuleTypeClassifier()).setStreamRules(streamRuleList)
                 .setConfigID(configId).setTimeStamp(input.getTimeStamp()).setTitle(input.getTitle())
-                .setStreamID(generateRandomId()).setDisabled("true").build();
+                .setStreamID(String.format("%x", (int) (Math.random() * 10000))).setDisabled("true").build();
 
-    }
-
-    public String generateRandomId() {
-        return String.format("%x", (int) (Math.random() * 10000));
     }
 
     /**
@@ -647,6 +643,11 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         return futureResult;
     }
 
+    public String generateRandomId() {
+        final String Id = String.format("%x", (int) (Math.random() * 10000));
+        return Id;
+    }
+
     @Override
     public Future<RpcResult<DeleteOutputOutput>> deleteOutput(DeleteOutputInput input) {
         return null;
@@ -663,7 +664,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                     streamIdcannotbenullError()));
         }
         final PauseStreamOutputBuilder pauseStreamOutputBuilder = new PauseStreamOutputBuilder();
-        pauseStreamOutputBuilder.setDisabled("The stream is paused");
+        pauseStreamOutputBuilder.setDisabled("true");
         LOG.info("updateAlertMessageCountRule: " + input);
         ListenableFuture<Optional<StreamRecord>> readFutureOperational = tx.read(LogicalDatastoreType.OPERATIONAL,
                 streamRecordId);
@@ -797,7 +798,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                     streamIdcannotbenullError()));
         }
         final ResumeStreamOutputBuilder resumeStreamOutputBuilder = new ResumeStreamOutputBuilder();
-        resumeStreamOutputBuilder.setDisabled("The stream is resumed");
+        resumeStreamOutputBuilder.setDisabled("false");
         LOG.info("updateAlertMessageCountRule: " + input);
         ListenableFuture<Optional<StreamRecord>> readFutureOperational = tx.read(LogicalDatastoreType.OPERATIONAL,
                 streamRecordId);
