@@ -7,7 +7,13 @@
  */
 package org.opendaylight.laas.rest.utilities;
 
+import java.io.StringReader;
+import java.util.concurrent.TimeUnit;
+
+import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRule;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.streamrecord.StreamList;
@@ -23,10 +29,12 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
     private static final Logger LOG = LoggerFactory.getLogger(CentinelStreamRESTServices.class);
     private static CentinelStreamRESTServices singleton = null;
     private static final String STREAM_ID = "stream_id";
+    private static String outputPluginId = "";
     String graylogStreamRules = properties.getProperty("graylog_streamrules");
     String graylogStreamPause = properties.getProperty("graylog_pause_stream");
     String graylogStreamResume = properties.getProperty("graylog_resume_stream");
     String stream = properties.getProperty("graylog_streams");
+    boolean outputExists = false;
 
     private CentinelStreamRESTServices() {
         super();
@@ -66,12 +74,48 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
             LOG.info("stream condition created successfully");
         }
 
+        ClientResponse outputResponse = graylogRESTGet(graylogServerIp + "system/outputs");
+        LOG.info("graylog outputs received status: " + outputResponse.getStatus());
+        JsonReader reader = Json.createReader(new StringReader(outputResponse.getEntity(String.class)));
+        JsonObject streamOutputJsonObject = reader.readObject();
+        reader.close();
+        JsonArray outResponse = streamOutputJsonObject.getJsonArray("outputs");
+        LOG.info("outResponse: " + outResponse);
+
+        if (outResponse.isEmpty() || !outputTypeExists(outResponse)) {
+            outputPluginId = createSystemOutput(streamResponse);
+            LOG.info("Output created with ID: " + outputPluginId);
+        } else {
+            for (int i = 0; i < outResponse.toArray().length; i++) {
+                if ("\"org.opendaylight.centinel.output.CentinelOutput\"".equals(outResponse.getJsonObject(i)
+                        .get("type").toString())) {
+                    outputPluginId = outResponse.getJsonObject(i).get("id").toString().replace("\"", "");
+                    LOG.info("Output already exists OutputId: " + outputPluginId);
+                    break;
+                }
+            }
+        }
+
         return newDataObjectRuleList;
 
     }
 
-    /*
-     * returns true if successfully deleted the object from Analysis server
+    private boolean outputTypeExists(JsonArray outResponse) {
+        boolean isExists = false;
+        for (int i = 0; i < outResponse.toArray().length; i++) {
+            if ("\"org.opendaylight.centinel.output.CentinelOutput\"".equals(outResponse.getJsonObject(i).get("type")
+                    .toString())) {
+                isExists = true;
+                break;
+            }
+        }
+        return isExists;
+    }
+
+    /**
+     * @param dataObj
+     * @return boolean returns true if successfully deleted the object from
+     *         Analysis server
      */
     public boolean deleteFromOperationalStream(DataObject dataObj) {
         boolean deletedSuccessfully = false;
@@ -160,9 +204,9 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
             StreamList streamDataObject = (StreamList) dataObjectRuleList;
             operationalDataObject = new StreamListBuilder().setTitle(streamDataObject.getTitle())
                     .setDescription(streamDataObject.getDescription()).setStreamID(streamId)
-                    .setConfigID(streamDataObject.getConfigID()).setStreamRules(streamDataObject.getStreamRules())
-                    .setDisabled(streamDataObject.getDisabled()).build();
-
+                    .setDisabled(streamDataObject.getDisabled()).setConfigID(streamDataObject.getConfigID())
+                    .setStreamRules(streamDataObject.getStreamRules()).setDisabled(streamDataObject.getDisabled())
+                    .build();
         }
         LOG.info("DataObject for Operational Data Store : " + operationalDataObject);
         return operationalDataObject;
@@ -195,16 +239,81 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
         } else {
             isUpdated = true;
             LOG.info("Stream condition updated successfully ");
+            createAlarmCallback(StreamId);
+            createStreamOutput(StreamId, outputPluginId);
         }
 
         return isUpdated;
     }
 
-    /*
-     * @param streamId String
-     * 
-     * @param streamrule StreamRule
-     * 
+    private void createAlarmCallback(String StreamId) {
+        JsonObject alertCallbackJsonObject = null;
+        ClientResponse alarmCallbackResponse = null;
+
+        alertCallbackJsonObject = factory.createObjectBuilder()
+                .add(properties.getProperty("type"), "org.opendaylight.centinel.alertcallback.CentinelAlertCallback")
+                .add("configuration", factory.createObjectBuilder()).build();
+        LOG.info("alertCallback JsonObject: " + alertCallbackJsonObject.toString());
+        LOG.info("resource: " + graylogServerIp + graylogStream + StreamId + alarmCallback);
+        try {
+            alarmCallbackResponse = graylogRESTPost(alertCallbackJsonObject, graylogServerIp + graylogStream + StreamId
+                    + alarmCallback);
+            LOG.info("alarmCallbackResponse created with status: " + alarmCallbackResponse.getStatus());
+
+            if (alarmCallbackResponse.getStatus() != 201 || alarmCallbackResponse == null) {
+                LOG.info("Problem at Graylog while adding alarm callback on stream with Response Code: "
+                        + alarmCallbackResponse.getStatus());
+            } else {
+                LOG.info("Alarm callback updated succesfully");
+            }
+        } catch (Exception e) {
+            LOG.error(e.getLocalizedMessage(), e);
+        }
+    }
+
+    private void createStreamOutput(String StreamId, String outputPluginId) {
+        JsonObject streamOutputJsonObject = null;
+        ClientResponse streamOutputResponse = null;
+
+        streamOutputJsonObject = factory.createObjectBuilder()
+                .add("outputs", factory.createArrayBuilder().add(outputPluginId)).build();
+        LOG.info("streamOutput JsonObject: " + streamOutputJsonObject.toString());
+        streamOutputResponse = graylogRESTPost(streamOutputJsonObject, graylogServerIp + graylogStream + StreamId
+                + "/outputs");
+        LOG.info("streamOutputResponse created with status: " + streamOutputResponse.getStatus());
+
+        if (streamOutputResponse.getStatus() != 202 || streamOutputResponse == null) {
+            LOG.info("Problem at Graylog while adding stream Output with Response Code: "
+                    + streamOutputResponse.getStatus());
+        } else {
+            LOG.info("stream Output updated succesfully");
+        }
+    }
+
+    private String createSystemOutput(ClientResponse streamResponse) {
+        JsonObject messageOutputJsonObject = null;
+        ClientResponse messageOutputResponse = null;
+        String outputId = "";
+
+        messageOutputJsonObject = factory.createObjectBuilder().add("configuration", factory.createObjectBuilder())
+                .add("title", "centinel output")
+                .add(properties.getProperty("type"), "org.opendaylight.centinel.output.CentinelOutput").build();
+        messageOutputResponse = graylogRESTPost(messageOutputJsonObject, graylogServerIp + "system/outputs");
+        LOG.info("messageOutputResponse created with status: " + messageOutputResponse.getStatus());
+
+        if (messageOutputResponse.getStatus() != 201 || messageOutputResponse == null) {
+            LOG.info("Problem at Graylog while adding output for stream with Response Code: "
+                    + messageOutputResponse.getStatus());
+        } else {
+            LOG.info("Output updated succesfully");
+            outputId = fetchResponse(messageOutputResponse.getEntity(String.class), "id");
+        }
+        return outputId;
+    }
+
+    /**
+     * @param streamrules
+     * @param string
      * @return boolean returns true if Analysis object successfully updated
      */
     public boolean updateToOperationalStreamRule(StreamRule streamrule, String streamId) {

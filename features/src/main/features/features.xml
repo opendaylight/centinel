@@ -64,6 +64,8 @@ Author: Abhishek Sharma <abhishek.abhi@tcs.com>
     
     <bundle>mvn:org.codehaus.jettison/jettison/{{VERSION}}</bundle>
     <bundle>mvn:log4j/log4j/1.2.17</bundle> 
+    <bundle>wrap:mvn:com.google.guava/guava/10.0</bundle>
+    <bundle>wrap:mvn:joda-time/joda-time/2.0</bundle>
     <bundle>wrap:mvn:org.json/json/{{VERSION}}</bundle>
     <feature version="${project.version}">odl-centinel-core</feature>
     
