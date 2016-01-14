@@ -70,6 +70,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrul
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.get.all.alert.rule.output.StreamAlertFieldValueRuleListSortedBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.get.all.alert.rule.output.StreamAlertMessageCountRuleListSorted;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.get.all.alert.rule.output.StreamAlertMessageCountRuleListSortedBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecord;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.streamrecord.StreamList;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcError.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -94,6 +96,8 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             .builder(AlertFieldValueRuleRecord.class).build();
     public static final InstanceIdentifier<AlertFieldContentRuleRecord> alertFeildContentRuleRecordId = InstanceIdentifier
             .builder(AlertFieldContentRuleRecord.class).build();
+    public static final InstanceIdentifier<StreamRecord> streamRecordId = InstanceIdentifier
+            .builder(StreamRecord.class).build();
 
     private NotificationService notificationProvider;
     private DataBroker dataProvider;
@@ -1446,7 +1450,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<GetAllAlertRuleOutput>> futureResult = SettableFuture.create();
-        boolean isMatches = false;
         if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()) {
             LOG.debug("Invalid Parameters for GetAllAlertRule");
             return Futures
@@ -1462,59 +1465,82 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                 LogicalDatastoreType.OPERATIONAL, alertFeildContentRuleRecordId);
         ListenableFuture<Optional<AlertFieldValueRuleRecord>> alertFieldValueReadFuture = tx.read(
                 LogicalDatastoreType.OPERATIONAL, alertFieldValueRuleRecordId);
+        ListenableFuture<Optional<StreamRecord>> streamRuleReadFuture = tx.read(LogicalDatastoreType.OPERATIONAL,
+                streamRecordId);
+        boolean check = true;
+
         try {
+            Optional<StreamRecord> streamRecord = streamRuleReadFuture.get();
+            List<StreamList> streamList = new ArrayList<StreamList>();
+            if (streamRecord.isPresent()) {
+                streamList = streamRecord.get().getStreamList();
+            } else {
+                return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
+                        RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
+                                "No Stream Record is present in operational data store")));
+            }
+            if (!streamList.isEmpty()) {
+                java.util.Iterator<StreamList> streamListIterator = streamList.iterator();
+
+                while (streamListIterator.hasNext()) {
+                    StreamList streamListObj = streamListIterator.next();
+                    if (streamListObj.getStreamID().equals(input.getStreamID())) {
+                        check = false;
+                        break;
+                    }
+                }
+            }
+            if (check) {
+                return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
+                        RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
+                                "NO stream with this Id in datastore")));
+            }
+
             Optional<AlertMessageCountRuleRecord> alertMessageCountRuleRecord = alertMessageCountReadFuture.get();
             List<StreamAlertMessageCountRuleList> streamAlertRuleList = new ArrayList<StreamAlertMessageCountRuleList>();
 
             if (alertMessageCountRuleRecord.isPresent()) {
                 streamAlertRuleList = alertMessageCountRuleRecord.get().getStreamAlertMessageCountRuleList();
 
-            }
+                java.util.Iterator<StreamAlertMessageCountRuleList> iterator = streamAlertRuleList.iterator();
+                List<StreamAlertMessageCountRuleListSorted> streamAlertMessageCountRuleListSortedList = new ArrayList<StreamAlertMessageCountRuleListSorted>();
+                StreamAlertMessageCountRuleListSortedBuilder streamAlertMessageCountRuleListSortedBuilder = new StreamAlertMessageCountRuleListSortedBuilder();
 
-            else {
-                return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
-                        RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
-                                "Record is not present in operational data store")));
-            }
+                while (iterator.hasNext()) {
+                    StreamAlertMessageCountRuleList streamAlertMessageObj = iterator.next();
+                    if (streamAlertMessageObj.getStreamID().equals(input.getStreamID())) {
+                        streamAlertMessageCountRuleListSortedBuilder.setStreamID(streamAlertMessageObj.getStreamID());
+                        streamAlertMessageCountRuleListSortedBuilder.setMessageCountOperator(streamAlertMessageObj
+                                .getMessageCountOperator());
+                        streamAlertMessageCountRuleListSortedBuilder.setNodeType(streamAlertMessageObj.getNodeType());
+                        streamAlertMessageCountRuleListSortedBuilder.setConfigID(streamAlertMessageObj.getConfigID());
+                        streamAlertMessageCountRuleListSortedBuilder.setRuleID(streamAlertMessageObj.getRuleID());
+                        streamAlertMessageCountRuleListSortedBuilder.setAlertTypeClassifier(streamAlertMessageObj
+                                .getAlertTypeClassifier());
+                        streamAlertMessageCountRuleListSortedBuilder.setRuleTypeClassifier(streamAlertMessageObj
+                                .getRuleTypeClassifier());
+                        streamAlertMessageCountRuleListSortedBuilder.setMessageCountCount(streamAlertMessageObj
+                                .getMessageCountCount());
+                        streamAlertMessageCountRuleListSortedBuilder.setMessageCountGrace(streamAlertMessageObj
+                                .getMessageCountGrace());
+                        streamAlertMessageCountRuleListSortedBuilder.setTimeStamp(streamAlertMessageObj.getTimeStamp());
+                        streamAlertMessageCountRuleListSortedBuilder.setMessageCountBacklog(streamAlertMessageObj
+                                .getMessageCountBacklog());
+                        streamAlertMessageCountRuleListSortedBuilder.setAlertName(streamAlertMessageObj.getAlertName());
+                        streamAlertMessageCountRuleListSortedList
+                                .add((StreamAlertMessageCountRuleListSorted) streamAlertMessageCountRuleListSortedBuilder
+                                        .build());
+                        allAlertRuleOutputBuilder
+                                .setStreamAlertMessageCountRuleListSorted(streamAlertMessageCountRuleListSortedList);
 
-            java.util.Iterator<StreamAlertMessageCountRuleList> iterator = streamAlertRuleList.iterator();
-            List<StreamAlertMessageCountRuleListSorted> streamAlertMessageCountRuleListSortedList = new ArrayList<StreamAlertMessageCountRuleListSorted>();
-            StreamAlertMessageCountRuleListSortedBuilder streamAlertMessageCountRuleListSortedBuilder = new StreamAlertMessageCountRuleListSortedBuilder();
-
-            while (iterator.hasNext()) {
-                StreamAlertMessageCountRuleList streamAlertMessageObj = iterator.next();
-                if (streamAlertMessageObj.getStreamID().equals(input.getStreamID())) {
-                    isMatches = true;
-                    streamAlertMessageCountRuleListSortedBuilder.setStreamID(streamAlertMessageObj.getStreamID());
-                    streamAlertMessageCountRuleListSortedBuilder.setMessageCountOperator(streamAlertMessageObj
-                            .getMessageCountOperator());
-                    streamAlertMessageCountRuleListSortedBuilder.setNodeType(streamAlertMessageObj.getNodeType());
-                    streamAlertMessageCountRuleListSortedBuilder.setConfigID(streamAlertMessageObj.getConfigID());
-                    streamAlertMessageCountRuleListSortedBuilder.setRuleID(streamAlertMessageObj.getRuleID());
-                    streamAlertMessageCountRuleListSortedBuilder.setAlertTypeClassifier(streamAlertMessageObj
-                            .getAlertTypeClassifier());
-                    streamAlertMessageCountRuleListSortedBuilder.setRuleTypeClassifier(streamAlertMessageObj
-                            .getRuleTypeClassifier());
-                    streamAlertMessageCountRuleListSortedBuilder.setMessageCountCount(streamAlertMessageObj
-                            .getMessageCountCount());
-                    streamAlertMessageCountRuleListSortedBuilder.setMessageCountGrace(streamAlertMessageObj
-                            .getMessageCountGrace());
-                    streamAlertMessageCountRuleListSortedBuilder.setTimeStamp(streamAlertMessageObj.getTimeStamp());
-                    streamAlertMessageCountRuleListSortedBuilder.setMessageCountBacklog(streamAlertMessageObj
-                            .getMessageCountBacklog());
-                    streamAlertMessageCountRuleListSortedBuilder.setAlertName(streamAlertMessageObj.getAlertName());
-                    streamAlertMessageCountRuleListSortedList
-                            .add((StreamAlertMessageCountRuleListSorted) streamAlertMessageCountRuleListSortedBuilder
-                                    .build());
-                    allAlertRuleOutputBuilder
-                            .setStreamAlertMessageCountRuleListSorted(streamAlertMessageCountRuleListSortedList);
-
+                    }
                 }
             }
 
         } catch (InterruptedException | ExecutionException ex) {
             ex.printStackTrace();
         }
+
         try {
             Optional<AlertFieldContentRuleRecord> alertFieldContentRuleRecord = alertFieldContentReadFuture.get();
             List<StreamAlertFieldContentRuleList> streamAlertRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
@@ -1530,7 +1556,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                 StreamAlertFieldContentRuleList streamAlertFieldContentObj = iterator.next();
 
                 if (streamAlertFieldContentObj.getStreamID().equals(input.getStreamID())) {
-                    isMatches = true;
                     streamAlertFieldContentRuleListSortedBuilder.setConfigID(streamAlertFieldContentObj.getConfigID());
                     streamAlertFieldContentRuleListSortedBuilder
                             .setTimeStamp(streamAlertFieldContentObj.getTimeStamp());
@@ -1578,7 +1603,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             while (iterator.hasNext()) {
                 StreamAlertFieldValueRuleList streamAlertFieldValueRuleObj = iterator.next();
                 if (streamAlertFieldValueRuleObj.getStreamID().equals(input.getStreamID())) {
-                    isMatches = true;
                     streamAlertFieldValueRuleListSortedBuilder.setAlertTypeClassifier(streamAlertFieldValueRuleObj
                             .getAlertTypeClassifier());
                     streamAlertFieldValueRuleListSortedBuilder.setConfigID(streamAlertFieldValueRuleObj.getConfigID());
@@ -1610,11 +1634,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                             .setStreamAlertFieldValueRuleListSorted(streamAlertFieldValueRuleListSorted);
                 }
             }
-            if (!isMatches) {
-                return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("invalid-input",
-                        RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
-                                "Invalid Stream id or The stream is not present in operational data store")));
-            }
+
             futureResult.set(RpcResultBuilder.<GetAllAlertRuleOutput> success(allAlertRuleOutputBuilder.build())
                     .build());
 

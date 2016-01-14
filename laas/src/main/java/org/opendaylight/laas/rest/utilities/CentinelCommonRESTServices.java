@@ -42,6 +42,7 @@ public class CentinelCommonRESTServices {
     String graylogStream;
     String message;
     String streams;
+    String alarmCallback;
 
     CentinelCommonRESTServices() {
         client = Client.create();
@@ -155,6 +156,7 @@ public class CentinelCommonRESTServices {
         graylogStream = properties.getProperty("graylog_stream");
         message = properties.getProperty("graylog_message");
         streams = properties.getProperty("graylog_streams");
+        alarmCallback = properties.getProperty("graylog_alarmcallback");
     }
 
 }
