@@ -85,13 +85,13 @@ public class CentinelRESTClient {
         Schema schemaMatchingMessage = ReflectData.get().getSchema(MatchingMessagePojo.class);
         GenericRecord recordMatchingMessage = new Record(schemaMatchingMessage);
         if (!checkResult.getMatchingMessages().isEmpty()) {
-            MessageSummary messageSummary = checkResult.getMatchingMessages().get(0);
-            recordMatchingMessage.put("index", messageSummary.getIndex());
-            recordMatchingMessage.put("message", messageSummary.getMessage());
-            recordMatchingMessage.put("fields", messageSummary.getFields());
-            recordMatchingMessage.put("id", messageSummary.getId());
-            recordMatchingMessage.put("source", messageSummary.getSource());
-            recordMatchingMessage.put("timestamp", messageSummary.getTimestamp());
+            MatchingMessagePojo matchingMessagePojo = new MatchingMessagePojo(checkResult.getMatchingMessages().get(0));
+            recordMatchingMessage.put("index", matchingMessagePojo.getIndex());
+            recordMatchingMessage.put("message", matchingMessagePojo.getMessage());
+            recordMatchingMessage.put("fields", matchingMessagePojo.getFields());
+            recordMatchingMessage.put("id", matchingMessagePojo.getId());
+            recordMatchingMessage.put("source", matchingMessagePojo.getSource());
+            recordMatchingMessage.put("message_timestamp", matchingMessagePojo.getTimestamp());
         }
 
         CheckResultPojo checkResultPojo = new CheckResultPojo(checkResult);
@@ -139,7 +139,7 @@ public class CentinelRESTClient {
                                 .add("eventBodyType", "avro")
                                 .add("eventBody", eventBody)
                                 .add("eventKeys",
-                                        factory.createArrayBuilder().add("triggeredAt")
+                                        factory.createArrayBuilder().add("check_result:triggeredAt")
                                                 .add("check_result:resultDescription")
                                                 .add("check_result:triggeredCondition:alertConditionId")
                                                 .add("check_result:triggeredCondition:type")
@@ -197,6 +197,12 @@ public class CentinelRESTClient {
             LOG.error("Problem while loading Properties file for Graylog " + e.getMessage(), e);
         }
     }
+    
+    public static String formatTimestamp(String timestamp){
+    	timestamp = timestamp.replace("T", " ");
+    	timestamp = timestamp.replace("Z", "");
+    	return timestamp;
+    }
 
     /**
      * Pojo for CheckResult - to map checkResult object to avro schema
@@ -217,6 +223,7 @@ public class CentinelRESTClient {
         }
 
         public String getResultDescription() {
+        	resultDescription=resultDescription.replace("\"", "");
             return resultDescription;
         }
 
@@ -233,7 +240,7 @@ public class CentinelRESTClient {
         }
 
         public String getTriggeredAt() {
-            return triggeredAt;
+            return formatTimestamp(triggeredAt);
         }
 
         public void setTriggeredAt(String triggeredAt) {
@@ -388,7 +395,7 @@ public class CentinelRESTClient {
         }
 
         public String getCreatedAt() {
-            return createdAt;
+            return formatTimestamp(createdAt);
         }
 
         public void setCreatedAt(String createdAt) {
@@ -508,7 +515,7 @@ public class CentinelRESTClient {
         private Map<String, Object> fields;
         private String id;
         private String source;
-        private String timestamp;
+        private String message_timestamp;
 
         public MatchingMessagePojo(MessageSummary messageSummary) {
             this.index = messageSummary.getIndex();
@@ -516,7 +523,7 @@ public class CentinelRESTClient {
             this.fields = messageSummary.getFields();
             this.id = messageSummary.getId();
             this.source = messageSummary.getSource();
-            this.timestamp = messageSummary.getTimestamp().toString();
+            this.message_timestamp = messageSummary.getTimestamp().toString();
         }
 
         public String getIndex() {
@@ -560,11 +567,11 @@ public class CentinelRESTClient {
         }
 
         public String getTimestamp() {
-            return timestamp;
+            return formatTimestamp(message_timestamp);
         }
 
         public void setTimestamp(String timestamp) {
-            this.timestamp = timestamp;
+            this.message_timestamp = timestamp;
         }
     }
 

@@ -43,7 +43,8 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
 		'app/centinelUI/streams/alert/alertFunction.directive',
 		'app/centinelUI/dashboards/widgets/widget.directive',
 		'app/centinelUI/streamingData/streamdata.directive',
-		'app/centinelUI/utils/js/autocomplete'
+		'app/centinelUI/utils/js/autocomplete',
+		'app/centinelUI/utils/js/formValidator'
       ];
   
       var loaded = $q.defer();

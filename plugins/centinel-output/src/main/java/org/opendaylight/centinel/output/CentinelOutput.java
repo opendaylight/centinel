@@ -152,6 +152,8 @@ public class CentinelOutput implements MessageOutput {
             Matcher matcher = pattern.matcher(body);
             if (matcher.find()) {
                 String str = "\"" + matcher.group() + "\"";
+                str = str.replace("T", " ");
+                str = str.replace("Z", "");
                 body = body.replaceAll(regex, str);
             }
 

@@ -7,22 +7,23 @@ import org.opendaylight.centinel.impl.subscribe.SubscriberInfoCache;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
+import org.opendaylight.streamhandler.impl.EventHandlerImpl;
+import org.opendaylight.streamhandler.impl.StreamhandlerImpl;
 import org.opendaylight.streamhandler.impl.StreamhandlerProvider;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardruleService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.StreamhandlerService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.SubscribeService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.opendaylight.streamhandler.impl.LogCollector;
 
 public class StreamhandlerModule extends
         org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centinel.streamhandler.impl.rev141210.AbstractStreamhandlerModule {
-    private static final Logger LOG = LoggerFactory.getLogger(StreamhandlerModule.class);
-
     public StreamhandlerModule(org.opendaylight.controller.config.api.ModuleIdentifier identifier,
             org.opendaylight.controller.config.api.DependencyResolver dependencyResolver) {
         super(identifier, dependencyResolver);
     }
 
-    public StreamhandlerModule(org.opendaylight.controller.config.api.ModuleIdentifier identifier,
+    public StreamhandlerModule(
+            org.opendaylight.controller.config.api.ModuleIdentifier identifier,
             org.opendaylight.controller.config.api.DependencyResolver dependencyResolver,
             org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centinel.streamhandler.impl.rev141210.StreamhandlerModule oldModule,
             java.lang.AutoCloseable oldInstance) {
@@ -36,11 +37,11 @@ public class StreamhandlerModule extends
 
     @Override
     public java.lang.AutoCloseable createInstance() {
-
-        LOG.info("module StreamHandler Initiated");
-
+        final StreamhandlerImpl streamhandlerImpl = new StreamhandlerImpl();
         StreamhandlerProvider streamhandlerProvider = new StreamhandlerProvider();
+        EventHandlerImpl eventHandlerImpl = new EventHandlerImpl(streamhandlerImpl);
         DataBroker dataBrokerService = getDataBrokerDependency();
+        
 
         /***
          * load the CentinelDashboardImpl and StreamCounterInfoCache register
@@ -49,16 +50,17 @@ public class StreamhandlerModule extends
 
         StreamCounterInfoCache streamCounterInfoCache = StreamCounterInfoCache.getInstance();
 
-        final CentinelDashboardImpl centinelDashboardImpl = new CentinelDashboardImpl();
+        final CentinelDashboardImpl centinelDashboardImpl = new CentinelDashboardImpl(streamhandlerImpl);
         centinelDashboardImpl.setDataProvider(dataBrokerService);
         final BindingAwareBroker.RpcRegistration<DashboardruleService> rpcDashboardruleServiceRegistration = getRpcRegistryDependency()
                 .addRpcImplementation(DashboardruleService.class, centinelDashboardImpl);
-                /**
-                 * end of CentinelDashboardImpl
-                 */
-                /**
-                 * load the subscriber cache in memory initalize Impl
-                 */
+        /**
+         * end of CentinelDashboardImpl
+         */
+
+        /**
+         * load the subscriber cache in memory initalize Impl
+         */
         SubscriberInfoCache subscriberInfoCache = SubscriberInfoCache.getInstance();
 
         final SubscriberImpl subscriberImpl = new SubscriberImpl();
@@ -70,20 +72,26 @@ public class StreamhandlerModule extends
         /**
          * end of subscribe module
          */
-        LOG.info("module StreamHandler done");
+
+        final BindingAwareBroker.RpcRegistration<StreamhandlerService> rpcRegistrationhandler = getRpcRegistryDependency()
+                .addRpcImplementation(StreamhandlerService.class, streamhandlerImpl);
+        getNotificationServiceDependency().registerNotificationListener(eventHandlerImpl);
 
         getBrokerDependency().registerProvider(streamhandlerProvider);
-        final class AutoCloseableCentinel implements AutoCloseable {
+        final class AutoCloseableToaster implements AutoCloseable {
 
             @Override
             public void close() throws Exception {
+                rpcRegistrationhandler.close();
+                closeQuietly(streamhandlerImpl);
 
                 /**
                  * close all resources for subscribe and dashboard:start
                  */
                 rpcDashboardruleServiceRegistration.close();
-                closeQuietly(rpcDashboardruleServiceRegistration);
                 rpcSubscribeRegistration.close();
+                closeQuietly(rpcDashboardruleServiceRegistration);
+
                 closeQuietly(subscriberImpl);
                 /**
                  * close all resources for subscribe and dashboard:end
@@ -98,7 +106,14 @@ public class StreamhandlerModule extends
             }
         }
 
-        AutoCloseable ret = new AutoCloseableCentinel();
+        /**
+         * Syslog Event Generator
+         */
+
+       	LogCollector collect = new LogCollector();
+        collect.server();
+ 
+        AutoCloseable ret = new AutoCloseableToaster();
         return ret;
     }
 
