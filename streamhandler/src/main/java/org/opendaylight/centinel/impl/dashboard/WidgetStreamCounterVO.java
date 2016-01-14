@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class WidgetStreamCounterVO {
+    private static final Logger LOG = LoggerFactory.getLogger(WidgetStreamCounterVO.class);
 
     private String WidgetID;
     private String StreamID;

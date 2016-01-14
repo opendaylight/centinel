@@ -7,16 +7,19 @@
  */
 package org.opendaylight.centinel.impl.dashboard;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 
-import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericData.Record;
-import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.reflect.ReflectData;
+import org.opendaylight.streamhandler.impl.StreamhandlerImpl;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.EventBodyType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.PersistEventInputBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +27,12 @@ public class ResetCounterThread implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(ResetCounterThread.class);
 
     WidgetStreamCounterVO widgetStreamCounterVO;
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private StreamhandlerImpl streamhandlerImpl2;
 
-    ResetCounterThread(WidgetStreamCounterVO widgetStreamCounterVO) {
+    ResetCounterThread(WidgetStreamCounterVO widgetStreamCounterVO, StreamhandlerImpl streamhandlerImpl2) {
         this.widgetStreamCounterVO = widgetStreamCounterVO;
+        this.streamhandlerImpl2=streamhandlerImpl2;
 
     }
 
@@ -37,8 +43,8 @@ public class ResetCounterThread implements Runnable {
         // widgetStreamCounterVO.getCounter()
         // widgetStreamCounterVO.getWidgetID()
         // widgetStreamCounterVO.getCal()
-        saveinDB(widgetStreamCounterVO.getWidgetID(), widgetStreamCounterVO.getCounter(),
-                widgetStreamCounterVO.getCal());
+    	LOG.info("inside run of ResetCounterThread for widgetStreamCounterVO.getWidgetID(): "+ widgetStreamCounterVO.getWidgetID());
+    	saveinDB(widgetStreamCounterVO.getWidgetID(), widgetStreamCounterVO.getCounter(),widgetStreamCounterVO.getCal());
         // Reset the counter value to zero
 
         widgetStreamCounterVO.setCounter(0);
@@ -46,63 +52,29 @@ public class ResetCounterThread implements Runnable {
         widgetStreamCounterVO.getCal().add(Calendar.MINUTE, widgetStreamCounterVO.getResettime() / 60);
 
     }
-
     private void saveinDB(String widgetID, int counter, Calendar calendar) {
-        JsonBuilderFactory factory = Json.createBuilderFactory(null);
+    	 JsonBuilderFactory factory = Json.createBuilderFactory(null);
+    	 
+     	LOG.info("inside saveinDB of ResetCounterThread for WidgetID(): "+widgetID+":counter:"+counter+":calendar:"+dateFormat.format(calendar.getTime()));
 
-        DashboardPojo dashboardPojo = new DashboardPojo();
-
-        Schema schemaDashboard = ReflectData.get().getSchema(DashboardPojo.class);
-
-        GenericRecord recordDashboard = new Record(schemaDashboard);
-        recordDashboard.put("timestamp", dashboardPojo.getTimestamp());
-        recordDashboard.put("widgetId", dashboardPojo.getWidgetId());
-        recordDashboard.put("value", dashboardPojo.getValue());
-
-        //System.out.println(recordDashboard);
-
-        JsonObject input_json = null;
-        input_json = factory.createObjectBuilder()
-                .add("input",
-                        factory.createObjectBuilder().add("eventType", "dashboard").add("eventBodyType", "avro")
-                                .add("eventBody", recordDashboard.toString())
-                                .add("eventKeys", factory.createArrayBuilder().add("timestamp").add("widgetId")))
-                .build();
-
-        //System.out.println(input_json);
-    }
-
-    public static class DashboardPojo {
-        String timestamp;
-        String widgetId;
-        int value;
-
-        public DashboardPojo() {
-
-        }
-
-        public String getTimestamp() {
-            return timestamp;
-        }
-
-        public void setTimestamp(String timestamp) {
-            this.timestamp = timestamp;
-        }
-
-        public String getWidgetId() {
-            return widgetId;
-        }
-
-        public void setWidgetId(String widgetId) {
-            this.widgetId = widgetId;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        public void setValue(int value) {
-            this.value = value;
-        }
-    }
+     	JsonObject inputJson = null;
+     	inputJson = factory.createObjectBuilder()
+              .add("resetTime", dateFormat.format(calendar.getTime()).toString())
+              .add("widgetId", widgetID)
+              .add("counter", counter).build();
+         
+         List<String> eventKeys = new ArrayList<String>();
+         eventKeys.add("resetTime");
+         eventKeys.add("widgetId");
+         
+         PersistEventInputBuilder input = new PersistEventInputBuilder();
+         input.setEventBody(inputJson.toString());
+         input.setEventBodyType(EventBodyType.Json);
+         input.setEventKeys(eventKeys);
+         input.setEventType("dashboard");
+         LOG.info("dashboard persist event input: "+ input.toString());
+         
+         streamhandlerImpl2.persistEvent(input.build());
+	}
+	
 }

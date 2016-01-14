@@ -24,6 +24,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		    $scope.noAlertSubscription = true;
 		    $scope.alertSubscription = false;
 		    $scope.streamIDForTheseAlerts = $stateParams.streamID;
+		    $scope.validationMsg  ="";
  
 		    $scope.makeAllAlertCall = function() {
 			    addAlertServiceFactory.getAllAlerts($scope.streamIDForTheseAlerts).then(function(res) {
@@ -92,12 +93,12 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			 				"configID": "",
 			                "streamID": "",
 			                "alertTypeClassifier": "alert-message-count",
-			                "messageCountBacklog":0 ,
-			                "timeStamp":0 ,
+			                "messageCountBacklog":1 ,
+			                "timeStamp":1,
 			                "ruleID": "string",
 			                "ruleTypeClassifier": "base-alert",
-			                "messageCountGrace":0 ,
-			                "messageCountCount":0 ,
+			                "messageCountGrace":1 ,
+			                "messageCountCount":1 ,
 			                "messageCountOperator": "more",
 			                "nodeType": "str3"
 			              
@@ -107,16 +108,16 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 				  				"configID": "",
 				                "alertTypeClassifier": "alert-field-value",
 				                "fieldValueThreshholdType": "higher",
-				                "timeStamp":0 ,
+				                "timeStamp":1 ,
 				                "fieldValueField": "",
-				                "fieldValueGrace":0 ,
+				                "fieldValueGrace":1 ,
 				                "fieldValueType": "mean value",
 				                "streamID": "",
 				                "ruleID": "str12",
 				                "ruleTypeClassifier": "base-alert",
-				                "fieldValueThreshhold":0,
+				                "fieldValueThreshhold":1,
 				                "nodeType": "string",
-				                "fieldValueBacklog":0
+				                "fieldValueBacklog":1
 				            };
 				  			
 				  			$scope.alertFieldContentConfigForm =     {
@@ -124,12 +125,12 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 				  					"configID": "",
 				  	                "streamID": "",
 				  	                "alertTypeClassifier": "alert-field-content",
-				  	                "timeStamp":0 ,
+				  	                "timeStamp":1 ,
 				  	                "ruleID": "str54",
-				  	                "fieldContentBacklog":0 ,
+				  	                "fieldContentBacklog":1 ,
 				  	                "fieldContentField": "",
 				  	                "ruleTypeClassifier": "base-alert",
-				  	                "fieldContentGrace":0 ,
+				  	                "fieldContentGrace":1 ,
 				  	                "nodeType": "str22",
 				  	                "fieldContentCompareToValue": ""
 				  	            };
