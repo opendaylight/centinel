@@ -21,6 +21,7 @@ import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
+import org.opendaylight.streamhandler.impl.StreamhandlerImpl;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardIncrementTestInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardIncrementTestOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardIncrementTestOutputBuilder;
@@ -53,6 +54,11 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboar
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.dashboardrecord.DashboardList;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.dashboardrecord.DashboardListBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.get.widget.histogram.output.Values;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.get.widget.histogram.output.ValuesBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlRelativeApiInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlRelativeApiOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.query.sql.relative.api.output.Records;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.record.Fields;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcError.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -64,22 +70,40 @@ import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
+/***
+ * 
+ * @author rajender
+ * @see dashboardrule.yang This class handles all RPC to be implemented for
+ *      dashboard
+ *
+ */
 public class CentinelDashboardImpl implements DashboardruleService, AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(CentinelDashboardImpl.class);
 
-    public static final InstanceIdentifier<DashboardRecord> dashboardRecordRecordId = InstanceIdentifier
-            .builder(DashboardRecord.class).build();
+    public static final InstanceIdentifier<DashboardRecord> dashboardRecordRecordId = InstanceIdentifier.builder(
+            DashboardRecord.class).build();
 
     private DataBroker dataProvider;
     private final ExecutorService executor;
+
+	private StreamhandlerImpl streamhandlerImpl;
 
     public CentinelDashboardImpl() {
         executor = Executors.newFixedThreadPool(1);
     }
 
-    public void setDataProvider(final DataBroker salDataProvider) {
-        LOG.info(" Entered to Data Provider");
+    public CentinelDashboardImpl(StreamhandlerImpl streamhandlerImpl) {
+		// TODO Auto-generated constructor stub
+    	
+        executor = Executors.newFixedThreadPool(1);
+        this.streamhandlerImpl=streamhandlerImpl;
+
+        
+	}
+
+	public void setDataProvider(final DataBroker salDataProvider) {
+        LOG.info("Entered to Data Provider");
         this.dataProvider = salDataProvider;
         LOG.info("data provider set");
     }
@@ -91,7 +115,7 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
         if (dataProvider != null) {
             WriteTransaction tx = dataProvider.newWriteOnlyTransaction();
-            LOG.info(" Transaction closed CentinelDashboardImpl");
+           LOG.info(" Transaction closed CentinelDashboardImpl");
             tx.delete(LogicalDatastoreType.OPERATIONAL, dashboardRecordRecordId);
 
         }
@@ -110,10 +134,10 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
             if (input.getDashboardID() == null) {
                 ErrorType errorType = ErrorType.APPLICATION;
-                futureResult.set(
-                        RpcResultBuilder.<SetWidgetOutput> failed().withError(errorType, "Dashboard cannot be empty")
+                futureResult.set(RpcResultBuilder.<SetWidgetOutput> failed()
+                        .withError(errorType, "Dashboard cannot be empty")
 
-                .build());
+                        .build());
                 return futureResult;
             }
             if (input.getMode() == null) {
@@ -145,8 +169,8 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
             List<DashboardList> Listofmerge = new ArrayList<DashboardList>();
             Listofmerge.add(newitem);
             try {
-                tx.merge(LogicalDatastoreType.OPERATIONAL, dashboardRecordRecordId,
-                        new DashboardRecordBuilder().setDashboardList(Listofmerge)
+                tx.merge(LogicalDatastoreType.OPERATIONAL, dashboardRecordRecordId, new DashboardRecordBuilder()
+                        .setDashboardList(Listofmerge)
 
                 .build(), false);
                 tx.submit();
@@ -163,14 +187,12 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
             futureResult.set(RpcResultBuilder.<SetWidgetOutput> success(setWidgetOutputBuilder.build()).build());
             if (input.getMode() == WidgetMode.Stream)
-                createCounterForStream(newitem.getWidgets().get(0).getWidgetID(),
-                        newitem.getWidgets().get(0).getStreamID(), newitem.getWidgets().get(0).getTimeRange(),
-                        input.getMode());
+                createCounterForStream(newitem.getWidgets().get(0).getWidgetID(), newitem.getWidgets().get(0)
+                        .getStreamID(), newitem.getWidgets().get(0).getTimeRange(), input.getMode(),streamhandlerImpl);
             if (input.getMode() == WidgetMode.Alert)
-                createCounterForStream(newitem.getWidgets().get(0).getWidgetID(),
-                        newitem.getWidgets().get(0).getAlertID(), newitem.getWidgets().get(0).getTimeRange(),
-                        input.getMode());
-            LOG.info("Dashboard Widget created/modified:" + newitem.getWidgets().get(0).getWidgetID());
+                createCounterForStream(newitem.getWidgets().get(0).getWidgetID(), newitem.getWidgets().get(0)
+                        .getAlertID(), newitem.getWidgets().get(0).getTimeRange(), input.getMode(),streamhandlerImpl);
+            LOG.info("Dashboard Widget created/modified:"+newitem.getWidgets().get(0).getWidgetID());
 
         } catch (Exception ex) {
             LOG.error(ex.getMessage());
@@ -187,7 +209,7 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
         // TODO Auto-generated method stub
     }
 
-    private void createCounterForStream(String widgetID, String streamID, Short resettime, Enum mode) {
+    private void createCounterForStream(String widgetID, String streamID, Short resettime, Enum mode, StreamhandlerImpl streamhandlerImpl2) {
         // TODO Auto-generated method stub
         StreamCounterInfoCache streamCounterInfoCache = StreamCounterInfoCache.getInstance();
         WidgetStreamCounterVO widgetStreamCounterVO = new WidgetStreamCounterVO();
@@ -196,7 +218,7 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
         widgetStreamCounterVO.setStreamID(streamID);
         widgetStreamCounterVO.setWidgetID(widgetID);
         widgetStreamCounterVO.setResettime(resettime);
-        streamCounterInfoCache.addCounter(widgetStreamCounterVO);
+        streamCounterInfoCache.addCounter(widgetStreamCounterVO,streamhandlerImpl2);
         LOG.info("created counter for widgetID:" + widgetID + ":streamID:" + streamID);
 
     }
@@ -283,8 +305,8 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
             List<DashboardList> Listofmerge = new ArrayList<DashboardList>();
             Listofmerge.add(newitem);
 
-            tx.merge(LogicalDatastoreType.OPERATIONAL, dashboardRecordRecordId,
-                    new DashboardRecordBuilder().setDashboardList(Listofmerge)
+            tx.merge(LogicalDatastoreType.OPERATIONAL, dashboardRecordRecordId, new DashboardRecordBuilder()
+                    .setDashboardList(Listofmerge)
 
             .build(), true);
             tx.submit();
@@ -321,8 +343,8 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
 
             setDashboardOutputBuilder.setValue(value);
 
-            futureResult.set(
-                    RpcResultBuilder.<GetWidgetMessageCountOutput> success(setDashboardOutputBuilder.build()).build());
+            futureResult.set(RpcResultBuilder.<GetWidgetMessageCountOutput> success(setDashboardOutputBuilder.build())
+                    .build());
 
         } catch (Exception e) {
             LOG.error(e.getMessage());
@@ -339,23 +361,105 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
         StreamCounterInfoCache streamCounterInfoCache = StreamCounterInfoCache.getInstance();
         List<WidgetStreamCounterVO> listofwidgets = streamCounterInfoCache.getListofcounter();
         for (WidgetStreamCounterVO widgetStreamCounterVO : listofwidgets) {
+            LOG.info("listofwidgets" + widgetStreamCounterVO.getWidgetID());
 
             if (widgetStreamCounterVO.getWidgetID().equals(input.getWidgetID())) {
+            	
+            	LOG.info("fetching data from DB ");
                 String widgetID = input.getWidgetID();
                 String starttime = input.getFromTimestamp();
                 String endtime = input.getToTimestamp();
 
                 // fetch data from DB where widgetID,starttime >=time<= endtime
-
+                QuerySqlRelativeApiInputBuilder querySqlRelativeApiInputBuilder=new QuerySqlRelativeApiInputBuilder();
+                List<String> value1;
+				//querySqlRelativeApiInputBuilder.setEventFields(value1);
+                String value2="select dashboard from centinel where centinel.dashboard.widgetId='"+widgetID +"'";
+				querySqlRelativeApiInputBuilder.setQueryString(value2);
+				LOG.info("querySqlRelativeApiInputBuilder query_string: " + querySqlRelativeApiInputBuilder.getQueryString());
+                Future<RpcResult<QuerySqlRelativeApiOutput>> result = streamhandlerImpl.querySqlRelativeApi(querySqlRelativeApiInputBuilder.build());
+                
+                
                 final SettableFuture<RpcResult<GetWidgetHistogramOutput>> futureResult = SettableFuture.create();
                 final GetWidgetHistogramOutputBuilder setWidgetHistogramOutputBuilder = new GetWidgetHistogramOutputBuilder();
-                List<Values> value = null;
+                List<Values> values = new ArrayList<Values>();
+              
+                		
+                try{
+                	if(result.get().getResult().getRecords().size()==0)
+                	{
+                		
+                		 ErrorType errorType = ErrorType.APPLICATION;
+                         futureResult.set(RpcResultBuilder.<GetWidgetHistogramOutput> failed()
+                                 .withError(errorType, "Exception caught at getWidgetHistogram:No Results found in DB").build());
+                         
+                         
+                		
+                		  return futureResult;
+
+                	}
+            	LOG.info("fetching data from DB "+result.get().getResult().getRecords().get(0).getFields());
+            	List<Records> records = result.get().getResult().getRecords();
+            	for (Records record : records) {
+            		
+            		ValuesBuilder valbuil=new ValuesBuilder();
+            		
+            		List<Fields> fields = record.getFields();
+            		for (Fields field : fields) {
+            			switch(field.getFieldName())
+            			{
+            			case "resetTime":
+            				valbuil.setTimestamp(field.getFieldValue());
+            			    break;
+            			
+            			case "counter":
+            				valbuil.setValue(Integer.parseInt(field.getFieldValue()));
+            			    break;
+            			
+            			}
+					}
+            		
+            		Values val=valbuil.build();
+              		values.add(val);
+				}
+            	
+            	if(!values.isEmpty())
+            	{
+                	LOG.info("Created list of data from DB of Size "+values.size());
+
+            	 setWidgetHistogramOutputBuilder.setValues(values);
+            	}
+            	else
+            	{
+                	LOG.warn("Could not fetch list of data from DB of Size ");
+
+            	}
+
+                 futureResult.set(RpcResultBuilder.<GetWidgetHistogramOutput> success(
+                         setWidgetHistogramOutputBuilder.build()).build());
+
+          		
+          		return futureResult;
+          		
+            	
+                }catch(Exception Ex)
+                {
+                	LOG.error("exception after fetching from DB "+Ex.getLocalizedMessage());
+                	 ErrorType errorType = ErrorType.APPLICATION;
+                     futureResult.set(RpcResultBuilder.<GetWidgetHistogramOutput> failed()
+                             .withError(errorType, "Exception Caught at widget deletion:" + Ex.getMessage())
+
+                             .build());
+                     
+               		return futureResult;
+
+                }
+            	
+            	
+                
+       
                 // set the values here
-                setWidgetHistogramOutputBuilder.setValues(value);
-
-                futureResult.set(RpcResultBuilder
-                        .<GetWidgetHistogramOutput> success(setWidgetHistogramOutputBuilder.build()).build());
-
+               
             }
         }
 
@@ -379,7 +483,8 @@ public class CentinelDashboardImpl implements DashboardruleService, AutoCloseabl
         Widgets widgettodelete = new WidgetsBuilder().setWidgetID(widgetID).build();
 
         try {
-            tx.delete(LogicalDatastoreType.OPERATIONAL,
+            tx.delete(
+                    LogicalDatastoreType.OPERATIONAL,
                     dashboardRecordRecordId.child(DashboardList.class, dashboardtodelete.getKey()).child(Widgets.class,
                             widgettodelete.getKey()));
             tx.submit();

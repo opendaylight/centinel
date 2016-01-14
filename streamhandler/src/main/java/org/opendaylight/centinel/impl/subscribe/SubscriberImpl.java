@@ -46,8 +46,8 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriberImpl.class);
 
-    public static final InstanceIdentifier<Subscription> subscriptionIID = InstanceIdentifier
-            .builder(Subscription.class).build();
+    public static final InstanceIdentifier<Subscription> subscriptionIID = InstanceIdentifier.builder(
+            Subscription.class).build();
 
     private DataBroker dataProvider;
     private final ExecutorService executor;
@@ -88,25 +88,21 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
         SubscriberInfoCache subscriberInfoCache = SubscriberInfoCache.getInstance();
 
         Subscription subscription = subscriberInfoCache.getSubscription();
+        if(subscription != null) {
+            for (Subscriptions subscriptionitem : subscription.getSubscriptions()) {
+                switch (subscriptionitem.getMode()) {
+                case Stream:
+                    if (streamID != null && message != null && streamID.equals(subscriptionitem.getStreamID())) {
+                        invokeRESTService(message, subscriptionitem.getURL());
+                    }
+                    break;
 
-        for (Subscriptions subscriptionitem : subscription.getSubscriptions()) {
-            switch (subscriptionitem.getMode()) {
-            case Stream:
-
-                if (streamID != null && message != null && streamID.equals(subscriptionitem.getStreamID())) {
-                    invokeRESTService(message, subscriptionitem.getURL());
+                case Alert:
+                    if (alertID != null && message != null && alertID.equals(subscriptionitem.getRuleID())) {
+                        invokeRESTService(message, subscriptionitem.getURL());
+                    }
+                    break;
                 }
-
-                break;
-
-            case Alert:
-                if (alertID != null && message != null && alertID.equals(subscriptionitem.getRuleID())) {
-
-                    invokeRESTService(message, subscriptionitem.getURL());
-                }
-
-                break;
-
             }
         }
 
@@ -168,8 +164,7 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
             LOG.info(" Subscribe Request recieved for Update/Creation:ID::" + subscriptionlist.get(0).getSubscribeID());
 
         } catch (Exception e) {
-            LOG.error("Subscribe Request recieved for Update/Creation:ID" + subscriptionlist.get(0).getSubscribeID()
-                    + ":ErrorMessage:" + e.getMessage());
+            LOG.error("Subscribe Request recieved for Update/Creation:ID"+ subscriptionlist.get(0).getSubscribeID()+":ErrorMessage:"+e.getMessage());
             futureResult.set(RpcResultBuilder.<SubscribeUserOutput> failed().build());
         }
 
@@ -178,12 +173,13 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
 
     @Override
     public Future<RpcResult<SubscribeTestOutput>> subscribeTest(SubscribeTestInput input) {
+        // TODO Auto-generated method stub
         final SettableFuture<RpcResult<SubscribeTestOutput>> futureResult = SettableFuture.create();
 
         publishToURL(input.getAlertID(), input.getStreamID(), input.getMessage());
 
-        futureResult.set(RpcResultBuilder
-                .<SubscribeTestOutput> success(new SubscribeTestOutputBuilder().setStatus("SUCCESS").build()).build());
+        futureResult.set(RpcResultBuilder.<SubscribeTestOutput> success(
+                new SubscribeTestOutputBuilder().setStatus("SUCCESS").build()).build());
         return futureResult;
     }
 
@@ -200,13 +196,13 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
             tx.submit();
 
             subscribeDeleteOutputBuilder.setStatus("SUCCESS");
-            futureResult.set(
-                    RpcResultBuilder.<SubscribeDeleteOutput> success(subscribeDeleteOutputBuilder.build()).build());
+            futureResult.set(RpcResultBuilder.<SubscribeDeleteOutput> success(subscribeDeleteOutputBuilder.build())
+                    .build());
 
             LOG.info("Subscription deleted:" + input.getSubscribeID());
         } catch (Exception Ex) {
-            LOG.error(
-                    "Exception in Subscription deleted:" + input.getSubscribeID() + ":ErrorMessage:" + Ex.getMessage());
+            LOG.error("Exception in Subscription deleted:" + input.getSubscribeID() + ":ErrorMessage:"
+                    + Ex.getMessage());
             ErrorType errorType = ErrorType.APPLICATION;
             futureResult.set(RpcResultBuilder.<SubscribeDeleteOutput> failed()
                     .withError(errorType, "Exception Caught at widget deletion:" + Ex.getMessage())

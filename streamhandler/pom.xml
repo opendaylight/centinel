@@ -47,10 +47,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
     <groupId>com.sun.jersey</groupId>
      <artifactId>jersey-client</artifactId>
+     <version>${jersey.version}</version>
      </dependency>
      <dependency>
      <groupId>com.sun.jersey</groupId>
      <artifactId>jersey-json</artifactId>
+     <version>${jersey.version}</version>
      </dependency>
       <dependency>
       <groupId>org.glassfish</groupId>
@@ -65,6 +67,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <dependency>
 	<groupId>org.codehaus.jettison</groupId>
 	<artifactId>jettison</artifactId>
+	<version>${jettison.version}</version>
 	</dependency>
 	
 	
@@ -89,6 +92,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 	<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
+			<version>2.5</version>
 		</dependency>
 		
 		<dependency>
@@ -125,8 +129,18 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
+			<version>${org.json.version}</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.0</version>
+		</dependency>		
 </dependencies>
 </project>
 
