@@ -923,13 +923,25 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         final SettableFuture<RpcResult<SetRuleOutput>> futureResult = SettableFuture.create();
         boolean idMatches = false;
         final String streamRuleId = generateRandomId();
-        if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
-                || input.getField() == null || input.getField().isEmpty() || input.getField().trim().isEmpty()
-                || input.getValue() == null || input.getValue().isEmpty() || input.getValue().trim().isEmpty()) {
-            LOG.debug("Value and field are mandatory ");
+       if(input.getType().FieldPresence != null)
+        {
+            if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
+                    || input.getField() == null || input.getField().isEmpty() || input.getField().trim().isEmpty()) {
+                return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
+                        RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
+                                "StreamId,Value are mandatory parameters")));
+        }
+        }
+        else 
+        {
+   if(input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
+           || input.getField() == null || input.getField().isEmpty() || input.getField().trim().isEmpty() || 
+           input.getValue() == null || input.getValue().isEmpty() || input.getValue().trim().isEmpty() )
+        { 
             return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
                     RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
                             "StreamId,Value and Field are mandatory parameters")));
+        }
         }
         LOG.info("setRule: " + input);
         final SetRuleOutputBuilder setRuleOutputBuilder = new SetRuleOutputBuilder();

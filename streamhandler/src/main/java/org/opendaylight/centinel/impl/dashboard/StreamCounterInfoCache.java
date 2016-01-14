@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.opendaylight.streamhandler.impl.StreamhandlerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,10 +69,10 @@ public final class StreamCounterInfoCache {
         this.listofcounter = listofcounter;
     }
 
-    public synchronized void addCounter(WidgetStreamCounterVO counter) {
+    public synchronized void addCounter(WidgetStreamCounterVO counter, StreamhandlerImpl streamhandlerImpl2) {
         ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
 
-        Runnable threadForReset = new ResetCounterThread(counter);
+        Runnable threadForReset = new ResetCounterThread(counter,streamhandlerImpl2);
         Calendar cal = Calendar.getInstance();
         int minute = cal.get(Calendar.MINUTE);
         long intialdelay = 5 - minute % 5;
@@ -84,6 +85,7 @@ public final class StreamCounterInfoCache {
 
         ses.scheduleAtFixedRate(threadForReset, intialdelay, period, tu);
         sesmap.put(counter.getWidgetID(), ses);
+        LOG.info("Add counter: initial delay: "+ intialdelay);
 
         this.listofcounter.add(counter);
     }
