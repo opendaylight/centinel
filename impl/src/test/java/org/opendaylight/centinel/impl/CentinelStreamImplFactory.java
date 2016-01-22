@@ -18,10 +18,15 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.r
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.PauseStreamInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.ResumeStreamInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.ResumeStreamInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetRuleInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetRuleInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetRuleOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetRuleOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetStreamInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetStreamInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetStreamOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetStreamOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.UpdateStreamInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.UpdateStreamInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.createstreaminput.StreamRules;
@@ -31,7 +36,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.r
 
 /**
  * @author Sunaina Khanna
- *
+ * 
  *         This class provides the mock data for junit test cases of stream.
  */
 
@@ -47,6 +52,110 @@ public class CentinelStreamImplFactory {
         setStreamInputBuilder.setTitle(null);
         setStreamInputBuilder.setDescription(null);
         return setStreamInputBuilder.build();
+    }
+
+    /**
+     * Mock params for SetStreamRule Rpc
+     */
+
+    public SetRuleInput setInputForStreamRuleWithInvalidInput() {
+        SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
+        setRuleInputBuilder.setField("field");
+        setRuleInputBuilder.setInverted(true);
+        setRuleInputBuilder.setStreamRuleID("rule001");
+        setRuleInputBuilder.setType(StreamType.GreatorThan);
+        setRuleInputBuilder.setValue("value");
+        return setRuleInputBuilder.build();
+    }
+
+    public ResumeStreamInput resumeInputValidValuesForStreamNull() {
+        ResumeStreamInputBuilder resumeStreamInputBuilder = new ResumeStreamInputBuilder();
+        resumeStreamInputBuilder.setStreamID(" ");
+        return resumeStreamInputBuilder.build();
+    }
+
+    public PauseStreamInput pauseInputValidValuesForStreamNull() {
+        PauseStreamInputBuilder pauseStreamInputBuilder = new PauseStreamInputBuilder();
+        pauseStreamInputBuilder.setStreamID(" ");
+        return pauseStreamInputBuilder.build();
+    }
+
+    /**
+     * Mock params for DeleteStream Rpc to create failure condition on invalid
+     * input.
+     */
+
+    public DeleteStreamInput deleteInputWithInvalidIdForStream() {
+        DeleteStreamInputBuilder deleteStreamInputBuilder = new DeleteStreamInputBuilder();
+        deleteStreamInputBuilder.setStreamID("deede");
+        return deleteStreamInputBuilder.build();
+    }
+
+    /**
+     * Mock params for SetStream Rpc to create failure condition on invalid
+     * input.
+     */
+
+    public StreamList setInputForStreamWithValidInputForRule() {
+        StreamListBuilder setStreamList = new StreamListBuilder();
+        setStreamList.setTitle("Str001");
+        setStreamList.setDescription("stream");
+        setStreamList.setStreamID("1000");
+        return setStreamList.build();
+    }
+
+    /**
+     * Mock params for SetStreamRule Rpc
+     */
+
+    public SetRuleInput setInputForStreamRuleWithInValidStreamId() {
+        SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
+        setRuleInputBuilder.setField("field");
+        setRuleInputBuilder.setInverted(true);
+        setRuleInputBuilder.setStreamID("str001");
+        setRuleInputBuilder.setStreamRuleID("rule001");
+        setRuleInputBuilder.setType(StreamType.GreatorThan);
+        setRuleInputBuilder.setValue("value");
+        return setRuleInputBuilder.build();
+    }
+
+    public SetRuleInput setInputForStreamRuleWithInvalidInputWithType() {
+        SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
+        setRuleInputBuilder.setField("field");
+        setRuleInputBuilder.setInverted(true);
+        setRuleInputBuilder.setStreamRuleID("rule001");
+        setRuleInputBuilder.setType(StreamType.FieldPresence);
+        setRuleInputBuilder.setValue("value");
+        return setRuleInputBuilder.build();
+    }
+
+    /**
+     * Mock params for SetStreamRule Rpc
+     */
+
+    public SetRuleOutput expectedStreamRuleObject() {
+        SetRuleOutputBuilder setRuleOutputBuilder = new SetRuleOutputBuilder();
+        setRuleOutputBuilder.setField("field");
+        setRuleOutputBuilder.setInverted(true);
+        setRuleOutputBuilder.setStreamRuleID("rule001");
+        setRuleOutputBuilder.setType(StreamType.GreatorThan);
+        setRuleOutputBuilder.setValue("value");
+        return setRuleOutputBuilder.build();
+    }
+
+    /**
+     * Mock params for SetStreamRule Rpc
+     */
+
+    public SetRuleInput setInputForStreamRuleWithValidInput() {
+        SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
+        setRuleInputBuilder.setField("field");
+        setRuleInputBuilder.setInverted(true);
+        setRuleInputBuilder.setStreamID("1000");
+        setRuleInputBuilder.setStreamRuleID("rule001");
+        setRuleInputBuilder.setType(StreamType.GreatorThan);
+        setRuleInputBuilder.setValue("value");
+        return setRuleInputBuilder.build();
     }
 
     /**
@@ -112,7 +221,6 @@ public class CentinelStreamImplFactory {
         StreamListBuilder streamListObj = new StreamListBuilder();
         List<StreamRules> streamRuleList = new ArrayList<StreamRules>();
         StreamRulesBuilder streamRuleBuilder = new StreamRulesBuilder();
-
         streamRuleBuilder.setField("field");
         streamRuleList.add(streamRuleBuilder.build());
         streamListObj.setTitle("Str001");
