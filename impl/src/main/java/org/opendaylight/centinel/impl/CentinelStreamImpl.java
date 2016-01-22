@@ -46,6 +46,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.r
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecord;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecordBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.UpdateStreamInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.UpdateStreamOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.UpdateStreamOutputBuilder;
@@ -913,14 +914,13 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         return null;
     }
 
-    @SuppressWarnings("static-access")
-	@Override
+    @Override
     public Future<RpcResult<SetRuleOutput>> setRule(final SetRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetRuleOutput>> futureResult = SettableFuture.create();
         boolean idMatches = false;
         final String streamRuleId = generateRandomId();
-       if(input.getType().FieldPresence != null)
+       if(input.getType() == StreamType.FieldPresence)
         {
             if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
                     || input.getField() == null || input.getField().isEmpty() || input.getField().trim().isEmpty()) {

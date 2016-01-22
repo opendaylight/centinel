@@ -39,6 +39,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.r
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.PauseStreamOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.ResumeStreamInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.ResumeStreamOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetRuleInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetRuleOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetStreamInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetStreamOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecord;
@@ -54,7 +56,7 @@ import com.google.common.util.concurrent.Futures;
 
 /**
  * @author Sunaina Khanna
- *
+ * 
  *         This class consists of junit test cases for streamImpl .
  */
 
@@ -97,6 +99,64 @@ public class CentinelStreamImplTest {
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
 
         Future<RpcResult<SetStreamOutput>> futureOutput = myMock.setStream(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getResult();
+        } catch (ExecutionException | InterruptedException e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    @Test
+    public void testSetStreamRuleFailureOnInvalidInput() {
+
+        // build dummy input
+        SetRuleInput input = centinelStreamImplFactory.setInputForStreamRuleWithInvalidInput();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamList> streamList = new ArrayList<StreamList>();
+
+        StreamRecord streamRecord = new StreamRecordBuilder().setStreamList(streamList).build();
+
+        Optional<StreamRecord> expected = Optional.of(streamRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
+                LogicalDatastoreType.CONFIGURATION, MockCentinelStreamImpl.streamRecordId);
+
+        Future<RpcResult<SetRuleOutput>> futureOutput = myMock.setRule(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getResult();
+        } catch (ExecutionException | InterruptedException e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    @Test
+    public void testSetStreamRuleFailureOnInvalidInputWithType() {
+
+        // build dummy input
+        SetRuleInput input = centinelStreamImplFactory.setInputForStreamRuleWithInvalidInputWithType();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamList> streamList = new ArrayList<StreamList>();
+
+        StreamRecord streamRecord = new StreamRecordBuilder().setStreamList(streamList).build();
+
+        Optional<StreamRecord> expected = Optional.of(streamRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
+                LogicalDatastoreType.CONFIGURATION, MockCentinelStreamImpl.streamRecordId);
+
+        Future<RpcResult<SetRuleOutput>> futureOutput = myMock.setRule(input);
 
         boolean caught = false;
         try {
@@ -169,6 +229,41 @@ public class CentinelStreamImplTest {
                 false);
         doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
         Future<RpcResult<GetStreamOutput>> futureOutput = myMock.getStream(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getResult();
+        } catch (ExecutionException | InterruptedException e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    @Test
+    public void testStreamRuleOnInValidStreamId() {
+        // build dummy input
+        SetRuleInput input = centinelStreamImplFactory.setInputForStreamRuleWithInValidStreamId();
+        StreamList input1 = centinelStreamImplFactory.setInputForStreamWithValidInputForRule();
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamList> streamList = new ArrayList<StreamList>();
+        streamList.add(input1);
+
+        StreamRecord streamRecord = new StreamRecordBuilder().setStreamList(streamList).build();
+
+        Optional<StreamRecord> expected = Optional.of(streamRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
+                LogicalDatastoreType.CONFIGURATION, MockCentinelStreamImpl.streamRecordId);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelStreamImpl.streamRecordId);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        Future<RpcResult<SetRuleOutput>> futureOutput = myMock.setRule(input);
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
 
         boolean caught = false;
         try {
@@ -271,6 +366,31 @@ public class CentinelStreamImplTest {
     }
 
     @Test
+    public void testDeleteStreamFailureDueToInvalidStreamId() {
+        // build dummy input
+        DeleteStreamInput input = centinelStreamImplFactory.deleteInputWithInvalidIdForStream();
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+        List<StreamList> streamList = new ArrayList<StreamList>();
+        StreamRecord streamRecord = new StreamRecordBuilder().setStreamList(streamList).build();
+        Optional<StreamRecord> expected = Optional.of(streamRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(
+                LogicalDatastoreType.CONFIGURATION, MockCentinelStreamImpl.streamRecordId);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        Future<RpcResult<DeleteStreamOutput>> futureOutput = myMock.deleteStream(input);
+        boolean caught = false;
+        try {
+            futureOutput.get().getResult();
+        } catch (ExecutionException | InterruptedException e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    @Test
     public void testPauseStreamFailureDueToInvalidStreamId() {
         // build dummy input
         PauseStreamInput input = centinelStreamImplFactory.pauseInputValidValuesForStream();
@@ -289,7 +409,6 @@ public class CentinelStreamImplTest {
             strmListObj = (StreamList) method.invoke(obj, streamListObj, streamListObj.getStreamID(), input);
         } catch (NoSuchMethodException | IllegalAccessException | SecurityException | IllegalArgumentException
                 | InvocationTargetException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -322,6 +441,104 @@ public class CentinelStreamImplTest {
     }
 
     @Test
+    public void testPauseStreamFailureDueToNullStreamId() {
+        // build dummy input
+        PauseStreamInput input = centinelStreamImplFactory.pauseInputValidValuesForStreamNull();
+        StreamList streamListObj = centinelStreamImplFactory.mockStreamObjectBuilder();
+
+        CentinelStreamImpl obj = new CentinelStreamImpl();
+        Class mockCentinelStreamImpl = CentinelStreamImpl.class;
+        StreamList strmListObj = null;
+
+        // reflecting build method
+        Class[] arg = new Class[] { StreamList.class, String.class, PauseStreamInput.class };
+        Method method = null;
+        try {
+            method = mockCentinelStreamImpl.getDeclaredMethod("buildPausedStreamListRecord", arg);
+            method.setAccessible(true);
+            strmListObj = (StreamList) method.invoke(obj, streamListObj, streamListObj.getStreamID(), input);
+        } catch (NoSuchMethodException | IllegalAccessException | SecurityException | IllegalArgumentException
+                | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamList> streamList = new ArrayList<StreamList>();
+
+        streamList.add(strmListObj);
+
+        StreamRecord streamRecord = new StreamRecordBuilder().setStreamList(streamList).build();
+
+        Optional<StreamRecord> expected = Optional.of(streamRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelStreamImpl.streamRecordId);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        Future<RpcResult<PauseStreamOutput>> futureOutput = myMock.pauseStream(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (ExecutionException | InterruptedException e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    @Test
+    public void testResumeStreamFailureDueToStreamIdNull() {
+        // build dummy input
+        ResumeStreamInput input = centinelStreamImplFactory.resumeInputValidValuesForStreamNull();
+        StreamList streamListObj = centinelStreamImplFactory.mockStreamObjectBuilder();
+
+        CentinelStreamImpl obj = new CentinelStreamImpl();
+        Class mockCentinelStreamImpl = CentinelStreamImpl.class;
+        StreamList strmListObj = null;
+
+        // reflecting build method
+        Class[] arg = new Class[] { StreamList.class, String.class, ResumeStreamInput.class };
+        Method method = null;
+        try {
+            method = mockCentinelStreamImpl.getDeclaredMethod("buildResumedStreamListRecord", arg);
+            method.setAccessible(true);
+            strmListObj = (StreamList) method.invoke(obj, streamListObj, streamListObj.getStreamID(), input);
+        } catch (NoSuchMethodException | IllegalAccessException | SecurityException | IllegalArgumentException
+                | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        // to mock the tx object
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        List<StreamList> streamList = new ArrayList<StreamList>();
+        streamList.add(strmListObj);
+
+        StreamRecord streamRecord = new StreamRecordBuilder().setStreamList(streamList).build();
+
+        Optional<StreamRecord> expected = Optional.of(streamRecord);
+        doReturn(Futures.immediateCheckedFuture(expected)).when(mockReadWriteTx).read(LogicalDatastoreType.OPERATIONAL,
+                MockCentinelStreamImpl.streamRecordId);
+
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+
+        Future<RpcResult<ResumeStreamOutput>> futureOutput = myMock.resumeStream(input);
+
+        boolean caught = false;
+        try {
+            futureOutput.get().getErrors();
+
+        } catch (ExecutionException | InterruptedException e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    @Test
     public void testResumeStreamFailureDueToInvalidStreamId() {
         // build dummy input
         ResumeStreamInput input = centinelStreamImplFactory.resumeInputValidValuesForStream();
@@ -340,7 +557,6 @@ public class CentinelStreamImplTest {
             strmListObj = (StreamList) method.invoke(obj, streamListObj, streamListObj.getStreamID(), input);
         } catch (NoSuchMethodException | IllegalAccessException | SecurityException | IllegalArgumentException
                 | InvocationTargetException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -390,7 +606,6 @@ public class CentinelStreamImplTest {
             strmListObj = (StreamList) method.invoke(obj, input, streamListObj);
         } catch (NoSuchMethodException | IllegalAccessException | SecurityException | IllegalArgumentException
                 | InvocationTargetException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -440,7 +655,6 @@ public class CentinelStreamImplTest {
             strmListObj = (StreamList) method.invoke(obj, input, streamListObj);
         } catch (NoSuchMethodException | IllegalAccessException | SecurityException | IllegalArgumentException
                 | InvocationTargetException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -489,7 +703,6 @@ public class CentinelStreamImplTest {
             strmListObj = (StreamList) method.invoke(obj, input, streamListObj);
         } catch (NoSuchMethodException | IllegalAccessException | SecurityException | IllegalArgumentException
                 | InvocationTargetException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
