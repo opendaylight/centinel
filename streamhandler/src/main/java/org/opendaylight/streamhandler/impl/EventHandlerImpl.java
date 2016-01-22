@@ -25,7 +25,7 @@ public class EventHandlerImpl implements StreamhandlerListener {
     @Override
     public void onEventNotified(EventNotified notification) {
 
-        LOG.info("Event Notification received: " + notification);
+        LOG.info("Event Notification received");
 
         PersistEventInputBuilder input = new PersistEventInputBuilder();
         input.setEventBody(notification.getEventBody());

@@ -51,13 +51,6 @@ public class LogCollector {
         catch (Exception e) {
             LOG.error("Exception while connecting " + e.getMessage(), e);
         }
-        try {
-            s.close();
-        }
-
-        catch (IOException ioException) {
-            LOG.error("Unable to close. IOexception", ioException);
-        }
     }
 
 }
@@ -97,7 +90,7 @@ class ClientHandler extends Thread {
             input = new PersistEventInputBuilder();
             input.setEventBodyType(EventBodyType.Avro);
             List<String> keyList = new ArrayList<String>();
-            keyList.add("log_timestamp");
+            keyList.add("log_time");
             keyList.add("message");
             input.setEventKeys(keyList);
             input.setEventType("stringdata");
@@ -116,7 +109,6 @@ class ClientHandler extends Thread {
                     // end Persisting Log event into Hbase
                     Future<RpcResult<Void>> persistEvent = streamHandlerImpl.persistEvent(input.build());
                     // end Persisting Log event into Hbase
-                    LOG.info("rpc result persisted in database: " + persistEvent.get().isSuccessful());
                     // if persisted successfully send it to graylog
                     if (persistEvent.get().isSuccessful()) {
 
@@ -124,7 +116,6 @@ class ClientHandler extends Thread {
                         ClientResponse response = webResource.type("application/json").post(ClientResponse.class,
                                 data.toString());
                         if (response.getStatus() == 202) {
-                            LOG.info("Message sent successfully to graylog");
                         }
                     }
                 } catch (Exception e) {
@@ -156,8 +147,8 @@ class ClientHandler extends Thread {
         int facility = priIntValue / 8;
         int severity = priIntValue % 8;
         // saving priority and facility into JSONObject
-        jsonLogEvent.put("Facility", String.valueOf(facility));
-        jsonLogEvent.put("Severity", String.valueOf(severity));
+        jsonLogEvent.put("facility", String.valueOf(facility));
+        jsonLogEvent.put("severity", String.valueOf(severity));
         Preconditions.checkArgument(msgLength > endBracPosition + 1, "Bad format: no data except priority (%s)",
                 logMessage);
         cursorPosition = endBracPosition + 1;
@@ -195,7 +186,7 @@ class ClientHandler extends Thread {
             LOG.error("Unable to parse message: " + logMessage);
             throw new IllegalArgumentException("Unable to parse message: " + logMessage, ex);
         }
-        jsonLogEvent.put("log_timestamp", String.valueOf(timeStamp));
+        jsonLogEvent.put("log_time", String.valueOf(timeStamp));
         int nextSpaceIndex = logMessage.indexOf(' ', cursorPosition);
         if (nextSpaceIndex == -1) {
             throw new IllegalArgumentException("bad syslog format (missing hostname)");
@@ -210,6 +201,9 @@ class ClientHandler extends Thread {
 
             messageData = logMessage;
         }
+    	messageData=messageData.replace("|", "~");
+    	String ar[]=messageData.split(("~"));
+    	messageData=ar[ar.length-1];
         jsonLogEvent.put("message", messageData);
         return jsonLogEvent;
     }
