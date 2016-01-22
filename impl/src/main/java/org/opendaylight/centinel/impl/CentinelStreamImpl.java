@@ -434,7 +434,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
             return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
                     streamIdcannotbenullError()));
         }
-        LOG.info("SetStreamRuleOutput: " + input);
         final GetStreamOutputBuilder getStreamOutputBuilder = new GetStreamOutputBuilder();
         ListenableFuture<Optional<StreamRecord>> streamRuleReadFuture = tx.read(LogicalDatastoreType.OPERATIONAL,
                 streamRecordId);
@@ -504,7 +503,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
             return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
                     streamIdcannotbenullError()));
         }
-        LOG.info("updateAlertMessageCountRule: " + input);
         final UpdateStreamOutputBuilder updateStreamRuleOutputBuilder = new UpdateStreamOutputBuilder();
         updateStreamRuleOutputBuilder.setTitle(input.getTitle());
         updateStreamRuleOutputBuilder.setDescription(input.getDescription());
@@ -665,7 +663,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         }
         final PauseStreamOutputBuilder pauseStreamOutputBuilder = new PauseStreamOutputBuilder();
         pauseStreamOutputBuilder.setDisabled("true");
-        LOG.info("updateAlertMessageCountRule: " + input);
         ListenableFuture<Optional<StreamRecord>> readFutureOperational = tx.read(LogicalDatastoreType.OPERATIONAL,
                 streamRecordId);
 
@@ -799,7 +796,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         }
         final ResumeStreamOutputBuilder resumeStreamOutputBuilder = new ResumeStreamOutputBuilder();
         resumeStreamOutputBuilder.setDisabled("false");
-        LOG.info("updateAlertMessageCountRule: " + input);
         ListenableFuture<Optional<StreamRecord>> readFutureOperational = tx.read(LogicalDatastoreType.OPERATIONAL,
                 streamRecordId);
 
@@ -917,7 +913,8 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         return null;
     }
 
-    @Override
+    @SuppressWarnings("static-access")
+	@Override
     public Future<RpcResult<SetRuleOutput>> setRule(final SetRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetRuleOutput>> futureResult = SettableFuture.create();
@@ -943,7 +940,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                             "StreamId,Value and Field are mandatory parameters")));
         }
         }
-        LOG.info("setRule: " + input);
         final SetRuleOutputBuilder setRuleOutputBuilder = new SetRuleOutputBuilder();
         setRuleOutputBuilder.setStreamRuleID(streamRuleId);
         ListenableFuture<Optional<StreamRecord>> readFutureOperational = tx.read(LogicalDatastoreType.OPERATIONAL,

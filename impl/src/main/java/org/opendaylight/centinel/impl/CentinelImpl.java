@@ -365,7 +365,6 @@ public class CentinelImpl implements AlertruleService, AutoCloseable, DataChange
 
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetAlertMessageCountRuleOutput>> futureResult = SettableFuture.create();
-        LOG.info("setAlertMessageCountRule: " + input);
         final SetAlertMessageCountRuleOutputBuilder setAlertMessageCountRuleOutputBuilder = new SetAlertMessageCountRuleOutputBuilder();
         setAlertMessageCountRuleOutputBuilder.setMessageCountOperator(input.getMessageCountOperator());
         setAlertMessageCountRuleOutputBuilder.setMessageCountCount(input.getMessageCountCount());
@@ -580,7 +579,6 @@ public class CentinelImpl implements AlertruleService, AutoCloseable, DataChange
             final UpdateAlertMessageCountRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<UpdateAlertMessageCountRuleOutput>> futureResult = SettableFuture.create();
-        LOG.info("updateAlertMessageCountRule: " + input);
         final UpdateAlertMessageCountRuleOutputBuilder updateAlertMessageCountRuleOutputBuilder = new UpdateAlertMessageCountRuleOutputBuilder();
         updateAlertMessageCountRuleOutputBuilder.setMessageCountOperator(input.getMessageCountOperator());
         updateAlertMessageCountRuleOutputBuilder.setMessageCountCount(input.getMessageCountCount());
@@ -706,7 +704,6 @@ public class CentinelImpl implements AlertruleService, AutoCloseable, DataChange
             final UpdateAlertFieldContentRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<UpdateAlertFieldContentRuleOutput>> futureResult = SettableFuture.create();
-        LOG.info("updateAlertFieldContentRule: " + input);
         final UpdateAlertFieldContentRuleOutputBuilder updateAlertFieldContentRuleOutputBuilder = new UpdateAlertFieldContentRuleOutputBuilder();
         updateAlertFieldContentRuleOutputBuilder.setFieldContentBacklog(input.getFieldContentBacklog());
         updateAlertFieldContentRuleOutputBuilder.setFieldContentCompareToValue(input.getFieldContentCompareToValue());
@@ -821,7 +818,6 @@ public class CentinelImpl implements AlertruleService, AutoCloseable, DataChange
             final UpdateAlertFieldValueRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<UpdateAlertFieldValueRuleOutput>> futureResult = SettableFuture.create();
-        LOG.info("updateAlertFieldValueRuleOutput: " + input);
         final UpdateAlertFieldValueRuleOutputBuilder updateAlertFieldValueRuleOutputBuilder = new UpdateAlertFieldValueRuleOutputBuilder();
         updateAlertFieldValueRuleOutputBuilder.setFieldValueBacklog(input.getFieldValueBacklog());
         updateAlertFieldValueRuleOutputBuilder.setFieldValueField(input.getFieldValueField());
@@ -938,7 +934,6 @@ public class CentinelImpl implements AlertruleService, AutoCloseable, DataChange
             DeleteAlertMessageCountRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<DeleteAlertMessageCountRuleOutput>> futureResult = SettableFuture.create();
-        LOG.info("DeleteAlertMessageCountRuleOutput: " + input);
         final DeleteAlertMessageCountRuleOutputBuilder deleteAlertMessageCountRuleOutputBuilder = new DeleteAlertMessageCountRuleOutputBuilder();
         deleteAlertMessageCountRuleOutputBuilder.setMessageCountOperator(input.getMessageCountOperator());
         deleteAlertMessageCountRuleOutputBuilder.setMessageCountCount(input.getMessageCountCount());
@@ -1058,7 +1053,6 @@ public class CentinelImpl implements AlertruleService, AutoCloseable, DataChange
             DeleteAlertFieldContentRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<DeleteAlertFieldContentRuleOutput>> futureResult = SettableFuture.create();
-        LOG.info("DeleteAlertFieldContentRuleOutput: " + input);
         final DeleteAlertFieldContentRuleOutputBuilder deleteAlertFieldContentRuleOutputBuilder = new DeleteAlertFieldContentRuleOutputBuilder();
         deleteAlertFieldContentRuleOutputBuilder.setFieldContentBacklog(input.getFieldContentBacklog());
         deleteAlertFieldContentRuleOutputBuilder.setFieldContentCompareToValue(input.getFieldContentCompareToValue());
@@ -1178,7 +1172,6 @@ public class CentinelImpl implements AlertruleService, AutoCloseable, DataChange
             final DeleteAlertFieldValueRuleInput input) {
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<DeleteAlertFieldValueRuleOutput>> futureResult = SettableFuture.create();
-        LOG.info("deleteAlertFieldValueRuleOutput: " + input);
         final DeleteAlertFieldValueRuleOutputBuilder deleteAlertFieldValueRuleOutputBuilder = new DeleteAlertFieldValueRuleOutputBuilder();
         deleteAlertFieldValueRuleOutputBuilder.setFieldValueBacklog(input.getFieldValueBacklog());
         deleteAlertFieldValueRuleOutputBuilder.setFieldValueField(input.getFieldValueField());
@@ -1489,7 +1482,6 @@ public class CentinelImpl implements AlertruleService, AutoCloseable, DataChange
 
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<GetAllAlertRuleOutput>> futureResult = SettableFuture.create();
-        LOG.info("GetAllAlertRuleOutput: " + input);
         final GetAllAlertRuleOutputBuilder allAlertRuleOutputBuilder = new GetAllAlertRuleOutputBuilder();
 
         ListenableFuture<Optional<AlertMessageCountRuleRecord>> alertMessageCountReadFuture = tx.read(

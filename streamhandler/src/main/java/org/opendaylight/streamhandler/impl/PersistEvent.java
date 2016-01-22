@@ -114,7 +114,6 @@ public class PersistEvent {
         rowKeyLength = rowKeyStr.length();
         rowKeyStr = rowKeyStr.substring(0, rowKeyLength - 1);
         event.setHeaders(header);
-        LOG.info("after event: " + event.toString());
         try {
             client.append(event);
         } catch (EventDeliveryException e) {

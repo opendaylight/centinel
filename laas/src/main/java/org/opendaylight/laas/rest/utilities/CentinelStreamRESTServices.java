@@ -93,10 +93,8 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
         JsonObject streamOutputJsonObject = reader.readObject();
         reader.close();
         JsonArray outResponse = streamOutputJsonObject.getJsonArray("outputs");
-        LOG.info("outResponse: " + outResponse);
 
         for (int i = 0; i < outResponse.toArray().length; i++) {
-            LOG.info("Outputs available: " + outResponse.getJsonObject(i));
             if ("\"org.opendaylight.centinel.output.CentinelOutput\"".equals(outResponse.getJsonObject(i).get("type")
                     .toString())) {
                 outputPluginId = outResponse.getJsonObject(i).get("id").toString().replace("\"", "");
@@ -185,7 +183,6 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
             }
         }
 
-        LOG.info("JSON for GrayLog" + setStreamJsonObject);
         return setStreamJsonObject;
     }
 
@@ -209,7 +206,6 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
                     .setStreamRules(streamDataObject.getStreamRules()).setDisabled(streamDataObject.getDisabled())
                     .build();
         }
-        LOG.info("DataObject for Operational Data Store : " + operationalDataObject);
         return operationalDataObject;
     }
 
@@ -252,7 +248,6 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
         alertCallbackJsonObject = factory.createObjectBuilder()
                 .add(properties.getProperty("type"), "org.opendaylight.centinel.alertcallback.CentinelAlertCallback")
                 .add("configuration", factory.createObjectBuilder()).build();
-        LOG.info("alertCallback JsonObject: " + alertCallbackJsonObject.toString());
         LOG.info("resource: " + graylogServerIp + graylogStream + streamId + alarmCallback);
         try {
             alarmCallbackResponse = graylogRESTPost(alertCallbackJsonObject, graylogServerIp + graylogStream + streamId
@@ -276,7 +271,6 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
 
         streamOutputJsonObject = factory.createObjectBuilder()
                 .add("outputs", factory.createArrayBuilder().add(outputPluginId)).build();
-        LOG.info("streamOutput JsonObject: " + streamOutputJsonObject.toString());
         streamOutputResponse = graylogRESTPost(streamOutputJsonObject, graylogServerIp + graylogStream + streamId
                 + "/outputs");
         LOG.info("streamOutputResponse created with status: " + streamOutputResponse.getStatus());
@@ -335,7 +329,6 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
     private JsonObject objectToJsonMapperStreamRule(StreamRule streamRule) {
 
         JsonObject setStreamRuleJsonObject = null;
-        LOG.info("STREAM RULE" + streamRule);
 
         if (streamRule.getType() != null && streamRule.getField() != null && streamRule.isInverted() != null) {
             int value = streamRule.getType().getIntValue() + 1;
@@ -346,7 +339,6 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
                     .add(properties.getProperty("type"), value).build();
         }
 
-        LOG.info("JSON for GrayLog" + setStreamRuleJsonObject.toString());
         return setStreamRuleJsonObject;
     }
     
@@ -355,7 +347,6 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
         JsonReader reader = Json.createReader(new StringReader(response.getEntity(String.class)));
         JsonObject jsonOutput = reader.readObject();
         reader.close();
-        LOG.info("Json for available inputs: " + jsonOutput.toString());
         JsonArray node = jsonOutput.getJsonArray("inputs");
         for (int i = 0; i < node.toArray().length; i++) {
             if ("\"org.graylog2.inputs.gelf.http.GELFHttpInput\"".equals(node.getJsonObject(i)
@@ -386,7 +377,6 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
                                 .add("port", 12201).add("enable_cors", true).add("override_source", "")
                                 .add("bind_address", "0.0.0.0")).build();
 
-        LOG.info("streamOutput JsonObject: " + systemInputJsonObject.toString());
         ClientResponse response = graylogRESTPost(systemInputJsonObject, graylogServerIp + "system/inputs");
         LOG.info("Response Status for creating system input: " + response.getStatus());
     }
@@ -397,7 +387,6 @@ public class CentinelStreamRESTServices extends CentinelCommonRESTServices {
         JsonReader reader = Json.createReader(new StringReader(response.getEntity(String.class)));
         JsonObject jsonOutput = reader.readObject();
         reader.close();
-        LOG.info("Output json for system information: " + jsonOutput.toString());
         node = jsonOutput.get("server_id");
         LOG.info("Node: " + node);
         return node;
