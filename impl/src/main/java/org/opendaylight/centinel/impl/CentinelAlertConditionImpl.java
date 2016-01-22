@@ -16,7 +16,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.NotificationService;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -99,18 +98,11 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
     public static final InstanceIdentifier<StreamRecord> streamRecordId = InstanceIdentifier
             .builder(StreamRecord.class).build();
 
-    private NotificationService notificationProvider;
     private DataBroker dataProvider;
     private final ExecutorService executor;
 
     public CentinelAlertConditionImpl() {
         executor = Executors.newFixedThreadPool(1);
-    }
-
-    public void setNotificationProvider(final NotificationService salService) {
-        LOG.info(" Entered to Notification ");
-        this.notificationProvider = salService;
-        LOG.info("notifictaion provider set");
     }
 
     StreamAlertMessageCountRuleList buildAlertMessageCountRuleRecord(final SetAlertMessageCountRuleInput input,
@@ -398,7 +390,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
         final ReadWriteTransaction tx = dataProvider.newReadWriteTransaction();
         final SettableFuture<RpcResult<SetAlertMessageCountRuleOutput>> futureResult = SettableFuture.create();
         final String configId = generateConfigId();
-        LOG.info("setAlertMessageCountRule: " + input);
         final SetAlertMessageCountRuleOutputBuilder setAlertMessageCountRuleOutputBuilder = new SetAlertMessageCountRuleOutputBuilder();
         setAlertMessageCountRuleOutputBuilder.setMessageCountOperator(input.getMessageCountOperator());
         setAlertMessageCountRuleOutputBuilder.setMessageCountCount(input.getMessageCountCount());
@@ -600,7 +591,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                     RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
                             "StreamId and RuleId are mandatory fields")));
         }
-        LOG.info("updateAlertMessageCountRule: " + input);
         final UpdateAlertMessageCountRuleOutputBuilder updateAlertMessageCountRuleOutputBuilder = new UpdateAlertMessageCountRuleOutputBuilder();
         updateAlertMessageCountRuleOutputBuilder.setMessageCountOperator(input.getMessageCountOperator());
         updateAlertMessageCountRuleOutputBuilder.setMessageCountCount(input.getMessageCountCount());
@@ -751,7 +741,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                     RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
                             "StreamId and RuleId are mandatory fields")));
         }
-        LOG.info("updateAlertFieldContentRule: " + input);
         final UpdateAlertFieldContentRuleOutputBuilder updateAlertFieldContentRuleOutputBuilder = new UpdateAlertFieldContentRuleOutputBuilder();
         updateAlertFieldContentRuleOutputBuilder.setFieldContentBacklog(input.getFieldContentBacklog());
         updateAlertFieldContentRuleOutputBuilder.setFieldContentCompareToValue(input.getFieldContentCompareToValue());
@@ -893,7 +882,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                     RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
                             "StreamId and RuleId are mandatory fields")));
         }
-        LOG.info("updateAlertFieldValueRuleOutput: " + input);
         final UpdateAlertFieldValueRuleOutputBuilder updateAlertFieldValueRuleOutputBuilder = new UpdateAlertFieldValueRuleOutputBuilder();
         updateAlertFieldValueRuleOutputBuilder.setFieldValueBacklog(input.getFieldValueBacklog());
         updateAlertFieldValueRuleOutputBuilder.setFieldValueField(input.getFieldValueField());
@@ -1036,7 +1024,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                     RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
                             "StreamId and RuleId are mandatory fields")));
         }
-        LOG.info("DeleteAlertMessageCountRuleOutput: " + input);
         final DeleteAlertMessageCountRuleOutputBuilder deleteAlertMessageCountRuleOutputBuilder = new DeleteAlertMessageCountRuleOutputBuilder();
         deleteAlertMessageCountRuleOutputBuilder.setMessageCountOperator(input.getMessageCountOperator());
         deleteAlertMessageCountRuleOutputBuilder.setMessageCountCount(input.getMessageCountCount());
@@ -1183,7 +1170,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                     RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
                             "StreamId and RuleId are mandatory fields")));
         }
-        LOG.info("DeleteAlertFieldContentRuleOutput: " + input);
         final DeleteAlertFieldContentRuleOutputBuilder deleteAlertFieldContentRuleOutputBuilder = new DeleteAlertFieldContentRuleOutputBuilder();
         deleteAlertFieldContentRuleOutputBuilder.setFieldContentBacklog(input.getFieldContentBacklog());
         deleteAlertFieldContentRuleOutputBuilder.setFieldContentCompareToValue(input.getFieldContentCompareToValue());
@@ -1329,7 +1315,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                     RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
                             "StreamId and RuleId are mandatory fields")));
         }
-        LOG.info("deleteAlertFieldValueRuleOutput: " + input);
         final DeleteAlertFieldValueRuleOutputBuilder deleteAlertFieldValueRuleOutputBuilder = new DeleteAlertFieldValueRuleOutputBuilder();
         deleteAlertFieldValueRuleOutputBuilder.setStreamID("The alert with this" + input.getStreamID() + "is deleted");
 
@@ -1456,7 +1441,6 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                     .immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input", RpcResultBuilder
                             .newError(ErrorType.APPLICATION, "invalid-input", "StreamId is a  mandatory field")));
         }
-        LOG.info("GetAllAlertRuleOutput: " + input);
         final GetAllAlertRuleOutputBuilder allAlertRuleOutputBuilder = new GetAllAlertRuleOutputBuilder();
 
         ListenableFuture<Optional<AlertMessageCountRuleRecord>> alertMessageCountReadFuture = tx.read(

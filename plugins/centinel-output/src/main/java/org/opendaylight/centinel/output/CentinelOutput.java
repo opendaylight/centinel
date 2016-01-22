@@ -171,8 +171,8 @@ public class CentinelOutput implements MessageOutput {
                                 .add("eventBody", body)
                                 .add("eventKeys",
                                         factory.createArrayBuilder().add("event_timestamp").add("streams:streamId")
-                                                .add("fields:message").add("fields:bundle").add("fields:feature")
-                                                .add("fields:source_node_type").add("fields:severity"))).build();
+                                                .add("fields:message").add("fields:facility").add("fields:severity")
+                                                .add("fields:log_time").add("fields:hostname"))).build();
 
         final URL url;
         try {

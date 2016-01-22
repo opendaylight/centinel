@@ -226,7 +226,6 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
 
             }
         }
-        LOG.info("JSON for GrayLog" + setAlertJsonObject.toString());
         return setAlertJsonObject;
     }
 
@@ -284,7 +283,6 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
                     .setTimeStamp(fieldValueDataObject.getTimeStamp()).setStreamID(streamId).build();
 
         }
-        LOG.info("DataObject for Operational Data Store : " + operationalDataObject);
         return operationalDataObject;
     }
 

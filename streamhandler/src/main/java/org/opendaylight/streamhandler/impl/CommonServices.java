@@ -108,12 +108,10 @@ public class CommonServices {
             Map<String, Object> output = null;
             Map<String, Object> out = new HashMap<String, Object>();
 
-            LOG.info("jsonArray: " + jsonArray.getJsonObject(i));
 
             if (jsonArray.getJsonObject(i).keySet().iterator().hasNext()) {
                 String row = jsonArray.getJsonObject(i).get(jsonArray.getJsonObject(i).keySet().iterator().next())
                         .toString();
-                LOG.info(" row ::" + row);
                 row = row.replace("\\", StreamConstants.BLANK);
                 row = row.replaceFirst("\"", StreamConstants.BLANK);
                 row = row.replace("}\"", "}");

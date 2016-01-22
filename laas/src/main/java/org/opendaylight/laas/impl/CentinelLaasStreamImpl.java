@@ -17,7 +17,6 @@ import java.util.concurrent.Executors;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.NotificationService;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -49,19 +48,12 @@ public class CentinelLaasStreamImpl implements AutoCloseable, DataChangeListener
 
     private static final Logger LOG = LoggerFactory.getLogger(CentinelLaasStreamImpl.class);
 
-    private NotificationService notificationProvider;
     private DataBroker dataProvider;
     private final ExecutorService executor;
     private CentinelStreamRESTServices restService;
 
     public CentinelLaasStreamImpl() {
         executor = Executors.newFixedThreadPool(1);
-    }
-
-    public void setNotificationProvider(final NotificationService salService) {
-        LOG.info(" Entered to Notification ");
-        this.notificationProvider = salService;
-        LOG.info("notifictaion provider set");
     }
 
     public void setDataProvider(final DataBroker salDataProvider) {
@@ -95,7 +87,6 @@ public class CentinelLaasStreamImpl implements AutoCloseable, DataChangeListener
             else if (change.getUpdatedSubtree() != null && change.getOriginalSubtree() != null) {
                 updateOperational(change, tx);
             }
-            LOG.info("onDataChanged - new Centinel - streamRecord config: {}", record);
         }
     }
 
@@ -115,7 +106,6 @@ public class CentinelLaasStreamImpl implements AutoCloseable, DataChangeListener
 
         final SettableFuture<RpcResult<SetStreamOutput>> futureResult = SettableFuture.create();
         final StreamList newstreamList = tempStreamList;
-        LOG.info("stream list: " + newstreamList);
 
         List<StreamList> streamList = new ArrayList<StreamList>();
         StreamList streamListObj = (StreamList) restService.createFromConfigToOperationalStream(newstreamList);
@@ -131,7 +121,6 @@ public class CentinelLaasStreamImpl implements AutoCloseable, DataChangeListener
         }
 
         catch (Exception e) {
-            LOG.info("Failed to commit Stream");
             LOG.info("Failed to commit Stream", e);
             futureResult.set(RpcResultBuilder.<SetStreamOutput> failed()
                     .withRpcErrors(((TransactionCommitFailedException) e).getErrorList()).build());
@@ -294,6 +283,6 @@ public class CentinelLaasStreamImpl implements AutoCloseable, DataChangeListener
 
     @Override
     public void close() throws Exception {
-
+    	executor.shutdown();
     }
 }
