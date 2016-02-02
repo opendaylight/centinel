@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Tata Consultancy Services and others.  All rights reserved.
+ * Copyright (c) 2016 Tata Consultancy Services and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -26,8 +26,11 @@ import org.mockito.MockitoAnnotations;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.Subscribe.Mode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.SubscribeDeleteInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.SubscribeDeleteOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.SubscribeTestInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.SubscribeTestOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.SubscribeUserInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.SubscribeUserOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.Subscription;
@@ -92,8 +95,20 @@ public class SubscriberImplTest {
     }
 
     @Test
-    public void subscribeUserTest() {
+    public void subscribeDeleteException() {
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        SubscribeDeleteInput input = subscriberImplFactory.mockInputForSubscriberDelete();
+        Subscriptions subscriptiontodelete = new SubscriptionsBuilder().setSubscribeID(input.getSubscribeID()).build();
+        mockReadWriteTx.delete(LogicalDatastoreType.OPERATIONAL,
+                subscriptionIID.child(Subscriptions.class, subscriptiontodelete.getKey()));
+        mockReadWriteTx.submit();
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<SubscribeDeleteOutput>> futureOutput = myMock.subscribeDelete(input);
+        assertNotNull(futureOutput);
+    }
 
+    @Test
+    public void subscribeUserTest() {
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
         SubscribeUserInput input = subscriberImplFactory.mockInputForSubscribeUser();
@@ -101,7 +116,6 @@ public class SubscriberImplTest {
                 .setStreamID(input.getStreamID()).setMode(input.getMode()).setRuleID(input.getRuleID()).build();
         List<Subscriptions> subscriptionlist = new ArrayList<Subscriptions>();
         subscriptionlist.add(inpt);
-
         mockReadWriteTx.merge(LogicalDatastoreType.CONFIGURATION, subscriptionIID, new SubscriptionBuilder()
                 .setSubscriptions(subscriptionlist).build(), true);
         mockReadWriteTx.submit();
@@ -111,16 +125,63 @@ public class SubscriberImplTest {
     }
 
     @Test
-    public void subscribeTestTest() {
+    public void subscribeUserTestException() {
 
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
-        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
         SubscribeUserInput input = subscriberImplFactory.mockInputForSubscribeUser();
         Subscriptions inpt = new SubscriptionsBuilder().setSubscribeID(input.getSubscribeID())
                 .setStreamID(input.getStreamID()).setMode(input.getMode()).setRuleID(input.getRuleID()).build();
         List<Subscriptions> subscriptionlist = new ArrayList<Subscriptions>();
         subscriptionlist.add(inpt);
+        mockReadWriteTx.merge(LogicalDatastoreType.CONFIGURATION, subscriptionIID, new SubscriptionBuilder()
+                .setSubscriptions(subscriptionlist).build(), true);
+        mockReadWriteTx.submit();
+        doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
+        Future<RpcResult<SubscribeUserOutput>> futureOutput = myMock.subscribeUser(input);
+        assertNotNull(futureOutput);
+    }
 
+    @Test
+    public void subscribeTestTestAlert() {
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+        SubscribeTestInput input = subscriberImplFactory.mockInputForSubscribeTest();
+        List<Subscriptions> value = new ArrayList<Subscriptions>();
+        Subscriptions e = new SubscriptionsBuilder().setMode(Mode.Alert).setRuleID("100").build();
+        value.add(e);
+        Subscription inpt = new SubscriptionBuilder().setSubscriptions(value).build();
+        SubscriberInfoCache mockSubscriberInfoCache = SubscriberInfoCache.getInstance();
+        mockSubscriberInfoCache.setSubscription(inpt);
+        Future<RpcResult<SubscribeTestOutput>> futureOutput = myMock.subscribeTest(input);
+        assertNotNull(futureOutput);
+    }
+
+    @Test
+    public void subscribeTestTestStream() {
+
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+        SubscribeTestInput input = subscriberImplFactory.mockInputForSubscribeTest();
+        List<Subscriptions> value = new ArrayList<Subscriptions>();
+        Subscriptions e = new SubscriptionsBuilder().setMode(Mode.Stream).setStreamID("100").build();
+        value.add(e);
+        Subscription inpt = new SubscriptionBuilder().setSubscriptions(value).build();
+        SubscriberInfoCache mockSubscriberInfoCache = SubscriberInfoCache.getInstance();
+        mockSubscriberInfoCache.setSubscription(inpt);
+        Future<RpcResult<SubscribeTestOutput>> futureOutput = myMock.subscribeTest(input);
+        assertNotNull(futureOutput);
+    }
+
+    @Test
+    public void subscribeUserTestNull() {
+
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+        SubscribeUserInput input = subscriberImplFactory.mockInputForSubscribeUserNull();
+        Subscriptions inpt = new SubscriptionsBuilder().setSubscribeID(input.getSubscribeID())
+                .setStreamID(input.getStreamID()).setMode(input.getMode()).setRuleID(input.getRuleID()).build();
+        List<Subscriptions> subscriptionlist = new ArrayList<Subscriptions>();
+        subscriptionlist.add(inpt);
         mockReadWriteTx.merge(LogicalDatastoreType.CONFIGURATION, subscriptionIID, new SubscriptionBuilder()
                 .setSubscriptions(subscriptionlist).build(), true);
         mockReadWriteTx.submit();

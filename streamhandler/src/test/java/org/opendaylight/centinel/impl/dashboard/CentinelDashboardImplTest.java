@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Tata Consultancy Services and others.  All rights reserved.
+ * Copyright (c) 2016 Tata Consultancy Services and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -30,7 +30,9 @@ import org.mockito.MockitoAnnotations;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
 import org.opendaylight.streamhandler.impl.StreamhandlerImpl;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centinel.streamhandler.impl.rev141210.StreamhandlerModule;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardIncrementTestInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardIncrementTestOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardRecord;
@@ -55,6 +57,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboar
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
+import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
 
 /**
@@ -70,6 +73,7 @@ public class CentinelDashboardImplTest {
 
     @Mock
     private StreamhandlerImpl mockStreamhandlerImpl;
+    private StreamCounterInfoCache mockStreamCounterInfoCache;
     private CentinelDashboardImpl mockCentinelDashboardImpl;
     private CentinelDashboardImplFactory centinelDashboardImplFactory = new CentinelDashboardImplFactory();
     private MockCentinelDashboardImpl myMock = new MockCentinelDashboardImpl();
@@ -92,18 +96,20 @@ public class CentinelDashboardImplTest {
     public void beforeTest() {
         MockitoAnnotations.initMocks(this);
         mockCentinelDashboardImpl = new CentinelDashboardImpl();
+        mockStreamCounterInfoCache = StreamCounterInfoCache.getInstance();
+        mockStreamhandlerImpl = new StreamhandlerImpl();
         myMock.setDataProvider(mockDataBroker);
     }
 
     @After
     public void AfterTest() {
         mockCentinelDashboardImpl = null;
-
+        mockStreamCounterInfoCache = null;
+        mockStreamhandlerImpl = null;
     }
 
     @Test
     public void testWidgetInputRuleDashboardNull() {
-        // build dummy input
         SetWidgetInput input = centinelDashboardImplFactory.setInputForWidgetModeNull();
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
@@ -120,7 +126,6 @@ public class CentinelDashboardImplTest {
 
     @Test
     public void testSetWidgetInputRuleDashboardNull() {
-        // build dummy input
         SetWidgetInput inputDashboardNull = centinelDashboardImplFactory.setInputForWidgetDashboardNull();
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
@@ -137,7 +142,6 @@ public class CentinelDashboardImplTest {
 
     @Test
     public void testgetWidgetHistogramTestWhenListNull() {
-        // build dummy input
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
         GetWidgetHistogramInput input = centinelDashboardImplFactory.setInputForGetWidgetHistogramInput();
@@ -145,8 +149,25 @@ public class CentinelDashboardImplTest {
     }
 
     @Test
+    public void testgetWidgetHistogramTestWhenListNotNull() {
+        boolean caught = false;
+        try {
+            ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+            doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+            GetWidgetHistogramInput input = centinelDashboardImplFactory.setInputForGetWidgetHistogramInput();
+            WidgetStreamCounterVO mockWidgetStreamCounterVO = new WidgetStreamCounterVO();
+            mockWidgetStreamCounterVO.setWidgetID(input.getWidgetID());
+            List<WidgetStreamCounterVO> listofwidgets = mockStreamCounterInfoCache.getListofcounter();
+            listofwidgets.add(mockWidgetStreamCounterVO);
+            Future<RpcResult<GetWidgetHistogramOutput>> futureOutput = myMock.getWidgetHistogram(input);
+        } catch (Exception e) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    @Test
     public void testDashboardIncrementTest() {
-        // build dummy input
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
         DashboardIncrementTestInput input = centinelDashboardImplFactory.setInputForDashboardIncrementTest();
@@ -156,8 +177,6 @@ public class CentinelDashboardImplTest {
 
     @Test
     public void testsetDashboard() {
-        // build dummy input
-        // to mock the tx object
         try {
             ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
             doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
@@ -184,7 +203,6 @@ public class CentinelDashboardImplTest {
 
     @Test
     public void testWidgetInputRuleWidgetNull() {
-        // build dummy input
         SetWidgetInput inputWidgetNull = centinelDashboardImplFactory.setInputForWidgetNull();
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
@@ -200,9 +218,8 @@ public class CentinelDashboardImplTest {
     }
 
     @Test
-    public void testWidgetInputRuleWidgetIdNull() {
-        // build dummy input
-        SetWidgetInput inputWidgetIdNull = centinelDashboardImplFactory.setInputForWidgetIdNull();
+    public void testWidgetInputRuleWidgetIdNullDashboardIsNull() {
+        SetWidgetInput inputWidgetIdNull = centinelDashboardImplFactory.setInputForWidgetIdNullDashboardIsNull();
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
         Future<RpcResult<SetWidgetOutput>> futureOutput = myMock.setWidget(inputWidgetIdNull);
@@ -217,8 +234,32 @@ public class CentinelDashboardImplTest {
     }
 
     @Test
+    public void testWidgetInputRuleModeIsNull() {
+        SetWidgetInput inputWidgetIdNull = centinelDashboardImplFactory.setInputForModeIsNull();
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+        Future<RpcResult<SetWidgetOutput>> futureOutput = myMock.setWidget(inputWidgetIdNull);
+        boolean caught = false;
+        try {
+            if (!futureOutput.get().getErrors().isEmpty()) {
+                caught = true;
+            }
+        } catch (Exception e) {
+        }
+        assertTrue(caught);
+    }
+
+    @Test
+    public void testWidgetInputRuleWidgetIdNull() {
+        SetWidgetInput inputWidgetIdNull = centinelDashboardImplFactory.setInputForWidgetIdNull();
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+        Future<RpcResult<SetWidgetOutput>> futureOutput = myMock.setWidget(inputWidgetIdNull);
+        assertNotNull(futureOutput);
+    }
+
+    @Test
     public void testWidgetInputRule() {
-        // build dummy input
         SetWidgetInput input = centinelDashboardImplFactory.setInputForWidget();
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
@@ -265,11 +306,29 @@ public class CentinelDashboardImplTest {
 
     @Test
     public void deleteDashboardTestDashboardListIsNull() {
-        // build dummy input
         DeleteDashboardInput input = centinelDashboardImplFactory.mockDeleteWidgetInputDashboardListIsNull();
-        // to mock the tx object
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+        Future<RpcResult<DeleteDashboardOutput>> futureOutput = myMock.deleteDashboard(input);
+        boolean caught = false;
+        try {
+            if (!futureOutput.get().getErrors().isEmpty()) {
+                caught = true;
+            }
+        } catch (Exception e) {
+        }
+        assertTrue(caught);
+    }
+
+    @Test
+    public void deleteDashboardTestDashboardListValues() {
+        DeleteDashboardInput input = centinelDashboardImplFactory.mockDeleteWidgetInputDashboardListValues();
+        ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+        DashboardList dashboardtodelete = new DashboardListBuilder().setDashboardID(input.getDashboardID()).build();
+        mockReadWriteTx.read(LogicalDatastoreType.OPERATIONAL,
+                mockDashboardRecordRecordId.child(DashboardList.class, dashboardtodelete.getKey()));
+        doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+        mockReadWriteTx.submit();
         Future<RpcResult<DeleteDashboardOutput>> futureOutput = myMock.deleteDashboard(input);
         boolean caught = false;
         try {
@@ -286,8 +345,6 @@ public class CentinelDashboardImplTest {
 
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
-
-        // build dummy input
         DeleteWidgetInput input = centinelDashboardImplFactory.mockDeleteWidgetInput();
         DashboardList dashboardtodelete = new DashboardListBuilder().setDashboardID(input.getDashboardID()).build();
         Widgets widgettodelete = new WidgetsBuilder().setWidgetID(input.getWidgetID()).build();
@@ -295,7 +352,6 @@ public class CentinelDashboardImplTest {
                 .child(DashboardList.class, dashboardtodelete.getKey()).child(Widgets.class, widgettodelete.getKey()));
         mockReadWriteTx.submit();
         doReturn(Mockito.mock(CheckedFuture.class)).when(mockReadWriteTx).submit();
-        // to mock the tx object
         Future<RpcResult<DeleteWidgetOutput>> futureOutput = myMock.deleteWidget(input);
         assertNotNull(futureOutput);
     }
@@ -306,11 +362,19 @@ public class CentinelDashboardImplTest {
         StreamCounterInfoCache streamCounterInfoCache = StreamCounterInfoCache.getInstance();
         ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
-        // build dummy input
         GetWidgetMessageCountInput input = centinelDashboardImplFactory.mockGetWidgetMessageCountInput();
         value = streamCounterInfoCache.getCounterValue(input.getWidgetID());
         Future<RpcResult<GetWidgetMessageCountOutput>> futureOutput = myMock.getWidgetMessageCount(input);
         assertNotNull(futureOutput);
+    }
+
+    @Test
+    public void close() {
+        try {
+            myMock.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private class MockCentinelDashboardImpl extends CentinelDashboardImpl {

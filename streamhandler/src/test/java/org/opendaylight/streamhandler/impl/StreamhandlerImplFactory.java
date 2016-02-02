@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Tata Consultancy services and others.  All rights reserved.
+ * Copyright (c) 2016 Tata Consultancy services and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -109,7 +109,6 @@ public class StreamhandlerImplFactory {
         QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
         querySqlApiInput.setQueryString(null);
         return querySqlApiInput.build();
-
     }
 
     public QuerySqlApiInput inputForQuerySqlApiLimitNull() {
@@ -117,14 +116,116 @@ public class StreamhandlerImplFactory {
         querySqlApiInput.setQueryString("select 1 from centinel");
         querySqlApiInput.setLimit(null);
         return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullStream() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select stream from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime("12");
+        querySqlApiInput.setToTime("200");
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullStreamDot() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select stream. from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime("12");
+        querySqlApiInput.setToTime("200");
+        return querySqlApiInput.build();
 
     }
 
-    public QuerySqlApiInput inputForQuerySqlApiLimitNotNull() {
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullAlert() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select alert from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime("12");
+        querySqlApiInput.setToTime("200");
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullAlertDot() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select alert. from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime("12");
+        querySqlApiInput.setToTime("200");
+        return querySqlApiInput.build();
+
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullDashboard() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select dashboard from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime("12");
+        querySqlApiInput.setToTime("200");
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullData() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select data from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime("12");
+        querySqlApiInput.setToTime("200");
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullNone() {
         QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
         querySqlApiInput.setQueryString("select 1 from centinel");
         querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime("12");
+        querySqlApiInput.setToTime("200");
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullTimeNullStream() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select stream from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime(null);
+        querySqlApiInput.setToTime(null);
         return querySqlApiInput.build();
 
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullTimeNullAlert() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select alert from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime(null);
+        querySqlApiInput.setToTime(null);
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullTimeNullDashboard() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select dashboard from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime(null);
+        querySqlApiInput.setToTime(null);
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullTimeNullData() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select data from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime(null);
+        querySqlApiInput.setToTime(null);
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullTimeNullNone() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select 1 from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime(null);
+        querySqlApiInput.setToTime(null);
+        return querySqlApiInput.build();
     }
 }
