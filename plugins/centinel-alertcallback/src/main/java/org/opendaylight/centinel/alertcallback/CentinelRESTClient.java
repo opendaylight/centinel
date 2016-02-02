@@ -109,7 +109,7 @@ public class CentinelRESTClient {
 
         StreamPojo streamPojo = new StreamPojo(stream);
 
-        StreamRule rule = streamPojo.getRules().get(0);
+        RulesPojo rule = new RulesPojo(streamPojo.getRules().get(0));
         recordRules.put("field", rule.getField());
         recordRules.put("streamId", rule.getStreamId());
         recordRules.put("id", rule.getId());
