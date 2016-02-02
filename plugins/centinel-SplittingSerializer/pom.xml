@@ -6,7 +6,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>centinel-SplittingSerializer</groupId>
+  <groupId>org.opendaylight.centinel.plugin</groupId>
   <artifactId>centinel-SplittingSerializer</artifactId>
   <version>0.2.0-SNAPSHOT</version>
   <name>centinel-SplittingSerializer</name>
