@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Tata Consultancy services and others.  All rights reserved.
+ * Copyright (c) 2016 Tata Consultancy services and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -8,31 +8,23 @@
 package org.opendaylight.streamhandler.impl;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 
 import java.util.concurrent.Future;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlApiInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlApiOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlRelativeApiInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlRelativeApiOutput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
-import com.sun.jersey.api.client.ClientResponse;
-
 public class StreamhandlerImplTest {
 
     StreamhandlerImplFactory streamHandlerImplFactory = new StreamhandlerImplFactory();
     StreamhandlerImpl mockStreamHandlerImpl;
     private MockStreamhandlerImpl myMock = new MockStreamhandlerImpl();
-    private CommonServices mockCommonServices = null;
 
     @Before
     public void beforeTest() {
@@ -230,9 +222,150 @@ public class StreamhandlerImplTest {
     }
 
     @Test
-    public void mockQuerySqlApiQueryWhenLimitNotNull() {
-        QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNull();
-        Future<RpcResult<QuerySqlApiOutput>> futureOutput = myMock.querySqlApi(mockInputNull);
+    public void mockQuerySqlApiQueryWhenLimitNotNullStream() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullStream();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullStreamDot() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullStreamDot();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullAlert() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullAlert();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullAlertDot() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullAlertDot();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullDashboard() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullDashboard();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullData() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullData();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullNone() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+
+        QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullNone();
+        futureOutput = myMock.querySqlApi(mockInputNull);
+        assertNotNull(futureOutput);
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullTimeNullStream() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullTimeNullStream();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullTimeNullAlert() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullTimeNullAlert();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullTimeNullDashboard() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory
+                    .inputForQuerySqlApiLimitNotNullTimeNullDashboard();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullTimeNullData() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullTimeNullData();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullTimeNullNone() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullTimeNullNone();
+        futureOutput = myMock.querySqlApi(mockInputNull);
         assertNotNull(futureOutput);
     }
 
