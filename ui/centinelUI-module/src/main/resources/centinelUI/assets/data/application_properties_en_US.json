@@ -28,7 +28,7 @@
   "TYPE": "Type",
   "ALERT_NAME":"Alarm Name",
   "CONFIGURE_ALERT":"Configure new Alarm condition",
-  "SELECT_CONDITION": "Select a Condition",
+  "SELECT_CONDITION": "Select a Type",
   "MSG_COUNT_ALERT_DETAILS":"Raise an alarm when message count is {{messageCountOperator}} than {{messageCountCount}} for a timeframe of {{timeStamp}} minutes. Consecutive alarms will be raised at a delay of {{messageCountGrace}} minutes (Grace Period). Alarm message should include last {{messageCountBacklog}} messages that satisfy this alarm condition.",
   "FIELD_VALUE_ALERT_DETAILS":"Raise an alarm when {{fieldValueType}} of field {{fieldValueField}} of the message has a value {{fieldValueThreshholdType}} than {{fieldValueThreshhold}} for a timeframe of {{timeStamp}} minutes. Consecutive alarms will be raised at a delay of {{fieldValueGrace}} minutes (Grace Period). Alarm message should include last {{fieldValueBacklog}} messages that satisfy this alarm condition.",
    "FIELD_CONTENT_ALERT_DETAILS":"Raise an alarm when message has field {{fieldContentField}} same as {{fieldContentCompareToValue}}. Consecutive alarms will be raised at a delay of {{fieldContentGrace}} minutes (Grace Period). Alarm message should include last {{fieldContentBacklog}} messages that satisfy this alarm condition.",
@@ -73,7 +73,12 @@
   "RULE_FIELD":"Field",
   "RULE_TYPE":"Type",
   "RULE_INVERTED":"Inverted",
-  "RULE_VALUE":"Value"
-  
+  "RULE_VALUE":"Value",
+  "MAX_FIELD_SELECT_MSG":"You can see only 4 fields at a time, Uncheck some field to view newly selected one",
+  "NO_STREAMS_FOUND":"No Rules Configured !!",
+  "NO_ALERTS_FOUND":"No Alerts Found !!",
+  "NO_RULES_FOUND":"No Rules Added !!",
+  "NO_EVENTS_FOUND":"No Log Messages Found !!",
+  "NO_DASHBOARD_FOUND":"No Dashboard Found !!"
   }
 
