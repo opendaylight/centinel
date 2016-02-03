@@ -25,7 +25,6 @@ import org.apache.flume.sink.hbase.AsyncHbaseEventSerializer;
  * multiple columns and inserts them into a row whose key is available in
  * the headers
  *
- * Originally from https://blogs.apache.org/flume/entry/streaming_data_into_apache_hbase
  * 
  */
 public class SplittingSerializer implements AsyncHbaseEventSerializer {
@@ -37,7 +36,6 @@ public class SplittingSerializer implements AsyncHbaseEventSerializer {
   private final List<AtomicIncrementRequest> incs = new ArrayList<AtomicIncrementRequest>();
   private byte[] currentRowKey;
   private final byte[] eventCountCol = "eventCount".getBytes();
-//  private String delim;
 
   
   public void initialize(byte[] table, byte[] cf) {
