@@ -8,6 +8,7 @@
 package org.opendaylight.centinel.impl.dashboard;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -29,6 +30,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
+import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
 import org.opendaylight.streamhandler.impl.StreamhandlerImpl;
@@ -154,7 +156,7 @@ public class CentinelDashboardImplTest {
         try {
             ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
             doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
-            GetWidgetHistogramInput input = centinelDashboardImplFactory.setInputForGetWidgetHistogramInput();
+            GetWidgetHistogramInput input = centinelDashboardImplFactory.setInputForGetWidgetHistogramInputListNotNull();
             WidgetStreamCounterVO mockWidgetStreamCounterVO = new WidgetStreamCounterVO();
             mockWidgetStreamCounterVO.setWidgetID(input.getWidgetID());
             List<WidgetStreamCounterVO> listofwidgets = mockStreamCounterInfoCache.getListofcounter();
@@ -370,11 +372,15 @@ public class CentinelDashboardImplTest {
 
     @Test
     public void close() {
+    	boolean caught = false;
         try {
+        	WriteTransaction mockWriteTx = mock(WriteTransaction.class);
+        	doReturn(mockWriteTx).when(mockDataBroker).newWriteOnlyTransaction();
             myMock.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            caught = true;
         }
+        assertFalse(caught);
     }
 
     private class MockCentinelDashboardImpl extends CentinelDashboardImpl {

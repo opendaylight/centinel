@@ -28,4 +28,38 @@ public class EventHandlerImplFactory {
         mockNotification.setEventType("stream");
         return mockNotification.build();
     }
+    public EventNotified setNotificationCorrectJsonStream() {
+        List<String> eventKeys = new ArrayList<String>();
+        eventKeys.add("streamId");
+        eventKeys.add("timestamp");
+        EventNotifiedBuilder mockNotification = new EventNotifiedBuilder();
+        mockNotification.setEventBody("{\"streamId\": \"abc\",\"timestamp\": \"12334\"}");
+        EventBodyType eventBodyType = EventBodyType.Avro;
+        mockNotification.setEventBodyType(eventBodyType);
+        mockNotification.setEventKeys(eventKeys);
+        mockNotification.setEventType("stream");
+        return mockNotification.build();
+    }
+    public EventNotified setNotificationCorrectJsonAlert() {
+        List<String> eventKeys = new ArrayList<String>();
+        eventKeys.add("streamId");
+        eventKeys.add("timestamp");
+        EventNotifiedBuilder mockNotification = new EventNotifiedBuilder();
+        mockNotification.setEventBody("{\"streamId\": \"abc\",\"timestamp\": \"12334\"}");
+        EventBodyType eventBodyType = EventBodyType.Avro;
+        mockNotification.setEventBodyType(eventBodyType);
+        mockNotification.setEventKeys(eventKeys);
+        mockNotification.setEventType("alert");
+        return mockNotification.build();
+    }
+    public EventNotified setNotificationEventKeyNull() {
+        List<String> eventKeys = new ArrayList<String>();
+        EventNotifiedBuilder mockNotification = new EventNotifiedBuilder();
+        mockNotification.setEventBody("testing event body");
+        EventBodyType eventBodyType = EventBodyType.Avro;
+        mockNotification.setEventBodyType(eventBodyType);
+        mockNotification.setEventKeys(eventKeys);
+        mockNotification.setEventType("stream");
+        return mockNotification.build();
+    }
 }

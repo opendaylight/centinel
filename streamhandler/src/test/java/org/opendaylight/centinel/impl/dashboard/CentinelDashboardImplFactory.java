@@ -211,6 +211,19 @@ public class CentinelDashboardImplFactory {
         return getWidgetHistogramInputBuilder.build();
     }
 
+    /**
+     * Mock params for GetWidgetHistogram Rpc
+     */
+    public GetWidgetHistogramInput setInputForGetWidgetHistogramInputListNotNull() {
+        GetWidgetHistogramInputBuilder getWidgetHistogramInputBuilder = new GetWidgetHistogramInputBuilder();
+        getWidgetHistogramInputBuilder.setDashboardID("100");
+        getWidgetHistogramInputBuilder.setFromTimestamp("1");
+        getWidgetHistogramInputBuilder.setNow(true);
+        getWidgetHistogramInputBuilder.setToTimestamp("10");
+        getWidgetHistogramInputBuilder.setWidgetID("100");
+        return getWidgetHistogramInputBuilder.build();
+    }
+    
     public String inputForRemoveCounterForWidget() {
         return "100";
     }
