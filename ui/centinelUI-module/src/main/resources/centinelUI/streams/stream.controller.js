@@ -36,13 +36,21 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		    		
 				$scope.search();
 		    },function(response) {
-	    	    console.log("Error with status code in controller", response.status);
-				$translate('ERROR_RETRIEVE_STREAMS').then(function (translations) {
-		    		 $scope.successMsg =  translations;
-		    	 });
-				$scope.submitSuccess =false;
-			$scope.submitted = true;
-	      });
+		    	if(response.status!=404){
+		    		console.log("Error with status code in controller", response.status);
+					$translate('ERROR_RETRIEVE_STREAMS').then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+					$scope.submitSuccess =false;
+					$scope.submitted = true;
+		    	}else{
+		    		$translate('NO_STREAMS_FOUND').then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+		    		$scope.submitSuccess =true;
+					$scope.submitted = true;
+		    	}
+		    });
 		};
 	   
 	    

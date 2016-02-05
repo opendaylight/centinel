@@ -52,7 +52,6 @@ public class CentinelEventNotifierImpl implements AutoCloseable, EventinputServi
 
     @Override
     public Future<RpcResult<Void>> notifyEvent(NotifyEventInput input) {
-        LOG.info("Input for rpc notifyEvent : " + input);
 
         final SettableFuture<RpcResult<Void>> futureResult = SettableFuture.create();
         futureResult.set(RpcResultBuilder.<Void> success().build());

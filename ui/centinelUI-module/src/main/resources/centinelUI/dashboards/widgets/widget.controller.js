@@ -125,13 +125,23 @@ define(['app/centinelUI/centinelUI.module','app/centinelUI/centinelUI.services']
 							  valueArr.push(res.values);
 							  valueArr.push(_.where($scope.streamList, {streamID: widget.streamID})[0].title);
 							  valueArr.push(_.where($scope.streamList, {streamID: widget.streamID})[0].description);
+							  valueArr.push("");
+							  valueArr.push(widget.widgetID);
 							  $scope.widgetValuesForHistogram.push(valueArr);
 						},function(response) {
-							$translate('ERROR_RETRIEVE_WIDGET_VALUE').then(function (translations) {
+							/*$translate('ERROR_RETRIEVE_WIDGET_VALUE').then(function (translations) {
 					    		 $scope.errorMsg =  translations;
 					    	});
 							$scope.submitSuccess =false;
-							$scope.submitted = true;
+							$scope.submitted = true;*/
+							/*console.info('in showWidget of widget.controller.js');
+							var emptyArray = [];
+							valueArr.push(emptyArray);
+							  valueArr.push("");
+							  valueArr.push("");
+							  valueArr.push("No Events Recieved!!");
+							  valueArr.push(widget.widgetID);
+							  $scope.widgetValuesForHistogram.push(valueArr);
 					    });*/
 							
 					  $timeout(function(){
@@ -139,6 +149,8 @@ define(['app/centinelUI/centinelUI.module','app/centinelUI/centinelUI.services']
 							  valueArr.push($scope.dummyHistogramValues);
 							  valueArr.push(_.where($scope.streamList, {streamID: widget.streamID})[0].title);
 							  valueArr.push(_.where($scope.streamList, {streamID: widget.streamID})[0].description);
+							  valueArr.push("");
+							  valueArr.push(widget.widgetID);
 							  $scope.widgetValuesForHistogram.push(valueArr);
 						  }  
 					  },800);

@@ -233,7 +233,6 @@ public class StreamhandlerImpl implements StreamhandlerService, AutoCloseable {
         List<Records> recordList = new ArrayList<Records>();
 
         for (Map<String, Object> out : output) {
-            LOG.info("output: " + out + "\n");
             
             Iterator<Entry<String, Object>> itr = out.entrySet().iterator();
             List<Fields> fieldsList = new ArrayList<Fields>();
@@ -247,7 +246,6 @@ public class StreamhandlerImpl implements StreamhandlerService, AutoCloseable {
     		recordList.add(recordObj);
         }
         
-        LOG.info("recordList: " + recordList.toString());
         QuerySqlRelativeApiOutput queryOutput = new QuerySqlRelativeApiOutputBuilder().setRecords(recordList).build();
         futureResult.set(RpcResultBuilder.<QuerySqlRelativeApiOutput> success(queryOutput).build());
         return futureResult;
@@ -388,7 +386,6 @@ public class StreamhandlerImpl implements StreamhandlerService, AutoCloseable {
         List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.query.sql.api.output.Records> recordList = new ArrayList<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.query.sql.api.output.Records>();
 
         for (Map<String, Object> out : output) {
-            LOG.info("output: " + out + "\n");
 
             Iterator<Entry<String, Object>> itr = out.entrySet().iterator();
             List<Fields> fieldsList = new ArrayList<Fields>();
@@ -402,8 +399,6 @@ public class StreamhandlerImpl implements StreamhandlerService, AutoCloseable {
                     .setFields(fieldsList).build();
             recordList.add(recordObj);
         }
-
-        LOG.info("recordList: " + recordList.toString());
 
         QuerySqlApiOutput queryOutput = new QuerySqlApiOutputBuilder().setRecords(recordList).build();
         futureResult.set(RpcResultBuilder.<QuerySqlApiOutput> success(queryOutput).build());

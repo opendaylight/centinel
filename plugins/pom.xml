@@ -26,6 +26,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <modules>
     <module>centinel-alertcallback</module>
     <module>centinel-output</module>
+    <module>centinel-SplittingSerializer</module>
   </modules>
 
 </project>

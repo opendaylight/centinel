@@ -17,7 +17,6 @@ import java.util.concurrent.Executors;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.NotificationService;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -64,19 +63,12 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
     public static final InstanceIdentifier<AlertFieldContentRuleRecord> alertFeildContentRuleRecordId = InstanceIdentifier
             .builder(AlertFieldContentRuleRecord.class).build();
 
-    private NotificationService notificationProvider;
     private DataBroker dataProvider;
     private final ExecutorService executor;
     private CentinelAlertConditionRESTServices restService;
 
     public CentinelLaasAlertConditionImpl() {
         executor = Executors.newFixedThreadPool(1);
-    }
-
-    public void setNotificationProvider(final NotificationService salService) {
-        LOG.info(" Entered to Notification ");
-        this.notificationProvider = salService;
-        LOG.info("notifictaion provider set");
     }
 
     public void setDataProvider(final DataBroker salDataProvider) {
@@ -134,8 +126,6 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
             final StreamAlertMessageCountRuleList streamAlertMessageCountRuleList = tempStreamAlertMessageCountRuleList;
 
-            LOG.info("Alert message count rule list: " + streamAlertMessageCountRuleList);
-
             List<StreamAlertMessageCountRuleList> streamAlertRuleList = new ArrayList<StreamAlertMessageCountRuleList>();
             StreamAlertMessageCountRuleList streamAlertMessageCountRuleListFromAnalyzer = (StreamAlertMessageCountRuleList) restService
                     .createFromConfigToOperational(streamAlertMessageCountRuleList);
@@ -154,7 +144,6 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
             }
 
             catch (Exception e) {
-                LOG.info("Failed to commit Rule");
                 LOG.info("Failed to commit Rule", e);
                 futureResult.set(RpcResultBuilder.<SetAlertMessageCountRuleOutput> failed()
                         .withRpcErrors(((TransactionCommitFailedException) e).getErrorList()).build());
@@ -174,7 +163,6 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
             }
 
             final StreamAlertFieldValueRuleList streamAlertFieldValueRuleList = tempStreamAlertFieldValueRuleList;
-            LOG.info("Alert Field value rule list: " + streamAlertFieldValueRuleList);
 
             List<StreamAlertFieldValueRuleList> streamAlertRuleList = new ArrayList<StreamAlertFieldValueRuleList>();
             StreamAlertFieldValueRuleList streamAlertFieldValueRuleListFromAnalyzer = (StreamAlertFieldValueRuleList) restService
@@ -192,7 +180,6 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
             }
 
             catch (Exception e) {
-                LOG.info("Failed to commit Rule");
                 LOG.info("Failed to commit Rule", e);
                 futureResult.set(RpcResultBuilder.<SetAlertFieldValueRuleOutput> failed()
                         .withRpcErrors(((TransactionCommitFailedException) e).getErrorList()).build());
@@ -211,7 +198,6 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
             }
 
             final StreamAlertFieldContentRuleList streamAlertFieldContentRuleList = tempStreamAlertFieldContentRuleList;
-            LOG.info("Alert Field content rule list: " + streamAlertFieldContentRuleList);
 
             List<StreamAlertFieldContentRuleList> streamAlertRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
             StreamAlertFieldContentRuleList streamAlertFieldContentRuleListFromAnalyzer = (StreamAlertFieldContentRuleList) restService
@@ -231,7 +217,6 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
             }
 
             catch (Exception e) {
-                LOG.info("Failed to commit Rule");
                 LOG.info("Failed to commit Rule", e);
                 futureResult.set(RpcResultBuilder.<SetAlertFieldContentRuleOutput> failed()
                         .withRpcErrors(((TransactionCommitFailedException) e).getErrorList()).build());
