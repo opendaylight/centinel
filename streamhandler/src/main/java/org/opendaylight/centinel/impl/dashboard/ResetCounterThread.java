@@ -39,10 +39,6 @@ public class ResetCounterThread implements Runnable {
     @Override
     public void run() {
         // Save the old value in DB
-        // save the following in DB
-        // widgetStreamCounterVO.getCounter()
-        // widgetStreamCounterVO.getWidgetID()
-        // widgetStreamCounterVO.getCal()
     	LOG.info("inside run of ResetCounterThread for widgetStreamCounterVO.getWidgetID(): "+ widgetStreamCounterVO.getWidgetID());
     	saveinDB(widgetStreamCounterVO.getWidgetID(), widgetStreamCounterVO.getCounter(),widgetStreamCounterVO.getCal());
         // Reset the counter value to zero
@@ -72,7 +68,6 @@ public class ResetCounterThread implements Runnable {
          input.setEventBodyType(EventBodyType.Json);
          input.setEventKeys(eventKeys);
          input.setEventType("dashboard");
-         LOG.info("dashboard persist event input: "+ input.toString());
          
          streamhandlerImpl2.persistEvent(input.build());
 	}

@@ -27,6 +27,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		$scope.streamingDataType = "stream";
 		$scope.tableRowHeight = '28px';
 		$scope.eventType = 'Streams';
+		var maxFieldToShow = 4;
 		
 		$scope.reset = function(){
 			$scope.queryList = [];
@@ -90,7 +91,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			     if(res[i].indexOf('=')>0){
 			      var temp = res[i];
 			      temp = $scope.streamingDataType+"."+temp;
-			      temp = temp.replace("=", "='");
+			      temp = temp.replace("=", "like '");
 			      res[i]= temp+"'";
 			      }
 			    }
@@ -101,31 +102,42 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			    return whereClause;
 		}
 		
-		$scope.getSelectedFieldsToDisplay = function() {
-			var eventArr = $scope.eventList;
-			$scope.eventStateToBeShownList = [];
-			
-			$scope.selectedFields = _.where($scope.fieldList, {"value": true}) ;
-			for (var i = 0; i < eventArr.length; i++) {
-				var fieldInThisEvent = eventArr[i].fields;
-				var selectedFieldInThisEvent =[];
-				for (var j = 0; j < $scope.selectedFields.length; j++) {
-					var fieldFound = (_.where(fieldInThisEvent, {"fieldName": $scope.selectedFields[j].label }))[0] ;
-					selectedFieldInThisEvent.push(fieldFound);
+		$scope.getSelectedFieldsToDisplay = function(field) {
+				var eventArr = $scope.eventList;
+				$scope.eventStateToBeShownList = [];
+				
+				var userSelectedFields = _.where($scope.fieldList, {"value": true}) ;
+				if(userSelectedFields.length > maxFieldToShow){
+					$translate('MAX_FIELD_SELECT_MSG').then(function (translations) {
+			    		 alert(translations);
+			    	 });
+						var lastSelectedFieldInEventFieldList = _.find($scope.fieldList, function(selectedFields) { return selectedFields.label === field.label });
+						lastSelectedFieldInEventFieldList.value = false;
+					return;
 				}
-				$scope.eventStateToBeShownList.push(selectedFieldInThisEvent);
+				else{
+					$scope.selectedFields = userSelectedFields;
+					for (var i = 0; i < eventArr.length; i++) {
+						var fieldInThisEvent = eventArr[i].fields;
+						var selectedFieldInThisEvent =[];
+						for (var j = 0; j < $scope.selectedFields.length; j++) {
+							var fieldFound = (_.where(fieldInThisEvent, {"fieldName": $scope.selectedFields[j].label }))[0] ;
+							selectedFieldInThisEvent.push(fieldFound);
+						}
+						$scope.eventStateToBeShownList.push(selectedFieldInThisEvent);
+					}
+					$scope.tableColSpacing = (940/$scope.selectedFields.length) + "px";
+					if(($scope.selectedFields.length>4 && $scope.streamingDataType=='stream')||($scope.selectedFields.length>3 && $scope.streamingDataType=='alert'))
+						$scope.tableRowHeight = 18*($scope.selectedFields.length-2) + "px";
+					else
+						$scope.tableRowHeight = '28px';
+					$scope.search();
 			}
-			$scope.tableColSpacing = (940/$scope.selectedFields.length) + "px";
-			if(($scope.selectedFields.length>4 && $scope.streamingDataType=='stream')||($scope.selectedFields.length>3 && $scope.streamingDataType=='alert'))
-				$scope.tableRowHeight = 18*($scope.selectedFields.length-2) + "px";
-			else
-				$scope.tableRowHeight = '28px';
-			$scope.search();
 		}; 
 
 		
 		$scope.newFieldSelected = function(field) {
-			$scope.getSelectedFieldsToDisplay();
+			$scope.getSelectedFieldsToDisplay(field);
 		};
 		
 
@@ -135,7 +147,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 	    	 for (var i = 0; i < events.length; i++) {
 	    		 var fieldsForEvent = events[i].fields;
 	    		 for (var j = 0; j < fieldsForEvent.length; j++) 
-	    			 if(fieldsForEvent[j].fieldName.length) 
+	    			 if(fieldsForEvent[j].fieldName.length<40) //hack
 	    				 uniquefields.push(fieldsForEvent[j].fieldName);
 	    		 uniquefields = _(uniquefields).unique(); 
 	    	 }
@@ -176,13 +188,23 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 				$scope.getSelectedFieldsToDisplay();
 				$scope.queryString='';
 		    },function(response) {
-	    	    console.log("Error with status code in controller", response.status);
-				$translate('ERROR_RETRIEVE_LOG_MESSAGES').then(function (translations) {
-		    		 $scope.successMsg =  translations;
-		    	 });
-				$scope.search();
-				$scope.submitSuccess =false;
-			$scope.submitted = true;
+		    	if(response.status!=404){
+		    		console.log("Error with status code in controller", response.status);
+					$translate('ERROR_RETRIEVE_LOG_MESSAGES').then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+					$scope.search();
+					$scope.submitSuccess =false;
+				$scope.submitted = true;
+		    	}else{
+		    		$translate('NO_EVENTS_FOUND').then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+		    		$scope.search();
+		    		$scope.submitSuccess =true;
+					$scope.submitted = true;
+		    	}
+	    	    
 	      });
 		};
 		

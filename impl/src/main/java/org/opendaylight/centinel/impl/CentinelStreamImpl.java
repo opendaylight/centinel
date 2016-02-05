@@ -46,6 +46,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.r
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecord;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecordBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.UpdateStreamInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.UpdateStreamOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.UpdateStreamOutputBuilder;
@@ -434,7 +435,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
             return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
                     streamIdcannotbenullError()));
         }
-        LOG.info("SetStreamRuleOutput: " + input);
         final GetStreamOutputBuilder getStreamOutputBuilder = new GetStreamOutputBuilder();
         ListenableFuture<Optional<StreamRecord>> streamRuleReadFuture = tx.read(LogicalDatastoreType.OPERATIONAL,
                 streamRecordId);
@@ -504,7 +504,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
             return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
                     streamIdcannotbenullError()));
         }
-        LOG.info("updateAlertMessageCountRule: " + input);
         final UpdateStreamOutputBuilder updateStreamRuleOutputBuilder = new UpdateStreamOutputBuilder();
         updateStreamRuleOutputBuilder.setTitle(input.getTitle());
         updateStreamRuleOutputBuilder.setDescription(input.getDescription());
@@ -665,7 +664,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         }
         final PauseStreamOutputBuilder pauseStreamOutputBuilder = new PauseStreamOutputBuilder();
         pauseStreamOutputBuilder.setDisabled("true");
-        LOG.info("updateAlertMessageCountRule: " + input);
         ListenableFuture<Optional<StreamRecord>> readFutureOperational = tx.read(LogicalDatastoreType.OPERATIONAL,
                 streamRecordId);
 
@@ -799,7 +797,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         }
         final ResumeStreamOutputBuilder resumeStreamOutputBuilder = new ResumeStreamOutputBuilder();
         resumeStreamOutputBuilder.setDisabled("false");
-        LOG.info("updateAlertMessageCountRule: " + input);
         ListenableFuture<Optional<StreamRecord>> readFutureOperational = tx.read(LogicalDatastoreType.OPERATIONAL,
                 streamRecordId);
 
@@ -923,7 +920,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         final SettableFuture<RpcResult<SetRuleOutput>> futureResult = SettableFuture.create();
         boolean idMatches = false;
         final String streamRuleId = generateRandomId();
-       if(input.getType().FieldPresence != null)
+       if(input.getType() == StreamType.FieldPresence)
         {
             if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
                     || input.getField() == null || input.getField().isEmpty() || input.getField().trim().isEmpty()) {
@@ -943,7 +940,6 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                             "StreamId,Value and Field are mandatory parameters")));
         }
         }
-        LOG.info("setRule: " + input);
         final SetRuleOutputBuilder setRuleOutputBuilder = new SetRuleOutputBuilder();
         setRuleOutputBuilder.setStreamRuleID(streamRuleId);
         ListenableFuture<Optional<StreamRecord>> readFutureOperational = tx.read(LogicalDatastoreType.OPERATIONAL,

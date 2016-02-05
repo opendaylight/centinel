@@ -20,6 +20,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		$scope.streamRuleList =[];
 		$scope.searchText ="";
 		$scope.NumberOfResults ="";
+		$scope.fieldPresenceSelected = false;
 		$scope.matchingType = [{'key':'Match Exactly','value':'match-exactly'},{'key':'Match Regular Expression','value':'match-reg-expression'},{'key':'Greater Than','value':'greator-than'},{'key':'Smaller Than','value':'smaller-than'},{'key':'Field Presence','value':'field-presence'}];
 		
 			$scope.ruleForm = {
@@ -32,6 +33,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		};
 		
 		$scope.reset = function() {
+			$scope.fieldPresenceSelected = false;
 			$scope.ruleForm = {
 		        	"streamID": "",
 		            "field": "",
@@ -50,6 +52,12 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		
 		$scope.closeForm = function() {
 			$scope.enableCreateStreamRuleForm = false;
+		};
+		
+		$scope.selectedType =  function(key) {
+			if(key.value == 'field-presence')
+				$scope.fieldPresenceSelected = true;
+
 		};
 		
 		$scope.addStreamRule = function(ruleForm , type){
@@ -88,13 +96,22 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		    				 });
 	     		},5000);
 			},function(response) {
-	    	    console.log("Error with status code in controller", response.status);
-				$translate('STREAMRULE_ADD_EDIT_DELETE_SUCCESS', { crud: 'not been added' }).then(function (translations) {
-		    		 $scope.successMsg =  translations;
-		    	 });
-				$scope.submitSuccess =false;
-		    	$scope.submitting=false;
-			$scope.submitted = true;
+				if(response!=404){
+					console.log("Error with status code in controller", response.status);
+					$translate('STREAMRULE_ADD_EDIT_DELETE_SUCCESS', { crud: 'not been added' }).then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+					$scope.submitSuccess =false;
+			    	$scope.submitting=false;
+				$scope.submitted = true;
+				}else{
+		    		$translate('NO_RULES_FOUND').then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+		    		$scope.submitSuccess =true;
+					$scope.submitted = true;
+		    	}
+	    	    
 	      });	
 		};
 		

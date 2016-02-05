@@ -1,16 +1,24 @@
 define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {	
 	
-	centinelUIApp.register.directive('barChart', function () {
+	centinelUIApp.register.directive('barChart',['$stateParams', function ($stateParams) {
 		return {
 	         restrict: 'E',
 	         replace: true,
-	         scope:{val1:'=', index:'@'},
+	         scope:{val1:'=', index:'@',dashboardID:'='},
 	         template: '<div style="float:left; margin-right:5px; clear:both;"></div>',
 	         //template: '<svg id="chart" width="280" height="180" style="margin-right: 50px;"></svg>',
+	         controller: function($scope,$stateParams,$window){
+		        	$scope.dashboardID = $stateParams.dashboard.dashboardID;
+		        	$scope.confirmDelete = function(){
+		        		var deleteWidget = $window.confirm('Are you sure you want to delete widget?');
+		        		return deleteWidget;
+		        	};
+		         },
 	         link: function (scope, element, attrs) {
 	        	 var barData = scope.val1[0],
 	        	 	name = scope.val1[1],
 	        	 	description = scope.val1[2],
+	        	 	widgetID = scope.val1[4],
 	        	 	grepId = '#widgetBar'+scope.index,	
 	        	 	//chart = d3.select('#chart'),
 	        	 	WIDTH = 580,
@@ -48,6 +56,16 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 	        	      .tickSubdivide(true);
        	     /*var inputDateBox = angular.element('<input type="datetime-local" id="exampleInput" name="input" ng-model="example.value" placeholder="yyyy-MM-ddTHH:mm:ss" min="2001-01-01T00:00:00" max="2016-12-31T00:00:00" required />');
 	        	 element.append(inputDateBox);*/
+       	  function deleteWidget(){
+     		 var widgetInputJson = "{\"input\":{\"dashboardID\" :\""+scope.dashboardID+"\",\"widgetID\" :\""+widgetID+"\"}}";
+     		 widgetServiceFactory.deleteWidget(widgetInputJson).then(function(res) {
+     			 d3.select(grepId).remove();
+     			 stopInterval();
+     			 console.info("Widget deletion successful");
+  	    	},function(response) {
+  	    		console.info('Error in deleting widget'+response);
+  	      }); 
+     	 };
        	     var svg = angular.element('<svg id="widgetBar'+scope.index+'" width="580" height="320"></svg>');
 	        	 element.append(svg);
 	        	 var tooltip = d3.select('body').append('div')
@@ -113,13 +131,51 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			             .attr("x", 10)
 			             .attr("dx", ".41em")
 			             .style("text-anchor", "start");*/
+	        	 ///Delete icon added
+	        	 chart.append("svg:image")
+			    			.attr('x',558)
+				    	.attr('y',10)
+				    	.attr('width',14)
+				    	.attr('height',18)
+				    	.attr('xlink:href','/src/app/centinelUI/assets/images/delete-icon.png')
+				    	.style('cursor','hand')
+				    	.on('click', function() {
+				    		console.info("Delete icon clicked");
+				    		if(scope.confirmDelete()){
+				    			deleteWidget();					    			
+				    		}
+		         		})
+		         	.on('mouseover', function() {
+		         		d3.select(this)
+		         		 .attr('width',15)
+		         		 .attr('height',19);
+		     			tooltip.transition()
+		     			.style('opacity',1);
+		     			tooltip.html("Delete Widget")
+		     			.style('left',(d3.event.pageX + 10)+ 'px') //position of the tooltip
+		     			.style('top',(d3.event.pageY + 15) + 'px'); 
+		         		})
+			        	  .on('mouseout',function(d){
+			        		  d3.select(this)
+		             		 .attr('width',14)
+		             		 .attr('height',18);
+			        		  tooltip.transition()
+			        			.style('opacity',0);
+			        	  	});
+	        	 //Display only when No data found or Error in retrieving widget values
+	        	 chart.append("svg:text")
+	        	 		.text(scope.val1[3])
+		        	 	.attr('x',120)
+		        	 	.attr('text-anchor','middle')
+		        	 	.style('opacity',0.7)
+		        	 	.style('font-size','32px');
 	        	 chart.append('svg:g')
 	        	    .attr('class', 'y axis')
 	        	    .attr('transform', 'translate(' + (MARGINS.left) + ',0)')
 	        	    .call(yAxis)
 		        	 .append("text")
 			             //.attr("transform", "rotate(-90)")
-			             .attr("y", 95)
+			             .attr("y", 90)
 			             .attr("x", 30)
 			             .attr("dy", ".41em")
 			             .style("text-anchor", "middle")
@@ -138,7 +194,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 	        	    //return yRange(d.value);
 	        		  return yRange(d.value);
 	        	  })
-	        	  .attr('width', 40) // sets the width of bar
+	        	  .attr('width', ((WIDTH - MARGINS.right-MARGINS.left)/barData.length) - 4) // sets the width of bar
 	        	  .attr('height', function(d){
 	        		  return HEIGHT - MARGINS.bottom - yRange(d.value);
 	        		  //return yRange(d.value);
@@ -147,25 +203,29 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 	        			tooltip.transition()
 	        			.style('opacity',1);
 	        	 
-	        			tooltip.html(d.value)
+	        			tooltip.html(d.value+" events<p style=\"font-size:8pt;color:gray\">"+dateFormat.parse(d.timestamp)+"</p>")
 	        			.style('left',(d3.event.pageX - 20)+ 'px') //position of the tooltip
 	        			.style('top',(d3.event.pageY + 15) + 'px'); 
 
+	        		  /*d3.select(this)
+	        		  .attr('fill', 'orange');*/
 	        		  d3.select(this)
-	        		  .attr('fill', 'orange');
+			        		  .style('opacity',0.7);
 	        	  })
 	        	  .on('mouseout',function(d){
 	        		  tooltip.transition()
 	        			.style('opacity',0);
+	        		  /*d3.select(this)
+	        		  .attr('fill','white');*/
 	        		  d3.select(this)
-	        		  .attr('fill','white');
+			        		  .style('opacity',1);
 	        	  })
 	        	  .transition().delay(0)            
 	              .duration(1000)
 	        	  .attr('fill', 'white');
 	         } 
 	      }
-	});
+	}]);
 	centinelUIApp.register.directive('msgCount', ['$interval','widgetServiceFactory','$stateParams', function($interval,widgetServiceFactory,$stateParams) {
 		      return {
 		         restrict: 'E',
