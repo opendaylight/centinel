@@ -2,13 +2,17 @@
 	<div style="color: wheat;margin-bottom: 0px;width: 980px;" class="well well-sm" ><div style="float: left;margin-top: 10px;">
 		<label for="dataType">{{'SELECT_EVENT_TYPE' | translate }}</label></div>
 		<div class="radio" style="margin-left: 320px;">
-		  <div style="float: left;width: 76px;">
+		  <div style="float: left;width: 145px;">
 			    <input id="stream" type="radio" name="streamingType" ng-click="selectStreaminDataType('stream')" checked="checked" value="stream">
 			    <label for="stream" style="">{{'STREAM' | translate }}</label>
 			</div>
 			<div style="width: 76px;float: left;">
 			    <input id="Alert" type="radio" name="streamingType" ng-click="selectStreaminDataType('alert')" value="Alert">
 			    <label for="Alert">{{'ALARM' | translate }}</label>
+		  	</div>
+		  	<div style="width: 76px;float: left;">
+			    <input id="logs" type="radio" name="streamingType" ng-click="selectStreaminDataType('stringdata')" value="logs">
+			    <label for="logs">{{'LOGS' | translate }}</label>
 		  	</div>
 		</div>
 	
@@ -59,7 +63,10 @@
            </div>
              <div ng-repeat="event in eventsByPage[currentPage]" style="border:1px solid #A09B9B; border-spacing: 4px;">
 	            <div class="div-table-row" >
-	            	 <div class="div-table-col" style=" width:{{tableColSpacing}}; height:{{tableRowHeight}};" ng-repeat="field in event track by $index"><div style="overflow-wrap: break-word;">{{field.fieldValue}}</div></div>
+	            	 <div class="div-table-col" style=" width:{{tableColSpacing}}; height:{{tableRowHeight}};" ng-repeat="field in event track by $index">
+		            	 <div ng-if="[columnFields.label]=='fields:message'" style="white-space : nowrap;">{{field.fieldValue}}</div>
+		            	 <div ng-if="!([columnFields.label]=='fields:message')" style="overflow-wrap: break-word;">{{field.fieldValue}}</div>
+		             </div>
 	            </div>
 			</div>
 		      </div>

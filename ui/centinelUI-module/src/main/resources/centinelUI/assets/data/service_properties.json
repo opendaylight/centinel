@@ -28,5 +28,6 @@
 "GET_WIDGET_HISTOGRAM":"operations/dashboardrule:get-widget-histogram",
 "DELETE_WIDGET_SERVICE":"operations/dashboardrule:delete-widget",
 "GET_EVENTS_SERVICE":"operations/streamhandler:query-sql-relative-api",
+"SET_CONFIG_SERVICE":"operations/configuration:set-centinel-configurations",
 "":""
 }
