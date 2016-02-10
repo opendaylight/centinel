@@ -205,9 +205,6 @@ class ClientHandler extends Thread {
 
             messageData = logMessage;
         }
-    	messageData=messageData.replace("|", "~");
-    	String ar[]=messageData.split(("~"));
-    	messageData=ar[ar.length-1];
         jsonLogEvent.put("message", messageData);
         return jsonLogEvent;
     }
