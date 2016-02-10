@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.cache.Cache;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
@@ -113,9 +114,12 @@ class ClientHandler extends Thread {
                     if (persistEvent.get().isSuccessful()) {
 
                         WebResource webResource = client.resource(commonServices.graylogHostname + "gelf");
+   					try {
                         ClientResponse response = webResource.type("application/json").post(ClientResponse.class,
                                 data.toString());
-                        if (response.getStatus() == 202) {
+                        } catch (ClientHandlerException clientHandlerExceptionFlume) {
+                            LOG.error("Cannot connect to Graylog.Check specifications. Graylog Hostname -> "
+                                    + commonServices.graylogHostname );
                         }
                     }
                 } catch (Exception e) {

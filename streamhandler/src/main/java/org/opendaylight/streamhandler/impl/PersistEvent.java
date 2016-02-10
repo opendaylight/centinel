@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.apache.flume.Event;
 import org.apache.flume.EventDeliveryException;
+import org.apache.flume.FlumeException;
 import org.apache.flume.api.RpcClient;
 import org.apache.flume.api.RpcClientFactory;
 import org.apache.flume.event.EventBuilder;
@@ -29,16 +30,17 @@ import org.slf4j.LoggerFactory;
 
 public class PersistEvent {
 
-    private RpcClient client;
+    private RpcClient client = null;
     private Event event;
-    private String hostname = null;
-    private String port;
     private static final Logger LOG = LoggerFactory.getLogger(PersistEvent.class);
 
     PersistEvent(String hostname, String port) {
-        this.hostname = hostname;
-        this.port = port;
-        this.client = RpcClientFactory.getDefaultInstance(hostname, Integer.parseInt(port));
+        try {
+            this.client = RpcClientFactory.getDefaultInstance(hostname, Integer.parseInt(port));
+        } catch (FlumeException e) {
+            LOG.error("Unable to connect to Flume.Flume specifications Flume Hostname -> " + hostname
+                    + " / Flume Port -> " + port);
+        }
     }
 
     public boolean sendDataToFlume(PersistEventInput input) throws IOException, JSONException {
@@ -115,11 +117,11 @@ public class PersistEvent {
         rowKeyStr = rowKeyStr.substring(0, rowKeyLength - 1);
         event.setHeaders(header);
         try {
-            client.append(event);
+            if (client != null)
+                client.append(event);
         } catch (EventDeliveryException e) {
             client.close();
             client = null;
-            client = RpcClientFactory.getDefaultInstance(hostname, Integer.parseInt(port));
             LOG.error(e.getLocalizedMessage(), e);
         }
         return true;
