@@ -10,9 +10,11 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centine
 import org.opendaylight.centinel.impl.CentinelAlertConditionImpl;
 import org.opendaylight.centinel.impl.CentinelProvider;
 import org.opendaylight.centinel.impl.CentinelStreamImpl;
+import org.opendaylight.centinel.impl.ConfigurationServiceImpl;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.AlertruleService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.configuration.rev150105.ConfigurationService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +45,7 @@ public class CentinelModule extends
     public java.lang.AutoCloseable createInstance() {
         final CentinelAlertConditionImpl alertImpl = new CentinelAlertConditionImpl();
         final CentinelStreamImpl streamImpl = new CentinelStreamImpl();
+        final ConfigurationServiceImpl configurationServiceImpl = new ConfigurationServiceImpl();
         CentinelProvider provider = new CentinelProvider();
         DataBroker dataBrokerService = getDataBrokerDependency();
 
@@ -50,12 +53,17 @@ public class CentinelModule extends
         streamImpl.setDataProvider(dataBrokerService);
 
         alertImpl.setDataProvider(dataBrokerService);
+        configurationServiceImpl.setDataProvider(dataBrokerService);
+        configurationServiceImpl.setNotificationProvider(getNotificationServiceDependency());
        
         final BindingAwareBroker.RpcRegistration<AlertruleService> rpcRegistration = getRpcRegistryDependency()
                 .addRpcImplementation(AlertruleService.class, alertImpl);
 
         final BindingAwareBroker.RpcRegistration<StreamService> rpcRegistrationStream = getRpcRegistryDependency()
                 .addRpcImplementation(StreamService.class, streamImpl);
+        
+        final BindingAwareBroker.RpcRegistration<ConfigurationService> rpcRegistrationConfiguration = getRpcRegistryDependency()
+                .addRpcImplementation(ConfigurationService.class, configurationServiceImpl);
 
         getBrokerDependency().registerProvider(provider);
 
@@ -65,7 +73,10 @@ public class CentinelModule extends
             public void close() throws Exception {
                 rpcRegistration.close();
                 rpcRegistrationStream.close();
+                rpcRegistrationConfiguration.close();
                 closeQuietly(alertImpl);
+                closeQuietly(streamImpl);
+                closeQuietly(configurationServiceImpl);
                
                 log.info(" provider (instance {}) torn down.", this);
             }

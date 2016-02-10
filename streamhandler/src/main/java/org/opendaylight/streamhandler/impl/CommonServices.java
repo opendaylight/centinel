@@ -25,6 +25,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.core.MediaType;
 
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.configuration.rev150105.ConfigurationChanged;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,14 +45,15 @@ public class CommonServices {
 
     private static final Logger LOG = LoggerFactory.getLogger(CommonServices.class);
     private static CommonServices singleton = null;
-    String flumeHostname = null;
-    String flumePort = null;
-    String drillHostname = null;
-    String drillPort = null;
+    String flumeHostname = "localhost";
+    String flumePort = "41414";
+    String drillHostname = "localhost";
+    String drillPort = "8047";
     String dbType = null;
     String defaultLimit = null;
-    String graylogHostname = null;
-    String syslogPort = null;
+    String graylogHostname = "localhost";
+    String syslogPort = "1514";
+    String gelfPort;
 
     private CommonServices() {
         super();
@@ -85,8 +87,8 @@ public class CommonServices {
                 .add(StreamConstants.QUERY_TYPE, drillQuery.get(StreamConstants.QUERY_TYPE))
                 .add(StreamConstants.QUERY, drillQuery.get(StreamConstants.QUERY)).build();
         WebResource webResource = client.resource("http://" + hostname + StreamConstants.COLON + port + "/query.json");
-        return webResource.header("content-type", MediaType.APPLICATION_JSON).post(ClientResponse.class,
-                obj.toString());
+        return webResource.header("content-type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, obj.toString());
 
     }
 
@@ -107,7 +109,6 @@ public class CommonServices {
         for (int i = 0; i < jsonArray.toArray().length; i++) {
             Map<String, Object> output = null;
             Map<String, Object> out = new HashMap<String, Object>();
-
 
             if (jsonArray.getJsonObject(i).keySet().iterator().hasNext()) {
                 String row = jsonArray.getJsonObject(i).get(jsonArray.getJsonObject(i).keySet().iterator().next())
@@ -178,14 +179,9 @@ public class CommonServices {
     }
 
     public void loadPropertiesValues() {
-        flumeHostname = configProperties.getProperty("flume.hostname");
-        flumePort = configProperties.getProperty("flume.port");
-        drillHostname = configProperties.getProperty("drill.hostname");
-        drillPort = configProperties.getProperty("drill.port");
         dbType = configProperties.getProperty("db.type");
         defaultLimit = configProperties.getProperty("default.limit");
-        graylogHostname = configProperties.getProperty("graylog_server_ip");
-        syslogPort = configProperties.getProperty("syslog.port");
+        gelfPort = configProperties.getProperty("gelf.port");
     }
 
     public String matchRegEx(String query) {
@@ -198,6 +194,16 @@ public class CommonServices {
             query = query.replaceFirst(regex, str);
         }
         return query;
+    }
+
+    public void updateConfigurationProperties(ConfigurationChanged notification) {
+        graylogHostname = notification.getGraylogIp();
+        flumeHostname = notification.getFlumeIp();
+        drillHostname = notification.getDrillIp();
+        flumePort = notification.getFlumePort();
+        drillPort = notification.getDrillPort();
+        syslogPort = notification.getSyslogPort();
+        LOG.info("centinel configurations updated");
     }
 
 }

@@ -7,13 +7,14 @@ import org.opendaylight.centinel.impl.subscribe.SubscriberInfoCache;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
+import org.opendaylight.streamhandler.impl.ConfigurationChangeImpl;
 import org.opendaylight.streamhandler.impl.EventHandlerImpl;
+import org.opendaylight.streamhandler.impl.LogCollector;
 import org.opendaylight.streamhandler.impl.StreamhandlerImpl;
 import org.opendaylight.streamhandler.impl.StreamhandlerProvider;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardruleService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.StreamhandlerService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.SubscribeService;
-import org.opendaylight.streamhandler.impl.LogCollector;
 
 public class StreamhandlerModule extends
         org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centinel.streamhandler.impl.rev141210.AbstractStreamhandlerModule {
@@ -40,16 +41,14 @@ public class StreamhandlerModule extends
         final StreamhandlerImpl streamhandlerImpl = new StreamhandlerImpl();
         StreamhandlerProvider streamhandlerProvider = new StreamhandlerProvider();
         EventHandlerImpl eventHandlerImpl = new EventHandlerImpl(streamhandlerImpl);
+        ConfigurationChangeImpl configurationChangeImpl = new ConfigurationChangeImpl(); 
         DataBroker dataBrokerService = getDataBrokerDependency();
         
-
         /***
          * load the CentinelDashboardImpl and StreamCounterInfoCache register
          * for RPC
          */
-
         StreamCounterInfoCache streamCounterInfoCache = StreamCounterInfoCache.getInstance();
-
         final CentinelDashboardImpl centinelDashboardImpl = new CentinelDashboardImpl(streamhandlerImpl);
         centinelDashboardImpl.setDataProvider(dataBrokerService);
         final BindingAwareBroker.RpcRegistration<DashboardruleService> rpcDashboardruleServiceRegistration = getRpcRegistryDependency()
@@ -75,7 +74,10 @@ public class StreamhandlerModule extends
 
         final BindingAwareBroker.RpcRegistration<StreamhandlerService> rpcRegistrationhandler = getRpcRegistryDependency()
                 .addRpcImplementation(StreamhandlerService.class, streamhandlerImpl);
+
+        // Register notification listeners to receive notifications
         getNotificationServiceDependency().registerNotificationListener(eventHandlerImpl);
+        getNotificationServiceDependency().registerNotificationListener(configurationChangeImpl);
 
         getBrokerDependency().registerProvider(streamhandlerProvider);
         final class AutoCloseableToaster implements AutoCloseable {
