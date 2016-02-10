@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.cache.Cache;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
@@ -112,10 +113,14 @@ class ClientHandler extends Thread {
                     // if persisted successfully send it to graylog
                     if (persistEvent.get().isSuccessful()) {
 
-                        WebResource webResource = client.resource(commonServices.graylogHostname + "gelf");
-                        ClientResponse response = webResource.type("application/json").post(ClientResponse.class,
-                                data.toString());
-                        if (response.getStatus() == 202) {
+                        WebResource webResource = client.resource("http://" + commonServices.graylogHostname
+                                + StreamConstants.COLON + commonServices.gelfPort + "/gelf");
+                        try {
+                            ClientResponse response = webResource.type("application/json").post(ClientResponse.class,
+                                    data.toString());
+                        } catch (ClientHandlerException clientHandlerExceptionFlume) {
+                            LOG.error("Cannot connect to Graylog.Check specifications. Graylog Hostname -> "
+                                    + commonServices.graylogHostname + " /Graylog Port -> " + commonServices.gelfPort);
                         }
                     }
                 } catch (Exception e) {
@@ -201,9 +206,6 @@ class ClientHandler extends Thread {
 
             messageData = logMessage;
         }
-    	messageData=messageData.replace("|", "~");
-    	String ar[]=messageData.split(("~"));
-    	messageData=ar[ar.length-1];
         jsonLogEvent.put("message", messageData);
         return jsonLogEvent;
     }
