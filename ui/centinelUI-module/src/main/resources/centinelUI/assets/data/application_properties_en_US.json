@@ -7,7 +7,8 @@
   "":"",
   "EVENTS":"Events",
   "STREAMS": "Rules",
-  "STREAM": "Rule",
+  "STREAM": "Intercepted Logs",
+  "LOGS":"Raw Logs",
   "MANAGE_ALERTS": "Manage Alarms",
   "EDIT_ALERT_RULES": "Edit Flow Rules",
   "ALERT_CONFIGURATION_PAGE_TITLE": "Alarm configuration for rules",
@@ -79,6 +80,10 @@
   "NO_ALERTS_FOUND":"No Alerts Found !!",
   "NO_RULES_FOUND":"No Rules Added !!",
   "NO_EVENTS_FOUND":"No Log Messages Found !!",
-  "NO_DASHBOARD_FOUND":"No Dashboard Found !!"
+  "NO_DASHBOARD_FOUND":"No Dashboard Found !!",
+  "CONFIGURATION":"Settings",
+  "TEST_CONNECTION":"Test",
+  "SAVE_IP":"Submit",
+  "CONFIG_ADD_SUCCESS":"Configuration is {{crud}} successfully !!"
   }
 

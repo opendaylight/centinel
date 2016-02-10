@@ -89,11 +89,20 @@ define(['app/centinelUI/centinelUI.module','app/centinelUI/centinelUI.services']
 		    		$scope.dashboardList = [];
 				$scope.search();
 		    },function(response) {
-				$translate('ERROR_RETRIEVE_DASHBOARDS').then(function (translations) {
-		    		 $scope.successMsg =  translations;
-		    	 });
-				$scope.submitSuccess =false;
-			$scope.submitted = true;
+		    	if(response.status!=404){
+		    		$translate('ERROR_RETRIEVE_DASHBOARDS').then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+					$scope.submitSuccess =false;
+					$scope.submitted = true;
+		    	}else{
+		    		$translate('NO_STREAMS_FOUND').then(function (translations) {
+			    		 $scope.successMsg =  translations;
+			    	 });
+		    		$scope.submitSuccess =true;
+					$scope.submitted = true;
+		    	}
+				
 	      });
 		};
 		$scope.getAllDashboardCall();

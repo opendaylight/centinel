@@ -1,0 +1,72 @@
+<div id="configurationPage">
+	<div class="well well-sm"><h3>Please provide following configuration details</h3></div>
+	<div class="well well-sm">
+		<form method="POST" ng-submit="save(configForm)" class="alert-type-form alert-type-form-message-count form-inline ng-pristine ng-valid ng-scope" id="configForm" style="display: block;">
+			<table>
+				<tr><td style="vertical-align:middle;">
+				<label for="graylog">Graylog Server IP : Port</label>
+				</td><td>
+					<input type="text" maxlength="3" ng-change="validatePass(0,'.graylog')" ng-model="configForm.graylogIP[0]" class="form-control ng-pristine ng-untouched ng-valid splitfirst graylog" required autocomplete='off'/>
+					<input type="text" maxlength="3" ng-change="validatePass(1,'.graylog')" ng-model="configForm.graylogIP[1]" class="form-control ng-pristine ng-untouched ng-valid split graylog" required/>
+					<input type="text" maxlength="3" ng-change="validatePass(2,'.graylog')" ng-model="configForm.graylogIP[2]" class="form-control ng-pristine ng-untouched ng-valid split graylog" required/>
+					<input type="text" maxlength="3" ng-change="validatePass(3,'.graylog')" ng-model="configForm.graylogIP[3]" class="form-control ng-pristine ng-untouched ng-valid splitlast graylog" required/>
+				</td>
+				<td>
+				<input id="graylogPort" type="text" class="form-control ng-pristine ng-untouched ng-valid" ng-model="configForm.graylogPort" style="border-radius: 0px; text-align: center; width: 60px;" ng-change="validatePort('#graylogPort')"/></td>
+				</tr>
+				<tr>
+				<td style="vertical-align:middle;">
+				<label for="flume">Flume Server IP : Port</label></td>
+				<td>
+					<input type="text" maxlength="3" ng-change="validatePass(0,'.flume')" ng-model="configForm.flumeIP[0]" class="form-control ng-pristine ng-untouched ng-valid splitfirst flume" required/>
+					<input type="text" maxlength="3" ng-change="validatePass(1,'.flume')" ng-model="configForm.flumeIP[1]" class="form-control ng-pristine ng-untouched ng-valid split flume" required/>
+					<input type="text" maxlength="3" ng-change="validatePass(2,'.flume')" ng-model="configForm.flumeIP[2]" class="form-control ng-pristine ng-untouched ng-valid split flume" required/>
+					<input type="text" maxlength="3" ng-change="validatePass(3,'.flume')" ng-model="configForm.flumeIP[3]" class="form-control ng-pristine ng-untouched ng-valid splitlast flume" required/>
+				</td>
+				<td>
+				<input id="flumePort" type="text" class="form-control ng-pristine ng-untouched ng-valid" ng-model="configForm.flumePort" style="border-radius: 0px; text-align: center; width: 60px;" ng-change="validatePort('#flumePort')"/></td>
+				</tr>
+				<!-- <tr>
+				<td style="vertical-align:middle;">
+				<label for="hbase">Hbase IP:Port</label></td>
+				<td>
+					<input type="text" maxlength="3" ng-change="validatePass(0)" ng-model="configForm.hbaseIP[0]" class="form-control ng-pristine ng-untouched ng-valid splitfirst"/>
+					<input type="text" maxlength="3" ng-change="validatePass(1)" ng-model="configForm.hbaseIP[1]" class="form-control ng-pristine ng-untouched ng-valid split"/>
+					<input type="text" maxlength="3" ng-change="validatePass(2)" ng-model="configForm.hbaseIP[2]" class="form-control ng-pristine ng-untouched ng-valid split"/>
+					<input type="text" maxlength="3" ng-change="validatePass(3)" ng-model="configForm.hbaseIP[3]" class="form-control ng-pristine ng-untouched ng-valid splitlast"/>
+				</td>
+				<td>
+				<input id="hbasePort" type="text" class="form-control ng-pristine ng-untouched ng-valid" ng-model="configForm.hbasePort" style="border-radius: 0px; text-align: center; width: 60px;" ng-change="validatePort('#hbasePort')"/></td>
+				</tr> -->
+				<tr>
+				<td style="vertical-align:middle;">
+				<label for="drill">Drill IP : Port</label></td>
+				<td>
+					<input type="text" maxlength="3" ng-change="validatePass(0,'.drill')" ng-model="configForm.drillIP[0]" class="form-control ng-pristine ng-untouched ng-valid splitfirst drill" required/>
+					<input type="text" maxlength="3" ng-change="validatePass(1,'.drill')" ng-model="configForm.drillIP[1]" class="form-control ng-pristine ng-untouched ng-valid split drill" required/>
+					<input type="text" maxlength="3" ng-change="validatePass(2,'.drill')" ng-model="configForm.drillIP[2]" class="form-control ng-pristine ng-untouched ng-valid split drill" required/>
+					<input type="text" maxlength="3" ng-change="validatePass(3,'.drill')" ng-model="configForm.drillIP[3]" class="form-control ng-pristine ng-untouched ng-valid splitlast drill" required/>
+				</td>
+				<td>
+				<input id="drillPort" type="text" class="form-control ng-pristine ng-untouched ng-valid" ng-model="configForm.drillPort" style="border-radius: 0px; text-align: center; width: 60px;" ng-change="validatePort('#drillPort')"/></td>
+				</tr>
+				<tr>
+				<td style="vertical-align:middle;">
+				<label for="syslogPort">Syslog Port</label></td>
+				<td>
+				<input id="syslogPort" type="text" class="form-control ng-pristine ng-untouched ng-valid" ng-model="configForm.syslogPort" style="border-radius: 0px; text-align: center; width: 60px;" ng-change="validatePort('#syslogPort')"/></td>
+				</tr> 
+			</table>
+			<div>
+				<button type="submit" class="btn btn-success" ng-disabled="submitting" style="margin-top: 8px;">{{'SAVE_IP'|translate}}</button>
+			</div>
+		</form>
+	</div>
+	<div class="submittingForm" ng-show="submitting" style="height: 35px;"></div>
+	<div style="text-align: center;color: white;" ng-show="submitting">Please Wait...</div>
+	<div class="tab-pane fade in active" id="smart-green-demo" ng-Show="submitted">
+		<p ng-class="{'smart-green': submitSuccess, 'smart-red': !submitSuccess}">
+			<span>{{ serviceResponseMsg }}</span>
+		 </p>
+	</div>
+</div>

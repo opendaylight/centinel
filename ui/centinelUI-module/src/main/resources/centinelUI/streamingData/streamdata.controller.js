@@ -61,8 +61,10 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		$scope.selectStreaminDataType = function(dataType) {
 			if(dataType =='alert')
 				$scope.eventType = 'Alarms';
-			else
+			else if(dataType =='stream')
 				$scope.eventType = 'Streams';
+			else
+				$scope.eventType = 'Logs';
 			$scope.tableRowHeight = '28px';
 			$scope.streamingDataType = dataType;
 			console.info("streamingDataType :: ");
@@ -91,8 +93,8 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			     if(res[i].indexOf('=')>0){
 			      var temp = res[i];
 			      temp = $scope.streamingDataType+"."+temp;
-			      temp = temp.replace("=", "like '");
-			      res[i]= temp+"'";
+			      temp = temp.replace("=", " like '%");
+			      res[i]= temp+"%'";
 			      }
 			    }
 			var whereClause= '';
@@ -152,7 +154,11 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 	    		 uniquefields = _(uniquefields).unique(); 
 	    	 }
 	    	 for (var i = 0; i < uniquefields.length; i++) {
-	    		 if(uniquefields[i]=='stream:title' ||uniquefields[i]=='check_result:triggeredCondition:type' ||uniquefields[i]=='check_result:triggeredCondition:type' ||uniquefields[i]=='event_timestamp' || uniquefields[i]=='check_result:triggeredAt'||uniquefields[i]=='fields:severity'||uniquefields[i]=='fields:message'||uniquefields[i]=='source')
+	    		 if(uniquefields[i]=='streams:title' ||uniquefields[i]=='check_result:triggeredCondition:type' ||
+	    				 uniquefields[i]=='check_result:triggeredCondition:type' ||uniquefields[i]=='event_timestamp' || 
+	    				 			uniquefields[i]=='check_result:triggeredAt'||uniquefields[i]=='fields:severity'||
+	    				 			uniquefields[i]=='source'||uniquefields[i]=='stream:title'|| uniquefields[i]=='hostname' || 
+	    				 			uniquefields[i]=='facility' || uniquefields[i]=='log_time')
 	    			 var fieldObj ="{\"label\":\""+uniquefields[i]+"\",\"value\":true}";
 	    		 else
 	    			 var fieldObj ="{\"label\":\""+uniquefields[i]+"\",\"value\":false}";
