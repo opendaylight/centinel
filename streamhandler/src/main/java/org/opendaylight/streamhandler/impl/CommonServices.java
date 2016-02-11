@@ -203,6 +203,7 @@ public class CommonServices {
         flumePort = notification.getFlumePort();
         drillPort = notification.getDrillPort();
         syslogPort = notification.getSyslogPort();
+        new PersistEvent(flumeHostname, flumePort);
         LOG.info("centinel configurations updated");
     }
 
