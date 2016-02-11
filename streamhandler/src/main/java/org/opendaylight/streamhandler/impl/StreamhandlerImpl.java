@@ -480,7 +480,7 @@ public class StreamhandlerImpl implements StreamhandlerService, AutoCloseable {
     private String updateWhenQueryContainsData(String query) {
         query = replaceFirstCentinelForDBType(query);
         query = query.replace(StreamConstants.DATA_DOT, StreamConstants.CENTINEL_DOT + StreamConstants.DATA_DOT);
-        query = query.replaceFirst(StreamConstants.DATA, "convert_from(centinel.data.stringdata, 'json')");
+        query = query.replaceFirst(StreamConstants.DATA, "convert_from(centinel.stringdata.stringdata, 'json')");
         return query;
     }
 
