@@ -5,6 +5,7 @@
         <li ng-class="{ active: isState('main.centinelUI.stream')|| isState('main.centinelUI.alert') || isState('main.centinelUI.editRules') }"><a href="#/centinelUI/streams" class="ng-binding">{{ 'STREAMS' | translate }}</a></li>
   		<li ng-class="{ active: isState('main.centinelUI.dashboards') || isState('main.centinelUI.widgets') || isState('main.centinelUI.createWidgets')}"><a href="#/centinelUI/dashboards" class="ng-binding">{{ 'DASHBOARDS' | translate }}</a></li>
     	<li ng-class="{ active: isState('main.centinelUI.streamdata')}"><a href="#/centinelUI/streamdata" class="ng-binding">{{ 'EVENTS' | translate }}</a></li>
+<li ng-class="{ active: isState('main.centinelUI.configuration')}"><a href="#/centinelUI/configuration" class="ng-binding">{{ 'CONFIGURATION' | translate }}</a></li>
     </ul>
     <!-- uiView: submenu --><div ui-view="submenu" class="ng-scope"></div>
 </div>
