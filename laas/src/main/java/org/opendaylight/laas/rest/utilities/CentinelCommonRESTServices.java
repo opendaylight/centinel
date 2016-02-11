@@ -34,7 +34,6 @@ public class CentinelCommonRESTServices {
     Client client = null;
     JsonBuilderFactory factory = null;
     Properties properties;
-    Properties configproperties;
     private static final String resourceType = "application/json";
 
     private static final Logger LOG = LoggerFactory.getLogger(CentinelCommonRESTServices.class);
@@ -138,13 +137,9 @@ public class CentinelCommonRESTServices {
      */
     public void loadPropertiesFiles() {
         properties = new Properties();
-        configproperties = new Properties();
         try {
             InputStream inputStreamForData = getClass().getClassLoader().getResourceAsStream("data.properties");
             properties.load(inputStreamForData);
-            InputStream inputStreamForConfiguration = getClass().getClassLoader().getResourceAsStream(
-                    "configuration.properties");
-            configproperties.load(inputStreamForConfiguration);
             LOG.info("Properties files for Graylog loaded successfully");
         } catch (Exception e) {
             LOG.error(e.getLocalizedMessage(), e);
@@ -152,11 +147,16 @@ public class CentinelCommonRESTServices {
     }
 
     private void loadPropertiesValues() {
-        graylogServerIp = configproperties.getProperty("graylog_server_ip");
         graylogStream = properties.getProperty("graylog_stream");
         message = properties.getProperty("graylog_message");
         streams = properties.getProperty("graylog_streams");
         alarmCallback = properties.getProperty("graylog_alarmcallback");
+    }
+    
+    public void setGraylogIp(String ip,String port)
+    {
+        graylogServerIp = "http://" + ip + ":" + port + "/";
+        LOG.info("graylog ip ultimate " + graylogServerIp);
     }
 
 }

@@ -1,0 +1,87 @@
+/*
+ * Copyright (c) 2016 Tata Consultancy services and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+module configuration {
+
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:configuration";
+    prefix "configuration";
+
+    revision "2015-01-05" {
+        description "Initial revision of configuration model";
+    }
+    
+    contact "Sumit Kapoor <sumit.kapoor@tcs.com>";
+    description "Configuring external systems in centinel.";
+
+    grouping configuration{
+        description
+            "The base type of configuration data.";
+
+        leaf graylogIp {
+            description
+                "The ip of graylog to be configured";
+            type string;       
+        }
+        leaf graylogPort
+        {
+            description
+                "The port of graylog to be configured";
+            type string;       
+        }
+        leaf flumeIp {
+            description
+                "The ip of flume to be configured";
+            type string;
+        }
+        leaf flumePort
+        {
+            description
+                "The port of flume to be configured";
+            type string;       
+        }
+        leaf drillIp {
+            description
+                "The ip of drill to be configured";
+            type string;
+        }
+        leaf drillPort
+        {
+            description
+                "The port of drill to be configured";
+            type string;       
+        }
+        leaf syslogPort {
+            description
+                "The port of centinel syslog to be configured";
+            type string;
+        }
+        
+    }
+
+   container configurationRecord {
+       uses configuration;
+   }
+
+   rpc set-centinel-configurations{
+        description "Set ip for graylog";
+
+        input {
+        	uses configuration;
+        }
+        output {
+        	uses configuration;            
+        }
+    }
+    
+    notification configuration-changed {
+        description "Indicates that configuration settings has changed";
+
+        uses configuration;            
+    }
+    
+}
