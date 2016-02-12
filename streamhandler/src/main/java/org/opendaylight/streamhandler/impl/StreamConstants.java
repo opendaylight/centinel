@@ -18,8 +18,8 @@ public class StreamConstants {
     public static final String SDF_DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
     
     public static final String SQL = "SQL";
-    public static final String DATA_DOT = "data.";
-    public static final String DATA = "data";
+    public static final String DATA_DOT = "stringdata.";
+    public static final String DATA = "stringdata";
     public static final String LIMIT = " limit ";
     public static final String DASHBOARD = "dashboard";
     public static final String DASHBOARD_DOT = "dashboard.";

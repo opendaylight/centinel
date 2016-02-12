@@ -10,12 +10,9 @@ package org.opendaylight.streamhandler.impl;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.EventNotified;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.PersistEventInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.StreamhandlerListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class EventHandlerImpl implements StreamhandlerListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EventHandlerImpl.class);
     StreamhandlerImpl streamHandlerImpl;
 
     public EventHandlerImpl(StreamhandlerImpl streamHandlerImpl) {
@@ -24,8 +21,6 @@ public class EventHandlerImpl implements StreamhandlerListener {
 
     @Override
     public void onEventNotified(EventNotified notification) {
-
-        LOG.info("Event Notification received");
 
         PersistEventInputBuilder input = new PersistEventInputBuilder();
         input.setEventBody(notification.getEventBody());

@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 public class PersistEvent {
 
-    private RpcClient client = null;
+    private static RpcClient client = null;
     private Event event;
     private static final Logger LOG = LoggerFactory.getLogger(PersistEvent.class);
 
