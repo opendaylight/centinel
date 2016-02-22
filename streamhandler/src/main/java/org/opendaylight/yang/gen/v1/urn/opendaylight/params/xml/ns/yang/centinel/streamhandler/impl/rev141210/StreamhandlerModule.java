@@ -113,8 +113,8 @@ public class StreamhandlerModule extends
          */
 
        	LogCollector collect = new LogCollector();
-        collect.server();
- 
+        collect.start();
+        
         AutoCloseable ret = new AutoCloseableToaster();
         return ret;
     }

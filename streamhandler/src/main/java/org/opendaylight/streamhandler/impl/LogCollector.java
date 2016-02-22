@@ -8,16 +8,23 @@
 
 package org.opendaylight.streamhandler.impl;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.joda.time.DateTime;
@@ -36,11 +43,11 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-public class LogCollector {
+public class LogCollector extends Thread{
     private static final Logger LOG = LoggerFactory.getLogger(LogCollector.class);
     CommonServices commonServices = CommonServices.getInstance();
 
-    public void server() {
+    public void run() {
         ServerSocket s = null;
         Socket conn = null;
         try {
@@ -78,11 +85,11 @@ class ClientHandler extends Thread {
     @SuppressWarnings("deprecation")
     @Override
     public void run() {
-        String line;
+        String line=null;
 
         try {
             // get socket writing and reading streams
-            DataInputStream in = new DataInputStream(conn.getInputStream());
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
             // Send welcome message to client
             LOG.info("Welcome to the Server");
@@ -95,12 +102,12 @@ class ClientHandler extends Thread {
             keyList.add("message");
             input.setEventKeys(keyList);
             input.setEventType("stringdata");
-            while (true) {
-                line = in.readLine();
-
+            
+            while (((line = br.readLine()) != null) && (!(line.equals("")))) {
                 try {
                     try {
-                        data = parseLogMessage(line);
+                        data = parseLogMessage(line);   
+                        line =null;
                     } catch (JSONException e) {
                         LOG.error("Exception while converting getting JSON from parseLogMessage " + e.getMessage(), e);
                     }
