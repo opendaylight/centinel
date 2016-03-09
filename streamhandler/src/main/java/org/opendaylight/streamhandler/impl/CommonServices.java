@@ -39,172 +39,209 @@ import com.sun.jersey.api.client.WebResource;
  */
 public class CommonServices {
 
-    Client client = null;
-    JsonBuilderFactory factory = null;
-    Properties configProperties;
+	Client client = null;
+	JsonBuilderFactory factory = null;
+	Properties configProperties;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CommonServices.class);
-    private static CommonServices singleton = null;
-    String flumeHostname = "localhost";
-    String flumePort = "41414";
-    String drillHostname = "localhost";
-    String drillPort = "8047";
-    String dbType = null;
-    String defaultLimit = null;
-    String graylogHostname = "localhost";
-    String syslogPort = "1514";
-    String gelfPort;
+	private static final Logger LOG = LoggerFactory
+			.getLogger(CommonServices.class);
+	private static CommonServices singleton = null;
+	String flumeHostname = "localhost";
+	String flumePort = "41414";
+	String drillHostname = "localhost";
+	String drillPort = "8047";
+	String dbType = null;
+	String defaultLimit = null;
+	String graylogHostname = "localhost";
+	String syslogPort = "1514";
+	boolean secureSyslog = false;
+	String gelfPort;
+	String tlsSecurityType = null;
+	String tlsServerKeyPath = null;
+	String tlsClientCertKeyPath = null;
+	String tlsServerKeyPwd = null;
+	String tlsClientCertPwd = null;
+	String tlsParingAlgo = null;
+	String tlsEncodeAlgo = null;
 
-    private CommonServices() {
-        super();
-        client = Client.create();
-        factory = Json.createBuilderFactory(null);
-        loadPropertiesFiles();
-        loadPropertiesValues();
+	private CommonServices() {
+		super();
+		client = Client.create();
+		factory = Json.createBuilderFactory(null);
+		loadPropertiesFiles();
+		loadPropertiesValues();
 
-    }
+	}
 
-    /*
-     * Provide single instance of CentinelStreamConditionRESTServices across the
-     * application throughout its life cycle
-     */
-    public static synchronized CommonServices getInstance() {
-        if (singleton == null) {
-            singleton = new CommonServices();
-        }
-        return singleton;
-    }
+	/*
+	 * Provide single instance of CentinelStreamConditionRESTServices across the
+	 * application throughout its life cycle
+	 */
+	public static synchronized CommonServices getInstance() {
+		if (singleton == null) {
+			singleton = new CommonServices();
+		}
+		return singleton;
+	}
 
-    /*
-     * @param obj
-     * @param resource
-     * @return ClientResponse
-     * 
-     *         Utility method to send HTTP POST request to drill
-     */
-    public ClientResponse drillRESTPost(Map<String, String> drillQuery, String hostname, String port) {
-        JsonObject obj = factory.createObjectBuilder()
-                .add(StreamConstants.QUERY_TYPE, drillQuery.get(StreamConstants.QUERY_TYPE))
-                .add(StreamConstants.QUERY, drillQuery.get(StreamConstants.QUERY)).build();
-        WebResource webResource = client.resource("http://" + hostname + StreamConstants.COLON + port + "/query.json");
-        return webResource.header("content-type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, obj.toString());
+	/*
+	 * @param obj
+	 * 
+	 * @param resource
+	 * 
+	 * @return ClientResponse
+	 * 
+	 * Utility method to send HTTP POST request to drill
+	 */
+	public ClientResponse drillRESTPost(Map<String, String> drillQuery,
+			String hostname, String port) {
+		JsonObject obj = factory
+				.createObjectBuilder()
+				.add(StreamConstants.QUERY_TYPE,
+						drillQuery.get(StreamConstants.QUERY_TYPE))
+				.add(StreamConstants.QUERY,
+						drillQuery.get(StreamConstants.QUERY)).build();
+		WebResource webResource = client.resource("http://" + hostname
+				+ StreamConstants.COLON + port + "/query.json");
+		return webResource.header("content-type", MediaType.APPLICATION_JSON)
+				.post(ClientResponse.class, obj.toString());
 
-    }
+	}
 
-    /*
-     * @param response
-     * @param key
-     * @return String Parsing the HTTP method response
-     */
-    public List<Map<String, Object>> parseResponse(String response, List<String> eventKey) {
-        JsonReader reader = Json.createReader(new StringReader(response));
-        JsonObject personObject = reader.readObject();
-        reader.close();
+	/*
+	 * @param response
+	 * 
+	 * @param key
+	 * 
+	 * @return String Parsing the HTTP method response
+	 */
+	public List<Map<String, Object>> parseResponse(String response,
+			List<String> eventKey) {
+		JsonReader reader = Json.createReader(new StringReader(response));
+		JsonObject personObject = reader.readObject();
+		reader.close();
 
-        JsonArray jsonArray = (JsonArray) personObject.get("rows");
+		JsonArray jsonArray = (JsonArray) personObject.get("rows");
 
-        List<Map<String, Object>> listOut = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> listOut = new ArrayList<Map<String, Object>>();
 
-        for (int i = 0; i < jsonArray.toArray().length; i++) {
-            Map<String, Object> output = null;
-            Map<String, Object> out = new HashMap<String, Object>();
+		for (int i = 0; i < jsonArray.toArray().length; i++) {
+			Map<String, Object> output = null;
+			Map<String, Object> out = new HashMap<String, Object>();
 
-            if (jsonArray.getJsonObject(i).keySet().iterator().hasNext()) {
-                String row = jsonArray.getJsonObject(i).get(jsonArray.getJsonObject(i).keySet().iterator().next())
-                        .toString();
-                row = row.replace("\\", StreamConstants.BLANK);
-                row = row.replaceFirst("\"", StreamConstants.BLANK);
-                row = row.replace("}\"", "}");
+			if (jsonArray.getJsonObject(i).keySet().iterator().hasNext()) {
+				String row = jsonArray
+						.getJsonObject(i)
+						.get(jsonArray.getJsonObject(i).keySet().iterator()
+								.next()).toString();
+				row = row.replace("\\", StreamConstants.BLANK);
+				row = row.replaceFirst("\"", StreamConstants.BLANK);
+				row = row.replace("}\"", "}");
 
-                reader = Json.createReader(new StringReader(row));
+				reader = Json.createReader(new StringReader(row));
 
-                output = parseJsonObject(reader.readObject(), StreamConstants.BLANK);
-                reader.close();
+				output = parseJsonObject(reader.readObject(),
+						StreamConstants.BLANK);
+				reader.close();
 
-                if (eventKey != null) {
-                    for (String key : eventKey) {
-                        out.put(key, output.get(key));
-                    }
-                } else {
-                    out = output;
-                }
-                listOut.add(out);
-            } else {
-                LOG.error("Drill response is empty");
-            }
-        }
-        return listOut;
-    }
+				if (eventKey != null) {
+					for (String key : eventKey) {
+						out.put(key, output.get(key));
+					}
+				} else {
+					out = output;
+				}
+				listOut.add(out);
+			} else {
+				LOG.error("Drill response is empty");
+			}
+		}
+		return listOut;
+	}
 
-    /*
-     * To load property file
-     */
-    public void loadPropertiesFiles() {
-        configProperties = new Properties();
-        try {
+	/*
+	 * To load property file
+	 */
+	public void loadPropertiesFiles() {
+		configProperties = new Properties();
+		try {
 
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Configuration.properties");
-            configProperties.load(inputStream);
-            LOG.info("Properties files for Stream Handler loaded successfully");
-        } catch (IOException e) {
-            LOG.error("Problem while loading Properties file for Stream Handller: "+ e.getMessage(), e);
-        }
-    }
+			InputStream inputStream = getClass().getClassLoader()
+					.getResourceAsStream("Configuration.properties");
+			configProperties.load(inputStream);
+			LOG.info("Properties files for Stream Handler loaded successfully");
+		} catch (IOException e) {
+			LOG.error(
+					"Problem while loading Properties file for Stream Handller: "
+							+ e.getMessage(), e);
+		}
+	}
 
-    private Map<String, Object> parseJsonObject(JsonObject jsonObj, String str) {
-        Map<String, Object> out = new HashMap<String, Object>();
-        for (Object key : jsonObj.keySet()) {
+	private Map<String, Object> parseJsonObject(JsonObject jsonObj, String str) {
+		Map<String, Object> out = new HashMap<String, Object>();
+		for (Object key : jsonObj.keySet()) {
 
-            String keyStr = (String) key;
-            Object keyvalue = jsonObj.get(keyStr);
+			String keyStr = (String) key;
+			Object keyvalue = jsonObj.get(keyStr);
 
-            // for nested objects iteration if required
-            if (keyvalue instanceof JsonObject) {
-                if (StreamConstants.BLANK.equals(str)) {
-                    out.putAll(parseJsonObject((JsonObject) keyvalue, keyStr));
-                } else {
-                    out.putAll(parseJsonObject((JsonObject) keyvalue, str + StreamConstants.COLON + keyStr));
-                }
-            } else {
-                keyvalue = (keyvalue).toString().replace("\"", StreamConstants.BLANK);
-                if (StreamConstants.BLANK.equals(str)) {
-                    out.put(keyStr, keyvalue);
-                } else {
-                    out.put(str + StreamConstants.COLON + keyStr, keyvalue);
-                }
-            }
-        }
-        return out;
-    }
+			// for nested objects iteration if required
+			if (keyvalue instanceof JsonObject) {
+				if (StreamConstants.BLANK.equals(str)) {
+					out.putAll(parseJsonObject((JsonObject) keyvalue, keyStr));
+				} else {
+					out.putAll(parseJsonObject((JsonObject) keyvalue, str
+							+ StreamConstants.COLON + keyStr));
+				}
+			} else {
+				keyvalue = (keyvalue).toString().replace("\"",
+						StreamConstants.BLANK);
+				if (StreamConstants.BLANK.equals(str)) {
+					out.put(keyStr, keyvalue);
+				} else {
+					out.put(str + StreamConstants.COLON + keyStr, keyvalue);
+				}
+			}
+		}
+		return out;
+	}
 
-    public void loadPropertiesValues() {
-        dbType = configProperties.getProperty("db.type");
-        defaultLimit = configProperties.getProperty("default.limit");
-        gelfPort = configProperties.getProperty("gelf.port");
-    }
+	public void loadPropertiesValues() {
+		dbType = configProperties.getProperty("db.type");
+		defaultLimit = configProperties.getProperty("default.limit");
+		gelfPort = configProperties.getProperty("gelf.port");
+		tlsSecurityType = configProperties.getProperty("TLS.securityType");
+		tlsServerKeyPath = configProperties.getProperty("TLS.serverKeyPath");
+		tlsClientCertKeyPath = configProperties
+				.getProperty("TLS.clientCertKeyPath");
+		tlsServerKeyPwd = configProperties.getProperty("TLS.serverKeyPwd");
+		tlsClientCertPwd = configProperties.getProperty("TLS.clientCertPwd");
+		tlsParingAlgo = configProperties.getProperty("TLS.paringAlgo");
+		tlsEncodeAlgo = configProperties.getProperty("TLS.encodeAlgo");
+	}
 
-    public String matchRegEx(String query) {
-        String regex = "([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2})_([0-9]{2})_([0-9]{2})";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(query);
-        while (matcher.find()) {
-            String str = matcher.group();
-            str = str.replace(StreamConstants.UNDERSCORE, StreamConstants.COLON);
-            query = query.replaceFirst(regex, str);
-        }
-        return query;
-    }
+	public String matchRegEx(String query) {
+		String regex = "([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2})_([0-9]{2})_([0-9]{2})";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(query);
+		while (matcher.find()) {
+			String str = matcher.group();
+			str = str
+					.replace(StreamConstants.UNDERSCORE, StreamConstants.COLON);
+			query = query.replaceFirst(regex, str);
+		}
+		return query;
+	}
 
-    public void updateConfigurationProperties(ConfigurationChanged notification) {
-        graylogHostname = notification.getGraylogIp();
-        flumeHostname = notification.getFlumeIp();
-        drillHostname = notification.getDrillIp();
-        flumePort = notification.getFlumePort();
-        drillPort = notification.getDrillPort();
-        syslogPort = notification.getSyslogPort();
-        new PersistEvent(flumeHostname, flumePort);
-        LOG.info("centinel configurations updated");
-    }
+	public void updateConfigurationProperties(ConfigurationChanged notification) {
+		graylogHostname = notification.getGraylogIp();
+		flumeHostname = notification.getFlumeIp();
+		drillHostname = notification.getDrillIp();
+		flumePort = notification.getFlumePort();
+		drillPort = notification.getDrillPort();
+		syslogPort = notification.getSyslogPort();
+		secureSyslog = notification.isSecureSysLog();
+		new PersistEvent(flumeHostname, flumePort);
+		LOG.info("centinel configurations updated");
+	}
 
 }

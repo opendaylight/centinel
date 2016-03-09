@@ -55,6 +55,12 @@
 				<label for="syslogPort">Syslog Port</label></td>
 				<td>
 				<input id="syslogPort" type="text" class="form-control ng-pristine ng-untouched ng-valid" ng-model="configForm.syslogPort" style="border-radius: 0px; text-align: center; width: 60px;" ng-change="validatePort('#syslogPort')"/></td>
+				</tr>
+				<tr>
+				<td style="vertical-align:middle;">
+				<label for="secureSysLog">SecureSysLog</label></td>
+				<td>
+				<input id="secureSysLog" type="checkbox" class="form-control ng-pristine ng-untouched ng-valid" ng-model="configForm.secureSysLog" style="margin-left:-1px; border-radius: 0px;  width: 14px;vertical-align:middle;"/> TLS</td>
 				</tr> 
 			</table>
 			<div>

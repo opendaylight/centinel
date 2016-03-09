@@ -60,7 +60,11 @@ module configuration {
                 "The port of centinel syslog to be configured";
             type string;
         }
-        
+        leaf secureSysLog {
+            description
+                "The variable to set up tcp or tls channel";
+            type boolean;
+        }    
     }
 
    container configurationRecord {
@@ -68,7 +72,7 @@ module configuration {
    }
 
    rpc set-centinel-configurations{
-        description "Set ip for graylog";
+        description "Set centinel configurations";
 
         input {
         	uses configuration;
