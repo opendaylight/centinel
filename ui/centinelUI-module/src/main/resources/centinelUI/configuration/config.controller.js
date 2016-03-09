@@ -12,7 +12,8 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 		      "graylogPort":12900,
 		      "flumePort":41414,
 		      "drillPort":8047,
-		      "syslogPort":1514		      
+		      "syslogPort":1514,		      
+			  "secureSysLog":false
 	  };
 	 
 	  $scope.validated = true;
@@ -27,6 +28,7 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 	  };
 	  
 	  $scope.save = function(configForm){
+		  $scope.submitted = false;
 		  $scope.validate(configForm);
 		  if (!$scope.validated){
 			  $window.alert("Invalid IP address !! Range: [0-255]");
@@ -35,7 +37,8 @@ define(['app/centinelUI/centinelUI.module'], function(centinelUIApp) {
 			  var graylogIP= configForm.graylogIP[0]+"."+configForm.graylogIP[1]+"."+configForm.graylogIP[2]+"."+configForm.graylogIP[3];
 			  var flumeIP= configForm.flumeIP[0]+"."+configForm.flumeIP[1]+"."+configForm.flumeIP[2]+"."+configForm.flumeIP[3];
 			  var drillIP= configForm.drillIP[0]+"."+configForm.drillIP[1]+"."+configForm.drillIP[2]+"."+configForm.drillIP[3];
-			  var ipInputJson = "{\"input\":{\"graylogIp\":\""+graylogIP+"\",\"flumeIp\":\""+flumeIP+"\",\"drillIp\":\""+drillIP+"\",\"graylogPort\":\""+configForm.graylogPort+"\",\"flumePort\":\""+configForm.flumePort+"\",\"drillPort\":\""+configForm.drillPort+"\",\"syslogPort\":\""+configForm.syslogPort+"\"}}";
+			  var ipInputJson = "{\"input\":{\"graylogIp\":\""+graylogIP+"\",\"flumeIp\":\""+flumeIP+"\",\"drillIp\":\""+drillIP+"\",\"graylogPort\":\""+configForm.graylogPort+"\",\"flumePort\":\""+configForm.flumePort+"\",\"drillPort\":\""+configForm.drillPort+"\",\"syslogPort\":\""+configForm.syslogPort+"\",\"secureSysLog\":"+configForm.secureSysLog+"}}";
+			  console.info(ipInputJson);
 			  configServiceFactory.setConfigIpAddr(ipInputJson).then(function(res) {
 				  $timeout(function(){
 					  $translate('CONFIG_ADD_SUCCESS', { crud: 'added' }).then(function (translations) {
