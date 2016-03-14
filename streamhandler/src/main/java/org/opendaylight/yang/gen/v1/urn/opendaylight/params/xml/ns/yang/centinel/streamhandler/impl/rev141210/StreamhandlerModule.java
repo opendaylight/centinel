@@ -9,7 +9,8 @@ import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
 import org.opendaylight.streamhandler.impl.ConfigurationChangeImpl;
 import org.opendaylight.streamhandler.impl.EventHandlerImpl;
-import org.opendaylight.streamhandler.impl.LogCollector;
+import org.opendaylight.streamhandler.impl.LogCollectorTLS;
+
 import org.opendaylight.streamhandler.impl.StreamhandlerImpl;
 import org.opendaylight.streamhandler.impl.StreamhandlerProvider;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardruleService;
@@ -41,7 +42,8 @@ public class StreamhandlerModule extends
         final StreamhandlerImpl streamhandlerImpl = new StreamhandlerImpl();
         StreamhandlerProvider streamhandlerProvider = new StreamhandlerProvider();
         EventHandlerImpl eventHandlerImpl = new EventHandlerImpl(streamhandlerImpl);
-        ConfigurationChangeImpl configurationChangeImpl = new ConfigurationChangeImpl(); 
+        ConfigurationChangeImpl configurationChangeImpl = new ConfigurationChangeImpl();
+        configurationChangeImpl.logCollectorStart();
         DataBroker dataBrokerService = getDataBrokerDependency();
         
         /***
@@ -80,6 +82,7 @@ public class StreamhandlerModule extends
         getNotificationServiceDependency().registerNotificationListener(configurationChangeImpl);
 
         getBrokerDependency().registerProvider(streamhandlerProvider);
+        
         final class AutoCloseableToaster implements AutoCloseable {
 
             @Override
@@ -107,14 +110,6 @@ public class StreamhandlerModule extends
                 }
             }
         }
-
-        /**
-         * Syslog Event Generator
-         */
-
-       	LogCollector collect = new LogCollector();
-        collect.server();
- 
         AutoCloseable ret = new AutoCloseableToaster();
         return ret;
     }
