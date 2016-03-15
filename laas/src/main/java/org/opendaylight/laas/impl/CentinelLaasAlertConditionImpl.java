@@ -380,8 +380,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
                 }
             }
         } catch (Exception e) {
-            LOG.error("Exception occured while getting record from operational data store", e.getMessage());
-            e.printStackTrace();
+            LOG.error("Exception occured while getting record from operational data store", e);
         }
     }
 
@@ -507,8 +506,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
             }
         } catch (Exception e) {
-            LOG.error("Exception occured while getting record from operational data store", e.getMessage());
-            e.printStackTrace();
+            LOG.error("Exception occured while getting record from operational data store", e);
         }
     }
 

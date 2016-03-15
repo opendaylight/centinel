@@ -176,8 +176,7 @@ public class CentinelLaasStreamImpl implements AutoCloseable, DataChangeListener
             }
 
             catch (Exception e) {
-                e.printStackTrace();
-                LOG.error("Exception occured while getting record from operational data store", e.getMessage());
+                LOG.error("Exception occured while getting record from operational data store", e);
             }
         }
     }
@@ -273,9 +272,7 @@ public class CentinelLaasStreamImpl implements AutoCloseable, DataChangeListener
             }
 
             catch (Exception e) {
-                LOG.error("Exception occured while getting stream rule record from operational data store",
-                        e.getMessage());
-                e.printStackTrace();
+                LOG.error("Exception occured while getting stream rule record from operational data store", e);
             }
 
         }
