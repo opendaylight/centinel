@@ -489,7 +489,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         }
 
         catch (Exception ex) {
-            ex.printStackTrace();
+            LOG.error("Exception occured while getting record from operational data store", ex);
         }
         return futureResult;
     }
