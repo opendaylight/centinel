@@ -9,15 +9,24 @@
 package org.opendaylight.streamhandler.impl;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.KeyStore;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManagerFactory;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -36,35 +45,71 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-public class LogCollector extends Thread {
+public class LogCollectorTLS extends Thread {
 	private static final Logger LOG = LoggerFactory
-			.getLogger(LogCollector.class);
+			.getLogger(LogCollectorTLS.class);
 	CommonServices commonServices = CommonServices.getInstance();
 
 	public void run() {
-		// Unsecured connection
-		Socket conn = null;
-		ServerSocket s = null;
+		// TLS secured connection
+		SSLServerSocket serverSock = null;
+		SSLSocket socket = null;
+		PrintWriter out = null;
 		try {
-
-			s = new ServerSocket(Integer.parseInt(commonServices.syslogPort));
-			conn = s.accept();
-			new ClientHandler(conn).start();
+			// load server private key
+			KeyStore serverKeys = KeyStore
+					.getInstance(commonServices.tlsSecurityType);
+			FileOutputStream file = new FileOutputStream("abc.txt");
+			serverKeys.load(
+					new FileInputStream(commonServices.tlsServerKeyPath),
+					(commonServices.tlsServerKeyPwd).toCharArray());
+			KeyManagerFactory serverKeyManager = KeyManagerFactory
+					.getInstance(commonServices.tlsEncodeAlgo);
+			serverKeyManager.init(serverKeys,
+					(commonServices.tlsServerKeyPwd).toCharArray());
+			// load client public key
+			KeyStore clientPub = KeyStore
+					.getInstance(commonServices.tlsSecurityType);
+			clientPub.load(new FileInputStream(
+					commonServices.tlsClientCertKeyPath),
+					(commonServices.tlsClientCertPwd).toCharArray());
+			TrustManagerFactory trustManager = TrustManagerFactory
+					.getInstance(commonServices.tlsEncodeAlgo);
+			trustManager.init(clientPub);
+			// use keys to create SSLSoket
+			SSLContext ssl = SSLContext.getInstance("TLS");
+			ssl.init(serverKeyManager.getKeyManagers(),
+					trustManager.getTrustManagers(),
+					SecureRandom.getInstance(commonServices.tlsParingAlgo));
+			serverSock = (SSLServerSocket) ssl.getServerSocketFactory()
+					.createServerSocket(
+							Integer.parseInt(commonServices.syslogPort));
+			serverSock.setNeedClientAuth(true);
+			while (ConfigurationChangeImpl.collectThreadSecured) {
+				socket = (SSLSocket) serverSock.accept();
+				new ClientHandlerTLS(socket).start();
+			}
 		} catch (Exception e) {
-			LOG.error("Exception while connecting " + e.getMessage(), e);
+			LOG.error("IO Exception :: " + e.getMessage());
 		} finally {
-			if (s != null)
-				try {
-					s.close();
-				} catch (IOException e) {
-					LOG.error("IO Exception while closing connection from un-secured Logcollector :: "
-							+ e.getMessage());
-				}
+			if (out != null)
+				out.close();
+			try {
+				if (serverSock != null)
+					serverSock.close();
+				if (socket != null)
+					socket.close();
+			} catch (IOException e) {
+				LOG.error("IO Exception while closing connection from secured Logcollector :: "
+						+ e.getMessage());
+			}
 		}
+
 	}
+
 }
 
-class ClientHandler extends Thread {
+class ClientHandlerTLS extends Thread {
 	PrintWriter out = null;
 	private Socket conn;
 	private static final int RFC3164_LENGTH = 15;
@@ -80,11 +125,11 @@ class ClientHandler extends Thread {
 	PersistEventInputBuilder input = null;
 	StreamhandlerImpl streamHandlerImpl = new StreamhandlerImpl();
 	private static final Logger LOG = LoggerFactory
-			.getLogger(ClientHandler.class);
+			.getLogger(ClientHandlerTLS.class);
 	public static final Client client = Client.create();
 	CommonServices commonServices = CommonServices.getInstance();
 
-	ClientHandler(Socket conn) {
+	ClientHandlerTLS(Socket conn) {
 		this.conn = conn;
 	}
 
@@ -105,7 +150,7 @@ class ClientHandler extends Thread {
 			input.setEventKeys(keyList);
 			input.setEventType("stringdata");
 			while (((line = br.readLine()) != null) && (!(line.equals("")))
-					&& ConfigurationChangeImpl.collectThread) {
+					&& ConfigurationChangeImpl.collectThreadSecured) {
 				try {
 					try {
 						data = parseLogMessage(line);
@@ -146,15 +191,13 @@ class ClientHandler extends Thread {
 
 			}
 		} catch (IOException e) {
-			LOG.error("IOException on socket from run: " + e);
+			LOG.error("IOException on socket : " + e);
 		} finally {
-			// conn = null;
 			try {
 				if (conn != null)
 					conn.close();
-
 			} catch (IOException e) {
-				LOG.error("IOException from run of un-secured logCollector :: "
+				LOG.error("Exception while closing connection in finally of secured logcollector :: "
 						+ e.getMessage());
 			}
 		}
@@ -245,6 +288,9 @@ class ClientHandler extends Thread {
 
 			messageData = logMessage;
 		}
+		messageData = messageData.replace("|", "~");
+		String ar[] = messageData.split(("~"));
+		messageData = ar[ar.length - 1];
 		jsonLogEvent.put("message", messageData);
 		return jsonLogEvent;
 	}
