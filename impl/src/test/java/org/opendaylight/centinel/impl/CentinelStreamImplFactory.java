@@ -26,6 +26,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.r
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetStreamInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetStreamOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetStreamOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecord;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecordBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.UpdateStreamInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.UpdateStreamInputBuilder;
@@ -33,258 +35,289 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.r
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.createstreaminput.StreamRulesBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.streamrecord.StreamList;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.streamrecord.StreamListBuilder;
+import org.opendaylight.yangtools.yang.binding.DataObject;
 
 /**
  * @author Sunaina Khanna
- *
+ * 
  *         This class provides the mock data for junit test cases of stream.
  */
 
 public class CentinelStreamImplFactory {
 
-    /**
-     * Mock params for SetStream Rpc to create failure condition on invalid
-     * input.
-     */
+	/* mock streamRecord */
+	public static StreamRecord getStreamRecord() {
+		StreamRecordBuilder streamRecordBuilder = new StreamRecordBuilder();
+		List<StreamList> streamList = new ArrayList<StreamList>();
+		streamList.add(getStreamList());
+		streamRecordBuilder.setStreamList(streamList);
+		return streamRecordBuilder.build();
+	}
 
-    public SetStreamInput setInputForStreamWithInvalidInput() {
-        SetStreamInputBuilder setStreamInputBuilder = new SetStreamInputBuilder();
-        setStreamInputBuilder.setTitle(null);
-        setStreamInputBuilder.setDescription(null);
-        return setStreamInputBuilder.build();
-    }
+	public static StreamList getStreamList() {
+		StreamListBuilder streamListObj = new StreamListBuilder();
+		List<StreamRules> streamRuleList = new ArrayList<StreamRules>();
 
-    /**
-     * Mock params for SetStreamRule Rpc
-     */
+		StreamRulesBuilder streamRuleBuilder = new StreamRulesBuilder();
+		streamRuleBuilder.setField("field");
+		streamRuleList.add(streamRuleBuilder.build());
 
-    public SetRuleInput setInputForStreamRuleWithInvalidInput() {
-        SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
-        setRuleInputBuilder.setField("field");
-        setRuleInputBuilder.setInverted(true);
-        setRuleInputBuilder.setStreamRuleID("rule001");
-        setRuleInputBuilder.setType(StreamType.GreatorThan);
-        setRuleInputBuilder.setValue("value");
-        return setRuleInputBuilder.build();
-    }
+		streamListObj.setTitle("Str001");
+		streamListObj.setDescription("stream");
+		streamListObj.setStreamID("str001");
+		streamListObj.setConfigID("1000");
+		streamListObj.setDisabled("false");
+		streamListObj.setStreamRules(streamRuleList);
+		return streamListObj.build();
+	}
 
-    public ResumeStreamInput resumeInputValidValuesForStreamNull() {
-        ResumeStreamInputBuilder resumeStreamInputBuilder = new ResumeStreamInputBuilder();
-        resumeStreamInputBuilder.setStreamID(" ");
-        return resumeStreamInputBuilder.build();
-    }
+	/**
+	 * Mock params for SetStream Rpc to create failure condition on invalid
+	 * input.
+	 */
 
-    public PauseStreamInput pauseInputValidValuesForStreamNull() {
-        PauseStreamInputBuilder pauseStreamInputBuilder = new PauseStreamInputBuilder();
-        pauseStreamInputBuilder.setStreamID(" ");
-        return pauseStreamInputBuilder.build();
-    }
+	public SetStreamInput setInputForStreamWithInvalidInput() {
+		SetStreamInputBuilder setStreamInputBuilder = new SetStreamInputBuilder();
+		setStreamInputBuilder.setTitle(null);
+		setStreamInputBuilder.setDescription(null);
+		return setStreamInputBuilder.build();
+	}
 
-    /**
-     * Mock params for DeleteStream Rpc to create failure condition on invalid
-     * input.
-     */
+	/**
+	 * Mock params for SetStreamRule Rpc
+	 */
 
-    public DeleteStreamInput deleteInputWithInvalidIdForStream() {
-        DeleteStreamInputBuilder deleteStreamInputBuilder = new DeleteStreamInputBuilder();
-        deleteStreamInputBuilder.setStreamID("deede");
-        return deleteStreamInputBuilder.build();
-    }
+	public SetRuleInput setInputForStreamRuleWithInvalidInput() {
+		SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
+		setRuleInputBuilder.setField("field");
+		setRuleInputBuilder.setInverted(true);
+		setRuleInputBuilder.setStreamRuleID("rule001");
+		setRuleInputBuilder.setType(StreamType.GreatorThan);
+		setRuleInputBuilder.setValue("value");
+		return setRuleInputBuilder.build();
+	}
 
-    /**
-     * Mock params for SetStream Rpc to create failure condition on invalid
-     * input.
-     */
+	public ResumeStreamInput resumeInputValidValuesForStreamNull() {
+		ResumeStreamInputBuilder resumeStreamInputBuilder = new ResumeStreamInputBuilder();
+		resumeStreamInputBuilder.setStreamID(" ");
+		return resumeStreamInputBuilder.build();
+	}
 
-    public StreamList setInputForStreamWithValidInputForRule() {
-        StreamListBuilder setStreamList = new StreamListBuilder();
-        setStreamList.setTitle("Str001");
-        setStreamList.setDescription("stream");
-        setStreamList.setStreamID("1000");
-        return setStreamList.build();
-    }
+	public PauseStreamInput pauseInputValidValuesForStreamNull() {
+		PauseStreamInputBuilder pauseStreamInputBuilder = new PauseStreamInputBuilder();
+		pauseStreamInputBuilder.setStreamID(" ");
+		return pauseStreamInputBuilder.build();
+	}
 
-    /**
-     * Mock params for SetStreamRule Rpc
-     */
+	/**
+	 * Mock params for DeleteStream Rpc to create failure condition on invalid
+	 * input.
+	 */
 
-    public SetRuleInput setInputForStreamRuleWithInValidStreamId() {
-        SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
-        setRuleInputBuilder.setField("field");
-        setRuleInputBuilder.setInverted(true);
-        setRuleInputBuilder.setStreamID("str001");
-        setRuleInputBuilder.setStreamRuleID("rule001");
-        setRuleInputBuilder.setType(StreamType.GreatorThan);
-        setRuleInputBuilder.setValue("value");
-        return setRuleInputBuilder.build();
-    }
+	public DeleteStreamInput deleteInputWithInvalidIdForStream() {
+		DeleteStreamInputBuilder deleteStreamInputBuilder = new DeleteStreamInputBuilder();
+		deleteStreamInputBuilder.setStreamID("deede");
+		return deleteStreamInputBuilder.build();
+	}
 
-    public SetRuleInput setInputForStreamRuleWithInvalidInputWithType() {
-        SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
-        setRuleInputBuilder.setField("field");
-        setRuleInputBuilder.setInverted(true);
-        setRuleInputBuilder.setStreamRuleID("rule001");
-        setRuleInputBuilder.setType(StreamType.FieldPresence);
-        setRuleInputBuilder.setValue("value");
-        return setRuleInputBuilder.build();
-    }
+	/**
+	 * Mock params for SetStream Rpc to create failure condition on invalid
+	 * input.
+	 */
 
-    /**
-     * Mock params for SetStreamRule Rpc
-     */
+	public StreamList setInputForStreamWithValidInputForRule() {
+		StreamListBuilder setStreamList = new StreamListBuilder();
+		setStreamList.setTitle("Str001");
+		setStreamList.setDescription("stream");
+		setStreamList.setStreamID("1000");
+		return setStreamList.build();
+	}
 
-    public SetRuleOutput expectedStreamRuleObject() {
-        SetRuleOutputBuilder setRuleOutputBuilder = new SetRuleOutputBuilder();
-        setRuleOutputBuilder.setField("field");
-        setRuleOutputBuilder.setInverted(true);
-        setRuleOutputBuilder.setStreamRuleID("rule001");
-        setRuleOutputBuilder.setType(StreamType.GreatorThan);
-        setRuleOutputBuilder.setValue("value");
-        return setRuleOutputBuilder.build();
-    }
+	/**
+	 * Mock params for SetStreamRule Rpc
+	 */
 
-    /**
-     * Mock params for SetStreamRule Rpc
-     */
+	public SetRuleInput setInputForStreamRuleWithInValidStreamId() {
+		SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
+		setRuleInputBuilder.setField("field");
+		setRuleInputBuilder.setInverted(true);
+		setRuleInputBuilder.setStreamID("str001");
+		setRuleInputBuilder.setStreamRuleID("rule001");
+		setRuleInputBuilder.setType(StreamType.GreatorThan);
+		setRuleInputBuilder.setValue("value");
+		return setRuleInputBuilder.build();
+	}
 
-    public SetRuleInput setInputForStreamRuleWithValidInput() {
-        SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
-        setRuleInputBuilder.setField("field");
-        setRuleInputBuilder.setInverted(true);
-        setRuleInputBuilder.setStreamID("1000");
-        setRuleInputBuilder.setStreamRuleID("rule001");
-        setRuleInputBuilder.setType(StreamType.GreatorThan);
-        setRuleInputBuilder.setValue("value");
-        return setRuleInputBuilder.build();
-    }
+	public SetRuleInput setInputForStreamRuleWithInvalidInputWithType() {
+		SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
+		setRuleInputBuilder.setField("field");
+		setRuleInputBuilder.setInverted(true);
+		setRuleInputBuilder.setStreamRuleID("rule001");
+		setRuleInputBuilder.setType(StreamType.FieldPresence);
+		setRuleInputBuilder.setValue("value");
+		return setRuleInputBuilder.build();
+	}
 
-    /**
-     * Mock params for SetStream Rpc
-     */
+	/**
+	 * Mock params for SetStreamRule Rpc
+	 */
 
-    public SetStreamInput setInputForStreamWithValidInput() {
-        SetStreamInputBuilder setStreamInputBuilder = new SetStreamInputBuilder();
-        setStreamInputBuilder.setTitle("Str001");
-        setStreamInputBuilder.setDescription("stream");
-        return setStreamInputBuilder.build();
-    }
+	public SetRuleOutput expectedStreamRuleObject() {
+		SetRuleOutputBuilder setRuleOutputBuilder = new SetRuleOutputBuilder();
+		setRuleOutputBuilder.setField("field");
+		setRuleOutputBuilder.setInverted(true);
+		setRuleOutputBuilder.setStreamRuleID("rule001");
+		setRuleOutputBuilder.setType(StreamType.GreatorThan);
+		setRuleOutputBuilder.setValue("value");
+		return setRuleOutputBuilder.build();
+	}
 
-    /**
-     * Mock params for SetStream Rpc
-     */
+	/**
+	 * Mock params for SetStreamRule Rpc
+	 */
 
-    public SetStreamOutput expectedStreamObject() {
-        SetStreamOutputBuilder setStreamOutputBuilder = new SetStreamOutputBuilder();
+	public SetRuleInput setInputForStreamRuleWithValidInput() {
+		SetRuleInputBuilder setRuleInputBuilder = new SetRuleInputBuilder();
+		setRuleInputBuilder.setField("field");
+		setRuleInputBuilder.setInverted(true);
+		setRuleInputBuilder.setStreamID("1000");
+		setRuleInputBuilder.setStreamRuleID("rule001");
+		setRuleInputBuilder.setType(StreamType.GreatorThan);
+		setRuleInputBuilder.setValue("value");
+		return setRuleInputBuilder.build();
+	}
 
-        setStreamOutputBuilder.setTitle("Str001");
-        setStreamOutputBuilder.setDescription("stream");
-        setStreamOutputBuilder.setConfigID("1000");
-        return setStreamOutputBuilder.build();
-    }
+	/**
+	 * Mock params for SetStream Rpc
+	 */
 
-    /**
-     * Mock params for DeleteStream Rpc
-     */
+	public SetStreamInput setInputForStreamWithValidInput() {
+		SetStreamInputBuilder setStreamInputBuilder = new SetStreamInputBuilder();
+		setStreamInputBuilder.setTitle("Str001");
+		setStreamInputBuilder.setDescription("stream");
+		return setStreamInputBuilder.build();
+	}
 
-    public DeleteStreamInput deleteInputValidValuesForStream() {
-        DeleteStreamInputBuilder deleteStreamInputBuilder = new DeleteStreamInputBuilder();
-        deleteStreamInputBuilder.setStreamID("str001");
-        return deleteStreamInputBuilder.build();
-    }
+	/**
+	 * Mock params for SetStream Rpc
+	 */
 
-    /**
-     * Mock params for PauseStream Rpc
-     */
+	public SetStreamOutput expectedStreamObject() {
+		SetStreamOutputBuilder setStreamOutputBuilder = new SetStreamOutputBuilder();
 
-    public PauseStreamInput pauseInputValidValuesForStream() {
-        PauseStreamInputBuilder pauseStreamInputBuilder = new PauseStreamInputBuilder();
-        pauseStreamInputBuilder.setStreamID("str001");
-        return pauseStreamInputBuilder.build();
-    }
+		setStreamOutputBuilder.setTitle("Str001");
+		setStreamOutputBuilder.setDescription("stream");
+		setStreamOutputBuilder.setConfigID("1000");
+		return setStreamOutputBuilder.build();
+	}
 
-    /**
-     * Mock params for ResumeStream Rpc to create failure condition on invalid
-     * input.
-     */
+	/**
+	 * Mock params for DeleteStream Rpc
+	 */
 
-    public ResumeStreamInput resumeInputValidValuesForStream() {
-        ResumeStreamInputBuilder resumeStreamInputBuilder = new ResumeStreamInputBuilder();
-        resumeStreamInputBuilder.setStreamID("str001");
-        return resumeStreamInputBuilder.build();
-    }
+	public DeleteStreamInput deleteInputValidValuesForStream() {
+		DeleteStreamInputBuilder deleteStreamInputBuilder = new DeleteStreamInputBuilder();
+		deleteStreamInputBuilder.setStreamID("str001");
+		return deleteStreamInputBuilder.build();
+	}
 
-    /**
-     * Mock object for stream in datastore
-     */
+	/**
+	 * Mock params for PauseStream Rpc
+	 */
 
-    public StreamList mockStreamObjectBuilder() {
-        StreamListBuilder streamListObj = new StreamListBuilder();
-        List<StreamRules> streamRuleList = new ArrayList<StreamRules>();
-        StreamRulesBuilder streamRuleBuilder = new StreamRulesBuilder();
+	public PauseStreamInput pauseInputValidValuesForStream() {
+		PauseStreamInputBuilder pauseStreamInputBuilder = new PauseStreamInputBuilder();
+		pauseStreamInputBuilder.setStreamID("str001");
+		return pauseStreamInputBuilder.build();
+	}
 
-        streamRuleBuilder.setField("field");
-        streamRuleList.add(streamRuleBuilder.build());
-        streamListObj.setTitle("Str001");
-        streamListObj.setDescription("stream");
-        streamListObj.setStreamID("naina");
-        streamListObj.setConfigID("1000");
-        streamListObj.setStreamRules(streamRuleList);
-        return streamListObj.build();
-    }
+	/**
+	 * Mock params for ResumeStream Rpc to create failure condition on invalid
+	 * input.
+	 */
 
-    /**
-     * Mock params for DeleteStream Rpc to create failure condition on invalid
-     * input.
-     */
+	public ResumeStreamInput resumeInputValidValuesForStream() {
+		ResumeStreamInputBuilder resumeStreamInputBuilder = new ResumeStreamInputBuilder();
+		resumeStreamInputBuilder.setStreamID("str001");
+		return resumeStreamInputBuilder.build();
+	}
 
-    public DeleteStreamInput deleteInputWithInvalidValuesForStream() {
+	/**
+	 * Mock object for stream in datastore
+	 */
 
-        DeleteStreamInputBuilder deleteStreamInputBuilder = new DeleteStreamInputBuilder();
-        return deleteStreamInputBuilder.build();
-    }
+	public StreamList mockStreamObjectBuilder() {
+		StreamListBuilder streamListObj = new StreamListBuilder();
+		List<StreamRules> streamRuleList = new ArrayList<StreamRules>();
+		StreamRulesBuilder streamRuleBuilder = new StreamRulesBuilder();
 
-    /**
-     * Mock params for UpdateStream Rpc to create failure condition on invalid
-     * input.
-     */
+		streamRuleBuilder.setField("field");
+		streamRuleList.add(streamRuleBuilder.build());
+		streamListObj.setTitle("Str001");
+		streamListObj.setDescription("stream");
+		streamListObj.setStreamID("naina");
+		streamListObj.setConfigID("1000");
+		streamListObj.setStreamRules(streamRuleList);
+		return streamListObj.build();
+	}
 
-    public UpdateStreamInput updateInvalidInputForStream() {
-        UpdateStreamInputBuilder updateStreamInputBuilder = new UpdateStreamInputBuilder();
-        updateStreamInputBuilder.setTitle("str001");
-        updateStreamInputBuilder.setDescription("str002");
-        return updateStreamInputBuilder.build();
-    }
+	/**
+	 * Mock params for DeleteStream Rpc to create failure condition on invalid
+	 * input.
+	 */
 
-    /**
-     * Mock params for UpdateStream Rpc
-     */
+	public DeleteStreamInput deleteInputWithInvalidValuesForStream() {
 
-    public UpdateStreamInput updateValidInputForStream() {
-        UpdateStreamInputBuilder updateStreamInputBuilder = new UpdateStreamInputBuilder();
-        updateStreamInputBuilder.setTitle("str001");
-        updateStreamInputBuilder.setDescription("str002");
-        updateStreamInputBuilder.setStreamID("sunaina");
-        return updateStreamInputBuilder.build();
-    }
+		DeleteStreamInputBuilder deleteStreamInputBuilder = new DeleteStreamInputBuilder();
+		return deleteStreamInputBuilder.build();
+	}
 
-    /**
-     * Mock params for GetStream Rpc
-     */
+	/**
+	 * Mock params for UpdateStream Rpc to create failure condition on invalid
+	 * input.
+	 */
 
-    public GetStreamInput validInputForGetStream() {
-        GetStreamInputBuilder getStreamInputBuilder = new GetStreamInputBuilder();
-        getStreamInputBuilder.setStreamID("sunaina");
-        return getStreamInputBuilder.build();
-    }
+	public UpdateStreamInput updateInvalidInputForStream() {
+		UpdateStreamInputBuilder updateStreamInputBuilder = new UpdateStreamInputBuilder();
+		updateStreamInputBuilder.setTitle("str001");
+		updateStreamInputBuilder.setDescription("str002");
+		return updateStreamInputBuilder.build();
+	}
 
-    /**
-     * Mock params for GetStream Rpc to create failure condition on invalid
-     * input.
-     */
+	/**
+	 * Mock params for UpdateStream Rpc
+	 */
 
-    public GetStreamInput invalidInputForGetStream() {
-        GetStreamInputBuilder getStreamInputBuilder = new GetStreamInputBuilder();
-        return getStreamInputBuilder.build();
-    }
+	public UpdateStreamInput updateValidInputForStream() {
+		UpdateStreamInputBuilder updateStreamInputBuilder = new UpdateStreamInputBuilder();
+		updateStreamInputBuilder.setTitle("str001");
+		updateStreamInputBuilder.setDescription("str002");
+		updateStreamInputBuilder.setStreamID("str001");
+		updateStreamInputBuilder.setConfigID("1000");
+		updateStreamInputBuilder.setContentPack("content pack");
+		updateStreamInputBuilder.setNodeType("node type");
+		updateStreamInputBuilder.setRuleID("1");
+		return updateStreamInputBuilder.build();
+	}
+
+	/**
+	 * Mock params for GetStream Rpc
+	 */
+
+	public GetStreamInput validInputForGetStream() {
+		GetStreamInputBuilder getStreamInputBuilder = new GetStreamInputBuilder();
+		getStreamInputBuilder.setStreamID("sunaina");
+		return getStreamInputBuilder.build();
+	}
+
+	/**
+	 * Mock params for GetStream Rpc to create failure condition on invalid
+	 * input.
+	 */
+
+	public GetStreamInput invalidInputForGetStream() {
+		GetStreamInputBuilder getStreamInputBuilder = new GetStreamInputBuilder();
+		return getStreamInputBuilder.build();
+	}
 
 }
