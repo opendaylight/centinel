@@ -151,133 +151,157 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         StreamAlertMessageCountRuleListBuilder streamAlertMessageCountRuleListBuilder = new StreamAlertMessageCountRuleListBuilder();
 
-        if (input.getAlertTypeClassifier() != null)
+        if (input.getAlertTypeClassifier() != null) {
             streamAlertMessageCountRuleListBuilder.setAlertTypeClassifier(input.getAlertTypeClassifier());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setAlertTypeClassifier(obj.getAlertTypeClassifier());
+        }
 
-        if (input.getMessageCountBacklog() != null)
+        if (input.getMessageCountBacklog() != null) {
             streamAlertMessageCountRuleListBuilder.setMessageCountBacklog(input.getMessageCountBacklog());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setMessageCountBacklog(obj.getMessageCountBacklog());
+        }
 
-        if (input.getMessageCountCount() != null)
+        if (input.getMessageCountCount() != null) {
             streamAlertMessageCountRuleListBuilder.setMessageCountCount(input.getMessageCountCount());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setMessageCountCount(obj.getMessageCountCount());
+        }
 
-        if (input.getMessageCountGrace() != null)
+        if (input.getMessageCountGrace() != null) {
             streamAlertMessageCountRuleListBuilder.setMessageCountGrace(input.getMessageCountGrace());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setMessageCountGrace(obj.getMessageCountGrace());
+        }
 
-        if (input.getMessageCountOperator() != null)
+        if (input.getMessageCountOperator() != null) {
             streamAlertMessageCountRuleListBuilder.setMessageCountOperator(input.getMessageCountOperator());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setMessageCountOperator(obj.getMessageCountOperator());
+        }
 
-        if (input.getNodeType() != null)
+        if (input.getNodeType() != null) {
             streamAlertMessageCountRuleListBuilder.setNodeType(input.getNodeType());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setNodeType(obj.getNodeType());
+        }
 
-        if (input.getRuleID() != null)
+        if (input.getRuleID() != null) {
             streamAlertMessageCountRuleListBuilder.setRuleID(input.getRuleID());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setRuleID(obj.getRuleID());
+        }
 
-        if (input.getRuleTypeClassifier() != null)
+        if (input.getRuleTypeClassifier() != null) {
             streamAlertMessageCountRuleListBuilder.setRuleTypeClassifier(input.getRuleTypeClassifier());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setRuleTypeClassifier(obj.getRuleTypeClassifier());
+        }
 
-        if (input.getTimeStamp() != null)
+        if (input.getTimeStamp() != null) {
             streamAlertMessageCountRuleListBuilder.setTimeStamp(input.getTimeStamp());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setTimeStamp(obj.getTimeStamp());
+        }
 
-        if (input.getStreamID() != null)
+        if (input.getStreamID() != null) {
             streamAlertMessageCountRuleListBuilder.setStreamID(input.getStreamID());
+        }
 
-        if (input.getAlertName() != null)
+        if (input.getAlertName() != null) {
             streamAlertMessageCountRuleListBuilder.setAlertName(input.getAlertName());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setAlertName(obj.getAlertName());
+        }
 
-        if (input.getNodeType() != null)
+        if (input.getNodeType() != null) {
             streamAlertMessageCountRuleListBuilder.setNodeType(input.getNodeType());
-        else
+        } else {
             streamAlertMessageCountRuleListBuilder.setNodeType(obj.getNodeType());
+        }
 
         streamAlertMessageCountRuleListBuilder.setConfigID(obj.getConfigID());
 
         return streamAlertMessageCountRuleListBuilder.build();
     }
 
-    StreamAlertFieldContentRuleList buildUpdateAlertFieldContentRuleRecord(
-            final UpdateAlertFieldContentRuleInput input, final StreamAlertFieldContentRuleList obj) {
+    StreamAlertFieldContentRuleList buildUpdateAlertFieldContentRuleRecord(final UpdateAlertFieldContentRuleInput input,
+            final StreamAlertFieldContentRuleList obj) {
 
         StreamAlertFieldContentRuleListBuilder streamAlertFieldContentRuleListBuilder = new StreamAlertFieldContentRuleListBuilder();
 
-        if (input.getAlertTypeClassifier() != null)
+        if (input.getAlertTypeClassifier() != null) {
             streamAlertFieldContentRuleListBuilder.setAlertTypeClassifier(input.getAlertTypeClassifier());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setAlertTypeClassifier(obj.getAlertTypeClassifier());
+        }
 
-        if (input.getFieldContentField() != null)
+        if (input.getFieldContentField() != null) {
             streamAlertFieldContentRuleListBuilder.setFieldContentField(input.getFieldContentField());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setFieldContentField(obj.getFieldContentField());
+        }
 
-        if (input.getFieldContentBacklog() != null)
+        if (input.getFieldContentBacklog() != null) {
             streamAlertFieldContentRuleListBuilder.setFieldContentBacklog(input.getFieldContentBacklog());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setFieldContentBacklog(obj.getFieldContentBacklog());
+        }
 
-        if (input.getFieldContentCompareToValue() != null)
+        if (input.getFieldContentCompareToValue() != null) {
             streamAlertFieldContentRuleListBuilder.setFieldContentCompareToValue(input.getFieldContentCompareToValue());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setFieldContentCompareToValue(obj.getFieldContentCompareToValue());
+        }
 
-        if (input.getFieldContentGrace() != null)
+        if (input.getFieldContentGrace() != null) {
             streamAlertFieldContentRuleListBuilder.setFieldContentGrace(input.getFieldContentGrace());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setFieldContentGrace(obj.getFieldContentGrace());
+        }
 
-        if (input.getNodeType() != null)
+        if (input.getNodeType() != null) {
             streamAlertFieldContentRuleListBuilder.setNodeType(input.getNodeType());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setNodeType(obj.getNodeType());
+        }
 
-        if (input.getRuleID() != null)
+        if (input.getRuleID() != null) {
             streamAlertFieldContentRuleListBuilder.setRuleID(input.getRuleID());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setRuleID(obj.getRuleID());
+        }
 
-        if (input.getRuleTypeClassifier() != null)
+        if (input.getRuleTypeClassifier() != null) {
             streamAlertFieldContentRuleListBuilder.setRuleTypeClassifier(input.getRuleTypeClassifier());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setRuleTypeClassifier(obj.getRuleTypeClassifier());
+        }
 
-        if (input.getTimeStamp() != null)
+        if (input.getTimeStamp() != null) {
             streamAlertFieldContentRuleListBuilder.setTimeStamp(input.getTimeStamp());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setTimeStamp(obj.getTimeStamp());
+        }
 
-        if (input.getStreamID() != null)
+        if (input.getStreamID() != null) {
             streamAlertFieldContentRuleListBuilder.setStreamID(input.getStreamID());
+        }
 
         streamAlertFieldContentRuleListBuilder.setConfigID(obj.getConfigID());
 
-        if (input.getAlertName() != null)
+        if (input.getAlertName() != null) {
             streamAlertFieldContentRuleListBuilder.setAlertName(input.getAlertName());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setAlertName(obj.getAlertName());
+        }
 
-        if (input.getNodeType() != null)
+        if (input.getNodeType() != null) {
             streamAlertFieldContentRuleListBuilder.setNodeType(input.getNodeType());
-        else
+        } else {
             streamAlertFieldContentRuleListBuilder.setNodeType(obj.getNodeType());
+        }
 
         return streamAlertFieldContentRuleListBuilder.build();
     }
@@ -287,75 +311,89 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         StreamAlertFieldValueRuleListBuilder streamAlertFieldValueRuleListBuilder = new StreamAlertFieldValueRuleListBuilder();
 
-        if (input.getAlertTypeClassifier() != null)
+        if (input.getAlertTypeClassifier() != null) {
             streamAlertFieldValueRuleListBuilder.setAlertTypeClassifier(input.getAlertTypeClassifier());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setAlertTypeClassifier(obj.getAlertTypeClassifier());
+        }
 
-        if (input.getFieldValueBacklog() != null)
+        if (input.getFieldValueBacklog() != null) {
             streamAlertFieldValueRuleListBuilder.setFieldValueBacklog(input.getFieldValueBacklog());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setFieldValueBacklog(obj.getFieldValueBacklog());
+        }
 
-        if (input.getFieldValueField() != null)
+        if (input.getFieldValueField() != null) {
             streamAlertFieldValueRuleListBuilder.setFieldValueField(input.getFieldValueField());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setFieldValueField(obj.getFieldValueField());
+        }
 
-        if (input.getFieldValueGrace() != null)
+        if (input.getFieldValueGrace() != null) {
             streamAlertFieldValueRuleListBuilder.setFieldValueGrace(input.getFieldValueGrace());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setFieldValueGrace(obj.getFieldValueGrace());
+        }
 
-        if (input.getFieldValueThreshhold() != null)
+        if (input.getFieldValueThreshhold() != null) {
             streamAlertFieldValueRuleListBuilder.setFieldValueThreshhold(input.getFieldValueThreshhold());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setFieldValueThreshhold(obj.getFieldValueThreshhold());
+        }
 
-        if (input.getFieldValueThreshholdType() != null)
+        if (input.getFieldValueThreshholdType() != null) {
             streamAlertFieldValueRuleListBuilder.setFieldValueThreshholdType(input.getFieldValueThreshholdType());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setFieldValueThreshholdType(obj.getFieldValueThreshholdType());
+        }
 
-        if (input.getFieldValueType() != null)
+        if (input.getFieldValueType() != null) {
             streamAlertFieldValueRuleListBuilder.setFieldValueType(input.getFieldValueType());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setFieldValueType(obj.getFieldValueType());
+        }
 
-        if (input.getNodeType() != null)
+        if (input.getNodeType() != null) {
             streamAlertFieldValueRuleListBuilder.setNodeType(input.getNodeType());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setNodeType(obj.getNodeType());
+        }
 
-        if (input.getRuleID() != null)
+        if (input.getRuleID() != null) {
             streamAlertFieldValueRuleListBuilder.setRuleID(input.getRuleID());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setRuleID(obj.getRuleID());
+        }
 
-        if (input.getRuleTypeClassifier() != null)
+        if (input.getRuleTypeClassifier() != null) {
             streamAlertFieldValueRuleListBuilder.setRuleTypeClassifier(input.getRuleTypeClassifier());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setRuleTypeClassifier(obj.getRuleTypeClassifier());
+        }
 
-        if (input.getTimeStamp() != null)
+        if (input.getTimeStamp() != null) {
             streamAlertFieldValueRuleListBuilder.setTimeStamp(input.getTimeStamp());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setTimeStamp(obj.getTimeStamp());
+        }
 
-        if (input.getStreamID() != null)
+        if (input.getStreamID() != null) {
             streamAlertFieldValueRuleListBuilder.setStreamID(input.getStreamID());
+        }
 
         streamAlertFieldValueRuleListBuilder.setConfigID(obj.getConfigID());
 
-        if (input.getAlertName() != null)
+        if (input.getAlertName() != null) {
             streamAlertFieldValueRuleListBuilder.setAlertName(input.getAlertName());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setAlertName(obj.getAlertName());
+        }
 
-        if (input.getNodeType() != null)
+        if (input.getNodeType() != null) {
             streamAlertFieldValueRuleListBuilder.setNodeType(input.getNodeType());
-        else
+        } else {
             streamAlertFieldValueRuleListBuilder.setNodeType(obj.getNodeType());
+        }
 
         return streamAlertFieldValueRuleListBuilder.build();
     }
@@ -440,8 +478,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
     }
 
     public String generateConfigId() {
-        final String configId = String.format("%x", (int) (Math.random() * 10000));
-        return configId;
+        return String.format("%x", (int) (Math.random() * 10000));
     }
 
     /*
@@ -1522,7 +1559,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
             }
 
         } catch (InterruptedException | ExecutionException ex) {
-            ex.printStackTrace();
+            LOG.error("Failed to get all Rules", ex);
         }
 
         try {
@@ -1569,7 +1606,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                 }
             }
         } catch (InterruptedException | ExecutionException ex) {
-            ex.printStackTrace();
+            LOG.error("Failed to get all Rules", ex);
         }
         try {
             Optional<AlertFieldValueRuleRecord> alertFieldValueRuleRecord = alertFieldValueReadFuture.get();
@@ -1623,7 +1660,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
                     .build());
 
         } catch (InterruptedException | ExecutionException ex) {
-            ex.printStackTrace();
+            LOG.error("Failed to get all Rules", ex);
         }
 
         return futureResult;

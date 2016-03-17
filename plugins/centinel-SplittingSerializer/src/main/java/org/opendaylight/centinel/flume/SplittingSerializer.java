@@ -39,9 +39,6 @@ public class SplittingSerializer implements AsyncHbaseEventSerializer {
     private final byte[] eventCountCol = "eventCount".getBytes();
 
     public void initialize(byte[] table, byte[] cf) {
-        this.table = table;
-        this.colFam = cf;
-
         if (table == null) {
             this.table = new byte[0];
         } else {
@@ -61,11 +58,11 @@ public class SplittingSerializer implements AsyncHbaseEventSerializer {
         int rowKeyLength = 0;
         Map<String, String> header = currentEvent.getHeaders();
         for (Map.Entry<String, String> entry : header.entrySet()) {
-            if (rowKeyStr == null)
+            if (rowKeyStr == null) {
                 rowKeyStr = entry.getValue() + ":";
-            else
+            } else {
                 rowKeyStr = rowKeyStr + entry.getValue() + ":";
-
+            }
         }
         rowKeyLength = rowKeyStr.length();
         rowKeyStr = rowKeyStr.substring(0, rowKeyLength - 1);
@@ -99,15 +96,15 @@ public class SplittingSerializer implements AsyncHbaseEventSerializer {
         int l = i++;
         cols[l] = eventStr;
         names[l] = "stringdata";
-        byte[][] columnNames = new byte[names.length][];
+        byte[][] columnNamesLocal = new byte[names.length][];
         int j = 0;
         for (String name : names) {
-            columnNames[j++] = name.getBytes();
+            columnNamesLocal[j++] = name.getBytes();
 
         }
         for (int k = 0; k < cols.length; k++) {
 
-            PutRequest req = new PutRequest(table, currentRowKey, colFam, columnNames[k], cols[k].getBytes());
+            PutRequest req = new PutRequest(table, currentRowKey, colFam, columnNamesLocal[k], cols[k].getBytes());
             puts.add(req);
         }
 
@@ -138,7 +135,6 @@ public class SplittingSerializer implements AsyncHbaseEventSerializer {
         for (String name : names) {
             columnNames[i++] = name.getBytes();
         }
-        // delim = new String(context.getString("delimiter"));
     }
 
     public void configure(ComponentConfiguration conf) {

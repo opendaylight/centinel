@@ -33,9 +33,9 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
     String graylogAlertConditions = properties.getProperty("graylog_alertconditions");
     String graylogAlertCondition = properties.getProperty("graylog_alertcondition");
     String graylogAlertConditionId = properties.getProperty("graylog_alertconditionId");
-    private static final String parameters = "parameters";
-    private static final String grace = "grace";
-    private static final String backlog = "backlog";
+    private static final String PARAMTERS = "parameters";
+    private static final String GRACE = "grace";
+    private static final String BACKLOG = "backlog";
 
     private CentinelAlertConditionRESTServices() {
         super();
@@ -161,15 +161,15 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
                 setAlertJsonObject = factory
                         .createObjectBuilder()
                         .add(properties.getProperty("type"), "message_count")
-                        .add(properties.getProperty(parameters),
+                        .add(properties.getProperty(PARAMTERS),
                                 factory.createObjectBuilder()
-                                        .add(properties.getProperty(grace),
+                                        .add(properties.getProperty(GRACE),
                                                 messageCountDataObject.getMessageCountGrace())
                                         .add(properties.getProperty("threshold"),
                                                 messageCountDataObject.getMessageCountCount())
                                         .add(properties.getProperty("thresholdType"),
                                                 messageCountDataObject.getMessageCountOperator())
-                                        .add(properties.getProperty(backlog),
+                                        .add(properties.getProperty(BACKLOG),
                                                 messageCountDataObject.getMessageCountBacklog())
                                         .add(properties.getProperty("time"), messageCountDataObject.getTimeStamp()))
                         .build();
@@ -186,11 +186,11 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
                 setAlertJsonObject = factory
                         .createObjectBuilder()
                         .add(properties.getProperty("type"), "field_content_value")
-                        .add(properties.getProperty(parameters),
+                        .add(properties.getProperty(PARAMTERS),
                                 factory.createObjectBuilder()
-                                        .add(properties.getProperty(grace),
+                                        .add(properties.getProperty(GRACE),
                                                 fieldContentDataObject.getFieldContentGrace())
-                                        .add(properties.getProperty(backlog),
+                                        .add(properties.getProperty(BACKLOG),
                                                 fieldContentDataObject.getFieldContentBacklog())
                                         .add(properties.getProperty("field"),
                                                 fieldContentDataObject.getFieldContentField())
@@ -209,12 +209,12 @@ public final class CentinelAlertConditionRESTServices extends CentinelCommonREST
                 setAlertJsonObject = factory
                         .createObjectBuilder()
                         .add(properties.getProperty("type"), "field_value")
-                        .add(properties.getProperty(parameters),
+                        .add(properties.getProperty(PARAMTERS),
                                 factory.createObjectBuilder()
-                                        .add(properties.getProperty(backlog),
+                                        .add(properties.getProperty(BACKLOG),
                                                 fieldValueDataObject.getFieldValueBacklog())
                                         .add(properties.getProperty("field"), fieldValueDataObject.getFieldValueField())
-                                        .add(properties.getProperty(grace), fieldValueDataObject.getFieldValueGrace())
+                                        .add(properties.getProperty(GRACE), fieldValueDataObject.getFieldValueGrace())
                                         .add(properties.getProperty("threshold"),
                                                 fieldValueDataObject.getFieldValueThreshhold())
                                         .add(properties.getProperty("thresholdType"),

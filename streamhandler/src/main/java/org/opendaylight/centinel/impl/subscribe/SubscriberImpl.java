@@ -46,8 +46,8 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriberImpl.class);
 
-    public static final InstanceIdentifier<Subscription> subscriptionIID = InstanceIdentifier.builder(
-            Subscription.class).build();
+    public static final InstanceIdentifier<Subscription> SUBSCRIPTION_ID = InstanceIdentifier
+            .builder(Subscription.class).build();
 
     private DataBroker dataProvider;
     private final ExecutorService executor;
@@ -124,8 +124,8 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
             // release the resources
             webResource.delete();
             client.destroy();
-        } catch (Exception Ex) {
-            LOG.error("Exception in sending REST call for URL:" + url + ":Message:" + Ex.getMessage());
+        } catch (Exception ex) {
+            LOG.error("Exception in sending REST call for URL:" + url + ":Message:" + ex);
 
         }
     }
@@ -143,10 +143,11 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
 
         try {
 
-            tx.merge(LogicalDatastoreType.CONFIGURATION, subscriptionIID,
+            tx.merge(LogicalDatastoreType.CONFIGURATION, SUBSCRIPTION_ID,
                     new SubscriptionBuilder().setSubscriptions(subscriptionlist)
 
-            .build(), true);
+                            .build(),
+                    true);
             tx.submit();
             /***
              * update the SubscriberInfoCache
@@ -164,7 +165,8 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
             LOG.info(" Subscribe Request recieved for Update/Creation:ID::" + subscriptionlist.get(0).getSubscribeID());
 
         } catch (Exception e) {
-            LOG.error("Subscribe Request recieved for Update/Creation:ID"+ subscriptionlist.get(0).getSubscribeID()+":ErrorMessage:"+e.getMessage());
+            LOG.error("Subscribe Request recieved for Update/Creation:ID" + subscriptionlist.get(0).getSubscribeID()
+                    + ":ErrorMessage:" + e.getMessage(), e);
             futureResult.set(RpcResultBuilder.<SubscribeUserOutput> failed().build());
         }
 
@@ -192,7 +194,7 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
 
         try {
             tx.delete(LogicalDatastoreType.OPERATIONAL,
-                    subscriptionIID.child(Subscriptions.class, subscriptiontodelete.getKey()));
+                    SUBSCRIPTION_ID.child(Subscriptions.class, subscriptiontodelete.getKey()));
             tx.submit();
 
             subscribeDeleteOutputBuilder.setStatus("SUCCESS");
@@ -200,14 +202,15 @@ public class SubscriberImpl implements AutoCloseable, SubscribeService {
                     .build());
 
             LOG.info("Subscription deleted:" + input.getSubscribeID());
-        } catch (Exception Ex) {
-            LOG.error("Exception in Subscription deleted:" + input.getSubscribeID() + ":ErrorMessage:"
-                    + Ex.getMessage());
+        } catch (Exception ex) {
+            LOG.error(
+                    "Exception in Subscription deleted:" + input.getSubscribeID() + ":ErrorMessage:" + ex.getMessage(),
+                    ex);
             ErrorType errorType = ErrorType.APPLICATION;
             futureResult.set(RpcResultBuilder.<SubscribeDeleteOutput> failed()
-                    .withError(errorType, "Exception Caught at widget deletion:" + Ex.getMessage())
+                    .withError(errorType, "Exception Caught at widget deletion:" + ex.getMessage())
 
-            .build());
+                    .build());
         }
         return futureResult;
 

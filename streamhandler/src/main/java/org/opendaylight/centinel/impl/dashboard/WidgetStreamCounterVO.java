@@ -13,10 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class WidgetStreamCounterVO {
-    private static final Logger LOG = LoggerFactory.getLogger(WidgetStreamCounterVO.class);
 
-    private String WidgetID;
-    private String StreamID;
+    private String widgetID;
+    private String streamID;
     private volatile int counter;
     private int resettime;
     private Enum<?> mode;
@@ -25,31 +24,31 @@ public class WidgetStreamCounterVO {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof WidgetStreamCounterVO) {
-            return this.WidgetID.equals(((WidgetStreamCounterVO) obj).getWidgetID());
-        } else
+            return this.widgetID.equals(((WidgetStreamCounterVO) obj).getWidgetID());
+        } else {
             return false;
-
+        }
     }
 
     @Override
     public int hashCode() {
-        return (WidgetID + StreamID).hashCode();
+        return (widgetID + streamID).hashCode();
     }
 
     public String getWidgetID() {
-        return WidgetID;
+        return widgetID;
     }
 
-    public void setWidgetID(String widgetID) {
-        WidgetID = widgetID;
+    public void setWidgetID(String widgtID) {
+        widgetID = widgtID;
     }
 
     public String getStreamID() {
-        return StreamID;
+        return streamID;
     }
 
-    public void setStreamID(String streamID) {
-        StreamID = streamID;
+    public void setStreamID(String strmID) {
+        streamID = strmID;
     }
 
     public int getCounter() {

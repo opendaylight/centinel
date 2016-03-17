@@ -30,20 +30,18 @@ import org.slf4j.LoggerFactory;
 
 public class PersistEvent {
 
-	private static RpcClient client = null;
-	private Event event;
-	private static final Logger LOG = LoggerFactory
-			.getLogger(PersistEvent.class);
+    private static RpcClient client = null;
+    private Event event;
+    private static final Logger LOG = LoggerFactory.getLogger(PersistEvent.class);
 
-	PersistEvent(String hostname, String port) {
-		try {
-			this.client = RpcClientFactory.getDefaultInstance(hostname,
-					Integer.parseInt(port));
-		} catch (FlumeException e) {
-			LOG.error("Unable to connect to Flume.Flume specifications Flume Hostname -> "
-					+ hostname + " / Flume Port -> " + port);
-		}
-	}
+    PersistEvent(String hostname, String port) {
+        try {
+            this.client = RpcClientFactory.getDefaultInstance(hostname, Integer.parseInt(port));
+        } catch (FlumeException e) {
+            LOG.error("Unable to connect to Flume.Flume specifications Flume Hostname -> " + hostname
+                    + " / Flume Port -> " + port, e);
+        }
+    }
 
 	public boolean sendDataToFlume(PersistEventInput input) throws IOException,
 			JSONException {
@@ -119,16 +117,16 @@ public class PersistEvent {
 		String rowKeyStr = null;
 		int rowKeyLength = 0;
 
-		for (Map.Entry<String, String> entry : header.entrySet()) {
-			if (rowKeyStr == null)
-				rowKeyStr = entry.getValue() + StreamConstants.COLON;
-			else
-				rowKeyStr = rowKeyStr + entry.getValue()
-						+ StreamConstants.COLON;
-		}
-		rowKeyLength = rowKeyStr.length();
-		rowKeyStr = rowKeyStr.substring(0, rowKeyLength - 1);
-		event.setHeaders(header);
+        for (Map.Entry<String, String> entry : header.entrySet()) {
+            if (rowKeyStr == null) {
+                rowKeyStr = entry.getValue() + StreamConstants.COLON;
+            } else {
+                rowKeyStr = rowKeyStr + entry.getValue() + StreamConstants.COLON;
+            }
+        }
+        rowKeyLength = rowKeyStr.length();
+        rowKeyStr = rowKeyStr.substring(0, rowKeyLength - 1);
+        event.setHeaders(header);
 
 		if (client != null) {
 			try {

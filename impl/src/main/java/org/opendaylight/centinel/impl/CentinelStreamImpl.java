@@ -112,10 +112,10 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         if (!obj.getStreamRules().isEmpty()) {
             Iterator<StreamRules> it = obj.getStreamRules().iterator();
             List<StreamRules> streamRuleList = new ArrayList<StreamRules>();
-            StreamRules StreamRuleListObj = null;
+            StreamRules streamRuleListObj = null;
             while (it.hasNext()) {
-                StreamRuleListObj = it.next();
-                streamRuleList.add(StreamRuleListObj);
+                streamRuleListObj = it.next();
+                streamRuleList.add(streamRuleListObj);
             }
             streamRulesListBuilder.setStreamRules(streamRuleList);
         }
@@ -137,10 +137,10 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
 
         if (input.getStreamRules() != null) {
             Iterator<StreamRules> it = input.getStreamRules().iterator();
-            StreamRules StreamRuleListObj = null;
+            StreamRules streamRuleListObj = null;
             while (it.hasNext()) {
-                StreamRuleListObj = it.next();
-                streamRuleList.add(StreamRuleListObj);
+                streamRuleListObj = it.next();
+                streamRuleList.add(streamRuleListObj);
             }
         }
         return new StreamListBuilder().setContentPack(input.getContentPack()).setDescription(input.getDescription())
@@ -160,53 +160,63 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
     private StreamList buildUpdateStreamListRecord(final UpdateStreamInput input, final StreamList obj) {
         StreamListBuilder streamRulesListBuilder = new StreamListBuilder();
 
-        if (input.getContentPack() != null)
+        if (input.getContentPack() != null) {
             streamRulesListBuilder.setContentPack(input.getContentPack());
-
-        else
+        } else {
 
             streamRulesListBuilder.setContentPack(obj.getContentPack());
+        }
 
-        if (input.getDescription() != null)
+        if (input.getDescription() != null) {
             streamRulesListBuilder.setDescription(input.getDescription());
+        }
 
-        else
+        else {
             streamRulesListBuilder.setDescription(obj.getDescription());
+        }
 
-        if (input.getNodeType() != null)
+        if (input.getNodeType() != null) {
             streamRulesListBuilder.setNodeType(input.getNodeType());
+        }
 
-        else
+        else {
 
             streamRulesListBuilder.setNodeType(obj.getNodeType());
+        }
 
-        if (input.getRuleID() != null)
+        if (input.getRuleID() != null) {
             streamRulesListBuilder.setRuleID(input.getRuleID());
+        }
 
-        else
+        else {
 
             streamRulesListBuilder.setRuleID(obj.getRuleID());
+        }
 
-        if (input.getRuleTypeClassifier() != null)
+        if (input.getRuleTypeClassifier() != null) {
             streamRulesListBuilder.setRuleTypeClassifier(input.getRuleTypeClassifier());
+        }
 
-        else
+        else {
 
             streamRulesListBuilder.setRuleTypeClassifier(obj.getRuleTypeClassifier());
+        }
 
-        if (input.getStreamID() != null)
+        if (input.getStreamID() != null) {
             streamRulesListBuilder.setStreamID(input.getStreamID());
+        }
 
-        else
+        else {
 
             streamRulesListBuilder.setStreamID(obj.getStreamID());
+        }
 
         if (input.getStreamRules() != null) {
             Iterator<StreamRules> it = input.getStreamRules().iterator();
             List<StreamRules> streamRuleList = new ArrayList<StreamRules>();
             while (it.hasNext()) {
-                StreamRules StreamRuleListObj = it.next();
-                streamRuleList.add(StreamRuleListObj);
+                StreamRules streamRuleListObj = it.next();
+                streamRuleList.add(streamRuleListObj);
             }
 
         }
@@ -214,27 +224,31 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         else {
             Iterator<StreamRules> it = obj.getStreamRules().iterator();
             List<StreamRules> streamRuleList = new ArrayList<StreamRules>();
-            StreamRules StreamRuleListObj = null;
+            StreamRules streamRuleListObj = null;
             while (it.hasNext()) {
-                StreamRuleListObj = it.next();
-                streamRuleList.add(StreamRuleListObj);
+                streamRuleListObj = it.next();
+                streamRuleList.add(streamRuleListObj);
             }
-            streamRuleList.add(StreamRuleListObj);
+            streamRuleList.add(streamRuleListObj);
         }
 
-        if (input.getTimeStamp() != null)
+        if (input.getTimeStamp() != null) {
             streamRulesListBuilder.setTimeStamp(input.getTimeStamp());
+        }
 
-        else
+        else {
 
             streamRulesListBuilder.setTimeStamp(obj.getTimeStamp());
+        }
 
-        if (input.getTitle() != null)
+        if (input.getTitle() != null) {
             streamRulesListBuilder.setTitle(input.getTitle());
+        }
 
-        else
+        else {
 
             streamRulesListBuilder.setTitle(obj.getTitle());
+        }
 
         streamRulesListBuilder.setConfigID(obj.getConfigID());
 
@@ -261,13 +275,13 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         if (obj.getStreamRules() != null) {
             Iterator<StreamRules> it = obj.getStreamRules().iterator();
             List<StreamRules> streamRuleList = new ArrayList<StreamRules>();
-            StreamRules StreamRuleListObj = null;
+            StreamRules streamRuleListObj = null;
             while (it.hasNext()) {
-                StreamRuleListObj = it.next();
-                streamRuleList.add(StreamRuleListObj);
+                streamRuleListObj = it.next();
+                streamRuleList.add(streamRuleListObj);
 
             }
-            streamRuleList.add(StreamRuleListObj);
+            streamRuleList.add(streamRuleListObj);
 
         }
 
@@ -300,12 +314,12 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         if (obj.getStreamRules() != null) {
             Iterator<StreamRules> it = obj.getStreamRules().iterator();
             List<StreamRules> streamRuleList = new ArrayList<StreamRules>();
-            StreamRules StreamRuleListObj = null;
+            StreamRules streamRuleListObj = null;
             while (it.hasNext()) {
-                StreamRuleListObj = it.next();
-                streamRuleList.add(StreamRuleListObj);
+                streamRuleListObj = it.next();
+                streamRuleList.add(streamRuleListObj);
             }
-            streamRuleList.add(StreamRuleListObj);
+            streamRuleList.add(streamRuleListObj);
         }
 
         streamRulesListBuilder.setTimeStamp(obj.getTimeStamp());
@@ -470,10 +484,10 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
 
                             Iterator<StreamRules> it = streamListObj.getStreamRules().iterator();
                             List<StreamRules> streamRule = new ArrayList<StreamRules>();
-                            StreamRules StreamRuleListObj = null;
+                            StreamRules streamRuleListObj = null;
                             while (it.hasNext()) {
-                                StreamRuleListObj = it.next();
-                                streamRule.add(StreamRuleListObj);
+                                streamRuleListObj = it.next();
+                                streamRule.add(streamRuleListObj);
                             }
                             getStreamOutputBuilder.setStreamRules(streamRule);
                         }
@@ -643,8 +657,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
     }
 
     public String generateRandomId() {
-        final String Id = String.format("%x", (int) (Math.random() * 10000));
-        return Id;
+        return String.format("%x", (int) (Math.random() * 10000));
     }
 
     @Override
@@ -804,7 +817,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                 streamRecordId);
 
         String configId = null;
-        String OpStrmId = null;
+        String opStrmId = null;
 
         try {
             Optional<StreamRecord> record = readFutureOperational.get();
@@ -823,7 +836,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
 
                         if (operationalObject.getStreamID().equals(input.getStreamID())) {
                             configId = operationalObject.getConfigID();
-                            OpStrmId = operationalObject.getStreamID();
+                            opStrmId = operationalObject.getStreamID();
                             idMatches = true;
 
                         }
@@ -848,7 +861,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
             return futureResult;
         }
         final String confID = configId;
-        final String opStreamId = OpStrmId;
+        final String opStreamId = opStrmId;
 
         final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
                 new AsyncFunction<Optional<StreamRecord>, Void>() {
@@ -871,8 +884,8 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
                                 configObject = iterator.next();
 
                                 if (configObject.getConfigID().equalsIgnoreCase(confID)) {
-                                    StreamList updatedConfigObj = buildResumedStreamListRecord(configObject,
-                                            opStreamId, input);
+                                    StreamList updatedConfigObj = buildResumedStreamListRecord(configObject, opStreamId,
+                                            input);
 
                                     updatedStreamRuleList.add(updatedConfigObj);
                                     tx.merge(LogicalDatastoreType.CONFIGURATION, streamRecordId,
@@ -920,25 +933,21 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         final SettableFuture<RpcResult<SetRuleOutput>> futureResult = SettableFuture.create();
         boolean idMatches = false;
         final String streamRuleId = generateRandomId();
-       if(input.getType() == StreamType.FieldPresence)
-        {
+        if (input.getType() == StreamType.FieldPresence) {
             if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
                     || input.getField() == null || input.getField().isEmpty() || input.getField().trim().isEmpty()) {
+                return Futures.immediateFailedCheckedFuture(
+                        new TransactionCommitFailedException("inalid-input", RpcResultBuilder.newError(
+                                ErrorType.APPLICATION, "invalid-input", "StreamId,Value are mandatory parameters")));
+            }
+        } else {
+            if (input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
+                    || input.getField() == null || input.getField().isEmpty() || input.getField().trim().isEmpty()
+                    || input.getValue() == null || input.getValue().isEmpty() || input.getValue().trim().isEmpty()) {
                 return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
                         RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
-                                "StreamId,Value are mandatory parameters")));
-        }
-        }
-        else 
-        {
-   if(input.getStreamID() == null || input.getStreamID().isEmpty() || input.getStreamID().trim().isEmpty()
-           || input.getField() == null || input.getField().isEmpty() || input.getField().trim().isEmpty() || 
-           input.getValue() == null || input.getValue().isEmpty() || input.getValue().trim().isEmpty() )
-        { 
-            return Futures.immediateFailedCheckedFuture(new TransactionCommitFailedException("inalid-input",
-                    RpcResultBuilder.newError(ErrorType.APPLICATION, "invalid-input",
-                            "StreamId,Value and Field are mandatory parameters")));
-        }
+                                "StreamId,Value and Field are mandatory parameters")));
+            }
         }
         final SetRuleOutputBuilder setRuleOutputBuilder = new SetRuleOutputBuilder();
         setRuleOutputBuilder.setStreamRuleID(streamRuleId);
