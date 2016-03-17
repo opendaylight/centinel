@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.AlertFieldContentRuleRecord;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.AlertFieldContentRuleRecordBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.alertfieldcontentrulerecord.StreamAlertFieldContentRuleList;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.alertfieldcontentrulerecord.StreamAlertFieldContentRuleListBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecord;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecordBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.createstreaminput.StreamRules;
@@ -51,8 +55,16 @@ public class ChangeEventObjectFactory {
         streamRecordBuilder.setStreamList(streamList);
         return streamRecordBuilder.build();
     }
+    
+    public DataObject getOriginalSubtreeAlertRecord() {
+        AlertFieldContentRuleRecordBuilder alertFieldContentRuleRecordBuilder = new AlertFieldContentRuleRecordBuilder();
+        List<StreamAlertFieldContentRuleList> streamAlertFieldContentRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
+        streamAlertFieldContentRuleList.add(getOriginalStreamAlertFieldContentRuleRecord());
+        alertFieldContentRuleRecordBuilder.setStreamAlertFieldContentRuleList(streamAlertFieldContentRuleList);
+        return alertFieldContentRuleRecordBuilder.build();
+    }
 
-    public StreamList getOriginalStreamList() {
+    public static StreamList getOriginalStreamList() {
         StreamListBuilder streamListObj = new StreamListBuilder();
         List<StreamRules> streamRuleList = new ArrayList<StreamRules>();
 
@@ -67,6 +79,20 @@ public class ChangeEventObjectFactory {
         streamListObj.setDisabled("false");
         streamListObj.setStreamRules(streamRuleList);
         return streamListObj.build();
+    }
+    
+    public static StreamAlertFieldContentRuleList getOriginalStreamAlertFieldContentRuleRecord() {
+    	StreamAlertFieldContentRuleListBuilder streamAlertFieldContentRuleListObj = new StreamAlertFieldContentRuleListBuilder();
+        List<StreamAlertFieldContentRuleList> streamAlertFieldContentRuleList = new ArrayList<StreamAlertFieldContentRuleList>();
+
+        StreamAlertFieldContentRuleListBuilder streamAlertFieldContentRuleListBuilder = new StreamAlertFieldContentRuleListBuilder();
+        streamAlertFieldContentRuleListBuilder.setAlertName("sample");
+        streamAlertFieldContentRuleList.add(streamAlertFieldContentRuleListBuilder.build());
+
+        streamAlertFieldContentRuleListObj.setAlertName("alert name");
+        streamAlertFieldContentRuleListObj.setStreamID("testID");
+        streamAlertFieldContentRuleListObj.setConfigID("1000");
+        return streamAlertFieldContentRuleListObj.build();
     }
 
     public StreamList getUpdatedStreamList() {
