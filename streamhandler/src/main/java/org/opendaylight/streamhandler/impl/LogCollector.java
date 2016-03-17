@@ -65,16 +65,15 @@ public class LogCollector extends Thread {
 }
 
 class ClientHandler extends Thread {
-	PrintWriter out = null;
-	private Socket conn;
-	private static final int RFC3164_LENGTH = 15;
-	private static final Pattern SPACES_TWO_CHECK = Pattern.compile("  ");
-	private static final DateTimeFormatter rfc3164_FORMAT_DATETIME = DateTimeFormat
-			.forPattern("MMM d HH:mm:ss").withZoneUTC();
-	private static final int RFC5424_LEN_PREFIX = 19;
-	private static final String timePat = "yyyy-MM-dd'T'HH:mm:ss";
-	private DateTimeFormatter timeParser = DateTimeFormat.forPattern(timePat)
-			.withZoneUTC();
+    PrintWriter out = null;
+    private Socket conn;
+    private static final int RFC3164_LENGTH = 15;
+    private static final Pattern SPACES_TWO_CHECK = Pattern.compile("  ");
+    private static final DateTimeFormatter RFC3164_FORMAT_DATETIME = DateTimeFormat.forPattern("MMM d HH:mm:ss")
+            .withZoneUTC();
+    private static final int RFC5424_LEN_PREFIX = 19;
+    private static final String TIMEPAT = "yyyy-MM-dd'T'HH:mm:ss";
+    private DateTimeFormatter timeParser = DateTimeFormat.forPattern(TIMEPAT).withZoneUTC();
 
 	JSONObject data = null;
 	PersistEventInputBuilder input = null;
@@ -249,35 +248,32 @@ class ClientHandler extends Thread {
 		return jsonLogEvent;
 	}
 
-	// parsing RFC3164 timestamp
-	protected long rfc3164TimeStamp(String timeStamp) {
-		DateTime currentDateTime = DateTime.now();
-		int yearCurrent = currentDateTime.getYear();
-		timeStamp = SPACES_TWO_CHECK.matcher(timeStamp).replaceFirst(" ");
-		DateTime dateReturned;
-		try {
-			dateReturned = rfc3164_FORMAT_DATETIME.parseDateTime(timeStamp);
-		} catch (IllegalArgumentException e) {
-			LOG.error("rfc3164 date parse failed on (" + timeStamp
-					+ "): invalid format", e);
-			return 0;
-		}
-		if (dateReturned != null) {
-			DateTime fixedDate = dateReturned.withYear(yearCurrent);
-			if (fixedDate.isAfter(currentDateTime)
-					&& fixedDate.minusMonths(1).isAfter(currentDateTime)) {
-				fixedDate = dateReturned.withYear(yearCurrent - 1);
-			} else if (fixedDate.isBefore(currentDateTime)
-					&& fixedDate.plusMonths(1).isBefore(currentDateTime)) {
-				fixedDate = dateReturned.withYear(yearCurrent + 1);
-			}
-			dateReturned = fixedDate;
-		}
-		if (dateReturned == null) {
-			return 0;
-		}
-		return dateReturned.getMillis();
-	}
+    // parsing RFC3164 timestamp
+    protected long rfc3164TimeStamp(String timeStamp) {
+        DateTime currentDateTime = DateTime.now();
+        int yearCurrent = currentDateTime.getYear();
+        timeStamp = SPACES_TWO_CHECK.matcher(timeStamp).replaceFirst(" ");
+        DateTime dateReturned;
+        try {
+            dateReturned = RFC3164_FORMAT_DATETIME.parseDateTime(timeStamp);
+        } catch (IllegalArgumentException e) {
+            LOG.error("rfc3164 date parse failed on (" + timeStamp + "): invalid format", e);
+            return 0;
+        }
+        if (dateReturned != null) {
+            DateTime fixedDate = dateReturned.withYear(yearCurrent);
+            if (fixedDate.isAfter(currentDateTime) && fixedDate.minusMonths(1).isAfter(currentDateTime)) {
+                fixedDate = dateReturned.withYear(yearCurrent - 1);
+            } else if (fixedDate.isBefore(currentDateTime) && fixedDate.plusMonths(1).isBefore(currentDateTime)) {
+                fixedDate = dateReturned.withYear(yearCurrent + 1);
+            }
+            dateReturned = fixedDate;
+        }
+        if (dateReturned == null) {
+            return 0;
+        }
+        return dateReturned.getMillis();
+    }
 
 	// parsing Rfc5424 timestamp
 	protected long rfc5424DateTime(String message) {

@@ -34,7 +34,7 @@ public class CentinelCommonRESTServices {
     Client client = null;
     JsonBuilderFactory factory = null;
     Properties properties;
-    private static final String resourceType = "application/json";
+    private static final String RESOURCE_TYPE = "application/json";
 
     private static final Logger LOG = LoggerFactory.getLogger(CentinelCommonRESTServices.class);
     String graylogServerIp;
@@ -75,7 +75,7 @@ public class CentinelCommonRESTServices {
      */
     public ClientResponse graylogRESTPost(JsonObject obj, String resource) {
         WebResource webResource = client.resource(resource);
-        return webResource.type(resourceType).post(ClientResponse.class, obj.toString());
+        return webResource.type(RESOURCE_TYPE).post(ClientResponse.class, obj.toString());
     }
 
     /*
@@ -99,7 +99,7 @@ public class CentinelCommonRESTServices {
      */
     public ClientResponse graylogRESTPut(JsonObject obj, String resource) {
         WebResource webResource = client.resource(resource);
-        return webResource.type(resourceType).put(ClientResponse.class, obj.toString());
+        return webResource.type(RESOURCE_TYPE).put(ClientResponse.class, obj.toString());
     }
 
     /*
@@ -129,7 +129,7 @@ public class CentinelCommonRESTServices {
 
     public ClientResponse graylogRESTPOSTEnabler(String resource) {
         WebResource webResource = client.resource(resource);
-        return webResource.type(resourceType).post(ClientResponse.class);
+        return webResource.type(RESOURCE_TYPE).post(ClientResponse.class);
     }
 
     /*
@@ -152,9 +152,8 @@ public class CentinelCommonRESTServices {
         streams = properties.getProperty("graylog_streams");
         alarmCallback = properties.getProperty("graylog_alarmcallback");
     }
-    
-    public void setGraylogIp(String ip,String port)
-    {
+
+    public void setGraylogIp(String ip, String port) {
         graylogServerIp = "http://" + ip + ":" + port + "/";
         LOG.info("graylog ip ultimate " + graylogServerIp);
     }

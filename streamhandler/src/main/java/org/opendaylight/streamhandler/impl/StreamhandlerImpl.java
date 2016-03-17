@@ -79,28 +79,27 @@ public class StreamhandlerImpl implements StreamhandlerService, AutoCloseable {
 		executor.shutdown();
 	}
 
-	@Override
-	public Future<RpcResult<Void>> persistEvent(PersistEventInput input) {
-		final SettableFuture<RpcResult<Void>> futureResult = SettableFuture
-				.create();
-		boolean result = true;
-		try {
-			// Initialize client with the remote Flume agent's host and port
-			if (client == null)
-				client = new PersistEvent(commonServices.flumeHostname,
-						commonServices.flumePort);
-			result = client.sendDataToFlume(input);
-		} catch (Exception e) {
-			futureResult.set(RpcResultBuilder.<Void> failed().build());
-			LOG.error("Unable to save data " + e.getMessage(), e);
-		}
-		if (!result) {
-			futureResult.set(RpcResultBuilder.<Void> failed().build());
-		} else {
-			futureResult.set(RpcResultBuilder.<Void> success().build());
-		}
-		return futureResult;
-	}
+    @Override
+    public Future<RpcResult<Void>> persistEvent(PersistEventInput input) {
+        final SettableFuture<RpcResult<Void>> futureResult = SettableFuture.create();
+        boolean result = true;
+        try {
+            // Initialize client with the remote Flume agent's host and port
+            if (client == null) {
+                client = new PersistEvent(commonServices.flumeHostname, commonServices.flumePort);
+            }
+            result = client.sendDataToFlume(input);
+        } catch (Exception e) {
+            futureResult.set(RpcResultBuilder.<Void> failed().build());
+            LOG.error("Unable to save data " + e.getMessage(), e);
+        }
+        if (!result) {
+            futureResult.set(RpcResultBuilder.<Void> failed().build());
+        } else {
+            futureResult.set(RpcResultBuilder.<Void> success().build());
+        }
+        return futureResult;
+    }
 
 	@Override
 	public Future<RpcResult<QuerySqlRelativeApiOutput>> querySqlRelativeApi(
@@ -555,35 +554,25 @@ public class StreamhandlerImpl implements StreamhandlerService, AutoCloseable {
 				+ StreamConstants.SPACE);
 	}
 
-	private String replaceFirstDashboard(String query) {
-		query = query.replaceFirst(StreamConstants.DASHBOARD,
-				CONVERT_QUERY_DASHBOARD_TO_JSON);
-		return query;
-	}
+    private String replaceFirstDashboard(String query) {
+        return query.replaceFirst(StreamConstants.DASHBOARD, CONVERT_QUERY_DASHBOARD_TO_JSON);
+    }
 
-	private String amendLimitToQuery(String query, Short limit) {
-		query = query + StreamConstants.SPACE + StreamConstants.LIMIT
-				+ StreamConstants.SPACE + limit;
-		return query;
-	}
+    private String amendLimitToQuery(String query, Short limit) {
+        return query + StreamConstants.SPACE + StreamConstants.LIMIT + StreamConstants.SPACE + limit;
+    }
 
-	private String replaceFirstAlert(String query) {
-		query = query.replaceFirst(StreamConstants.ALERT,
-				CONVERT_QUERY_ALERT_TO_JSON);
-		return query;
-	}
+    private String replaceFirstAlert(String query) {
+        return query.replaceFirst(StreamConstants.ALERT, CONVERT_QUERY_ALERT_TO_JSON);
+    }
 
-	private String replaceFirstStream(String query) {
-		query = query.replaceFirst(StreamConstants.STREAM,
-				CONVERT_QUERY_STREAM_TO_JSON);
-		return query;
-	}
+    private String replaceFirstStream(String query) {
+        return query.replaceFirst(StreamConstants.STREAM, CONVERT_QUERY_STREAM_TO_JSON);
+    }
 
-	private String replaceFirstCentinelForDBType(String query) {
-		query = query.replaceFirst(StreamConstants.CENTINEL,
-				commonServices.dbType + StreamConstants.DOT_CENTINEL);
-		return query;
-	}
+    private String replaceFirstCentinelForDBType(String query) {
+        return query.replaceFirst(StreamConstants.CENTINEL, commonServices.dbType + StreamConstants.DOT_CENTINEL);
+    }
 
 	private String updateWhenQueryContainsData(String query) {
 		query = replaceFirstCentinelForDBType(query);

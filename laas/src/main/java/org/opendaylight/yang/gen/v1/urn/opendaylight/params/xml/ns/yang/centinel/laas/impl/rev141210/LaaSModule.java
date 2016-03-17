@@ -45,17 +45,17 @@ public class LaaSModule
 
         final ListenerRegistration<DataChangeListener> alertMessageCountRuleChangeListener = dataBrokerService
                 .registerDataChangeListener(LogicalDatastoreType.CONFIGURATION,
-                        CentinelLaasAlertConditionImpl.alertMessageCountRuleRecordId, centinelAlertConditionImpl,
+                        CentinelLaasAlertConditionImpl.ALERTMESSAGECOUNTRULERECORDID, centinelAlertConditionImpl,
                         DataChangeScope.SUBTREE);
 
         final ListenerRegistration<DataChangeListener> alertFeildContentRuleChangeListener = dataBrokerService
                 .registerDataChangeListener(LogicalDatastoreType.CONFIGURATION,
-                        CentinelLaasAlertConditionImpl.alertFeildContentRuleRecordId, centinelAlertConditionImpl,
+                        CentinelLaasAlertConditionImpl.ALERTFIELDCONTENTRULERECORDID, centinelAlertConditionImpl,
                         DataChangeScope.SUBTREE);
 
         final ListenerRegistration<DataChangeListener> alertFeildValueRuleChangeListener = dataBrokerService
                 .registerDataChangeListener(LogicalDatastoreType.CONFIGURATION,
-                        CentinelLaasAlertConditionImpl.alertFieldValueRuleRecordId, centinelAlertConditionImpl,
+                        CentinelLaasAlertConditionImpl.ALERTFIELDVALUERULERECORDID, centinelAlertConditionImpl,
                         DataChangeScope.SUBTREE);
 
         final ListenerRegistration<DataChangeListener> streamRuleChangeListener = dataBrokerService

@@ -56,11 +56,11 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
     private static final Logger LOG = LoggerFactory.getLogger(CentinelLaasAlertConditionImpl.class);
 
-    public static final InstanceIdentifier<AlertMessageCountRuleRecord> alertMessageCountRuleRecordId = InstanceIdentifier
+    public static final InstanceIdentifier<AlertMessageCountRuleRecord> ALERTMESSAGECOUNTRULERECORDID = InstanceIdentifier
             .builder(AlertMessageCountRuleRecord.class).build();
-    public static final InstanceIdentifier<AlertFieldValueRuleRecord> alertFieldValueRuleRecordId = InstanceIdentifier
+    public static final InstanceIdentifier<AlertFieldValueRuleRecord> ALERTFIELDVALUERULERECORDID = InstanceIdentifier
             .builder(AlertFieldValueRuleRecord.class).build();
-    public static final InstanceIdentifier<AlertFieldContentRuleRecord> alertFeildContentRuleRecordId = InstanceIdentifier
+    public static final InstanceIdentifier<AlertFieldContentRuleRecord> ALERTFIELDCONTENTRULERECORDID = InstanceIdentifier
             .builder(AlertFieldContentRuleRecord.class).build();
 
     private DataBroker dataProvider;
@@ -135,7 +135,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
                 if (streamAlertMessageCountRuleListFromAnalyzer != null) {
                     tx.merge(
                             LogicalDatastoreType.OPERATIONAL,
-                            alertMessageCountRuleRecordId,
+                            ALERTMESSAGECOUNTRULERECORDID,
                             new AlertMessageCountRuleRecordBuilder().setStreamAlertMessageCountRuleList(
                                     streamAlertRuleList).build(), true);
                     tx.submit();
@@ -171,7 +171,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
             try {
                 if (streamAlertFieldValueRuleListFromAnalyzer != null) {
-                    tx.merge(LogicalDatastoreType.OPERATIONAL, alertFieldValueRuleRecordId,
+                    tx.merge(LogicalDatastoreType.OPERATIONAL, ALERTFIELDVALUERULERECORDID,
                             new AlertFieldValueRuleRecordBuilder()
                                     .setStreamAlertFieldValueRuleList(streamAlertRuleList).build(), true);
                     tx.submit();
@@ -208,7 +208,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
                 if (streamAlertFieldContentRuleListFromAnalyzer != null) {
                     tx.merge(
                             LogicalDatastoreType.OPERATIONAL,
-                            alertFeildContentRuleRecordId,
+                            ALERTFIELDCONTENTRULERECORDID,
                             new AlertFieldContentRuleRecordBuilder().setStreamAlertFieldContentRuleList(
                                     streamAlertRuleList).build(), true);
                     tx.submit();
@@ -258,7 +258,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
                 // Read operational data store
                 ListenableFuture<Optional<AlertMessageCountRuleRecord>> readFutureFromOperational = tx.read(
-                        LogicalDatastoreType.OPERATIONAL, alertMessageCountRuleRecordId);
+                        LogicalDatastoreType.OPERATIONAL, ALERTMESSAGECOUNTRULERECORDID);
 
                 Optional<AlertMessageCountRuleRecord> alertMessageCountRuleRecord = readFutureFromOperational.get();
 
@@ -274,13 +274,12 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
                     StreamAlertMessageCountRuleList streamAlertMessageOperationalObj = iterator1.next();
                     LOG.info("Operational Data store .getConfigID()" + streamAlertMessageOperationalObj.getConfigID());
                     LOG.info("Config data store .getConfigID() " + alertMessageCountRuleList.getConfigID());
-                    if (streamAlertMessageOperationalObj.getConfigID().equals(alertMessageCountRuleList.getConfigID())) {
-                        if (restService.updateToOperational(alertMessageCountRuleList)) {
-                            tx.merge(LogicalDatastoreType.OPERATIONAL, alertMessageCountRuleRecordId.child(
-                                    StreamAlertMessageCountRuleList.class, streamAlertMessageOperationalObj.getKey()),
-                                    alertMessageCountRuleList);
-                            tx.submit();
-                        }
+                    if (streamAlertMessageOperationalObj.getConfigID().equals(alertMessageCountRuleList.getConfigID())
+                            && restService.updateToOperational(alertMessageCountRuleList)) {
+                        tx.merge(LogicalDatastoreType.OPERATIONAL, ALERTMESSAGECOUNTRULERECORDID.child(
+                                StreamAlertMessageCountRuleList.class, streamAlertMessageOperationalObj.getKey()),
+                                alertMessageCountRuleList);
+                        tx.submit();
                     }
                 }
             } else if (configUpdatedData instanceof AlertFieldContentRuleRecord
@@ -304,7 +303,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
                 // Read operational data store
                 ListenableFuture<Optional<AlertFieldContentRuleRecord>> readFutureFromOperational = tx.read(
-                        LogicalDatastoreType.OPERATIONAL, alertFeildContentRuleRecordId);
+                        LogicalDatastoreType.OPERATIONAL, ALERTFIELDCONTENTRULERECORDID);
 
                 Optional<AlertFieldContentRuleRecord> alertFieldContentRuleRecord = readFutureFromOperational.get();
 
@@ -322,13 +321,12 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
                             + streamAlertFieldContentOperationalObj.getConfigID());
                     LOG.info("Config data store .getConfigID() " + alertFieldContentRuleList.getConfigID());
                     if (streamAlertFieldContentOperationalObj.getConfigID().equals(
-                            alertFieldContentRuleList.getConfigID())) {
-                        if (restService.updateToOperational(alertFieldContentRuleList)) {
-                            tx.merge(LogicalDatastoreType.OPERATIONAL, alertFeildContentRuleRecordId.child(
-                                    StreamAlertFieldContentRuleList.class,
-                                    streamAlertFieldContentOperationalObj.getKey()), alertFieldContentRuleList);
-                            tx.submit();
-                        }
+                            alertFieldContentRuleList.getConfigID())
+                            && restService.updateToOperational(alertFieldContentRuleList)) {
+                        tx.merge(LogicalDatastoreType.OPERATIONAL, ALERTFIELDCONTENTRULERECORDID.child(
+                                StreamAlertFieldContentRuleList.class, streamAlertFieldContentOperationalObj.getKey()),
+                                alertFieldContentRuleList);
+                        tx.submit();
                     }
                 }
             } else if (configUpdatedData instanceof AlertFieldValueRuleRecord
@@ -352,7 +350,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
                 // Read operational data store
                 ListenableFuture<Optional<AlertFieldValueRuleRecord>> readFutureFromOperational = tx.read(
-                        LogicalDatastoreType.OPERATIONAL, alertFieldValueRuleRecordId);
+                        LogicalDatastoreType.OPERATIONAL, ALERTFIELDVALUERULERECORDID);
 
                 Optional<AlertFieldValueRuleRecord> alertFieldValueRuleRecord = readFutureFromOperational.get();
 
@@ -369,13 +367,12 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
                     LOG.info("Operational Data store .getConfigID()"
                             + streamAlertFieldValueOperationalObj.getConfigID());
                     LOG.info("Config data store .getConfigID() " + alertFieldValueRuleList.getConfigID());
-                    if (streamAlertFieldValueOperationalObj.getConfigID().equals(alertFieldValueRuleList.getConfigID())) {
-                        if (restService.updateToOperational(alertFieldValueRuleList)) {
-                            tx.merge(LogicalDatastoreType.OPERATIONAL, alertFieldValueRuleRecordId.child(
-                                    StreamAlertFieldValueRuleList.class, streamAlertFieldValueOperationalObj.getKey()),
-                                    alertFieldValueRuleList);
-                            tx.submit();
-                        }
+                    if (streamAlertFieldValueOperationalObj.getConfigID().equals(alertFieldValueRuleList.getConfigID())
+                            && restService.updateToOperational(alertFieldValueRuleList)) {
+                        tx.merge(LogicalDatastoreType.OPERATIONAL, ALERTFIELDVALUERULERECORDID.child(
+                                StreamAlertFieldValueRuleList.class, streamAlertFieldValueOperationalObj.getKey()),
+                                alertFieldValueRuleList);
+                        tx.submit();
                     }
                 }
             }
@@ -411,7 +408,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
                 // Read operational data store
                 ListenableFuture<Optional<AlertMessageCountRuleRecord>> readFutureFromOperational = tx.read(
-                        LogicalDatastoreType.OPERATIONAL, alertMessageCountRuleRecordId);
+                        LogicalDatastoreType.OPERATIONAL, ALERTMESSAGECOUNTRULERECORDID);
 
                 Optional<AlertMessageCountRuleRecord> alertMessageCountRuleRecord = readFutureFromOperational.get();
 
@@ -425,15 +422,14 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
                 while (iterator1.hasNext()) {
                     StreamAlertMessageCountRuleList streamAlertMessageOperationalObj = iterator1.next();
-                    if (streamAlertMessageOperationalObj.getConfigID().equals(alertMessageCountConfigObj.getConfigID())) {
+                    if (streamAlertMessageOperationalObj.getConfigID().equals(alertMessageCountConfigObj.getConfigID())
+                            && restService.deleteFromOperational(streamAlertMessageOperationalObj)) {
                         // if following statement returns true then remove from
                         // operational data store
-                        if (restService.deleteFromOperational(streamAlertMessageOperationalObj)) {
-                            LOG.info("Deleted succesfully from Graylog");
-                            tx.delete(LogicalDatastoreType.OPERATIONAL, alertMessageCountRuleRecordId.child(
-                                    StreamAlertMessageCountRuleList.class, streamAlertMessageOperationalObj.getKey()));
-                            tx.submit();
-                        }
+                        LOG.info("Deleted succesfully from Graylog");
+                        tx.delete(LogicalDatastoreType.OPERATIONAL, ALERTMESSAGECOUNTRULERECORDID.child(
+                                StreamAlertMessageCountRuleList.class, streamAlertMessageOperationalObj.getKey()));
+                        tx.submit();
                     }
                 }
 
@@ -445,7 +441,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
                 // Read operational data store
                 ListenableFuture<Optional<AlertFieldContentRuleRecord>> readFutureFromOperational = tx.read(
-                        LogicalDatastoreType.OPERATIONAL, alertFeildContentRuleRecordId);
+                        LogicalDatastoreType.OPERATIONAL, ALERTFIELDCONTENTRULERECORDID);
 
                 Optional<AlertFieldContentRuleRecord> alertFieldContentRuleRecord = readFutureFromOperational.get();
 
@@ -460,16 +456,14 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
                 while (iterator1.hasNext()) {
                     StreamAlertFieldContentRuleList streamAlertFieldContentOperationalObj = iterator1.next();
                     if (streamAlertFieldContentOperationalObj.getConfigID().equals(
-                            alertFieldContentConfigObj.getConfigID())) {
+                            alertFieldContentConfigObj.getConfigID())
+                            && restService.deleteFromOperational(streamAlertFieldContentOperationalObj)) {
                         // if following statement returns true then remove from
                         // operational data store
-                        if (restService.deleteFromOperational(streamAlertFieldContentOperationalObj)) {
-                            LOG.info("Deleted succesfully from Graylog");
-                            tx.delete(LogicalDatastoreType.OPERATIONAL, alertFeildContentRuleRecordId.child(
-                                    StreamAlertFieldContentRuleList.class,
-                                    streamAlertFieldContentOperationalObj.getKey()));
-                            tx.submit();
-                        }
+                        LOG.info("Deleted succesfully from Graylog");
+                        tx.delete(LogicalDatastoreType.OPERATIONAL, ALERTFIELDCONTENTRULERECORDID.child(
+                                StreamAlertFieldContentRuleList.class, streamAlertFieldContentOperationalObj.getKey()));
+                        tx.submit();
                     }
                 }
 
@@ -479,7 +473,7 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
 
                 // Read operational data store
                 ListenableFuture<Optional<AlertFieldValueRuleRecord>> readFutureFromOperational = tx.read(
-                        LogicalDatastoreType.OPERATIONAL, alertFieldValueRuleRecordId);
+                        LogicalDatastoreType.OPERATIONAL, ALERTFIELDVALUERULERECORDID);
 
                 Optional<AlertFieldValueRuleRecord> alertFieldValueRuleRecord = readFutureFromOperational.get();
 
@@ -494,13 +488,12 @@ public class CentinelLaasAlertConditionImpl implements AutoCloseable, DataChange
                 while (iterator1.hasNext()) {
                     StreamAlertFieldValueRuleList streamAlertFieldValueOperationalObj = iterator1.next();
                     if (streamAlertFieldValueOperationalObj.getConfigID()
-                            .equals(alertFieldValueConfigObj.getConfigID())) {
-                        if (restService.deleteFromOperational(streamAlertFieldValueOperationalObj)) {
-                            LOG.info("Deleted succesfully from Graylog");
-                            tx.delete(LogicalDatastoreType.OPERATIONAL, alertFieldValueRuleRecordId.child(
-                                    StreamAlertFieldValueRuleList.class, streamAlertFieldValueOperationalObj.getKey()));
-                            tx.submit();
-                        }
+                            .equals(alertFieldValueConfigObj.getConfigID())
+                            && restService.deleteFromOperational(streamAlertFieldValueOperationalObj)) {
+                        LOG.info("Deleted succesfully from Graylog");
+                        tx.delete(LogicalDatastoreType.OPERATIONAL, ALERTFIELDVALUERULERECORDID.child(
+                                StreamAlertFieldValueRuleList.class, streamAlertFieldValueOperationalObj.getKey()));
+                        tx.submit();
                     }
                 }
 

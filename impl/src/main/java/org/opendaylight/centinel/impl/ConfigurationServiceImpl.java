@@ -44,14 +44,14 @@ public class ConfigurationServiceImpl implements ConfigurationService,
 	private final ExecutorService executor;
 	private DataBroker dataProvider;
 	private NotificationProviderService notificationProvider;
-	public static String graylogIp;
-	public static String graylogPort;
-	public static String flumeIp;
-	public static String flumePort;
-	public static String drillIp;
-	public static String drillPort;
-	public static String syslogPort;
-	public static boolean secureSyslog;
+	private String graylogIp;
+	private String graylogPort;
+	private String flumeIp;
+	private String flumePort;
+	private String drillIp;
+	private String drillPort;
+	private String syslogPort;
+	private boolean secureSyslog;
 
 	public ConfigurationServiceImpl() {
 		executor = Executors.newFixedThreadPool(1);
@@ -96,7 +96,7 @@ public class ConfigurationServiceImpl implements ConfigurationService,
 		syslogPort = input.getSyslogPort();
 		secureSyslog = input.isSecureSysLog();
 
-		final SetCentinelConfigurationsOutputBuilder centinelConfigurationsOutputBuilder = new SetCentinelConfigurationsOutputBuilder();
+        final SetCentinelConfigurationsOutputBuilder centinelConfigurationsOutputBuilder = new SetCentinelConfigurationsOutputBuilder();
 
 		centinelConfigurationsOutputBuilder.setGraylogIp(graylogIp);
 		centinelConfigurationsOutputBuilder.setDrillIp(drillIp);
