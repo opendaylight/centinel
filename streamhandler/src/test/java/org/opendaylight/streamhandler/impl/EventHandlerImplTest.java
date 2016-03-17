@@ -21,21 +21,33 @@ public class EventHandlerImplTest {
         EventHandlerImplFactory mockEventHandlerImplFactory = new EventHandlerImplFactory();
         mockEventHandlerImpl.onEventNotified(mockEventHandlerImplFactory.setNotification());
     }
+
     @Test
     public void mockOnEventNotifiedEventKeyNull() {
         EventHandlerImplFactory mockEventHandlerImplFactory = new EventHandlerImplFactory();
         mockEventHandlerImpl.onEventNotified(mockEventHandlerImplFactory.setNotificationEventKeyNull());
     }
+
     @Test
     public void mockOnEventNotifiedCorrectJsonStream() {
         EventHandlerImplFactory mockEventHandlerImplFactory = new EventHandlerImplFactory();
         mockEventHandlerImpl.onEventNotified(mockEventHandlerImplFactory.setNotificationCorrectJsonStream());
     }
+
+    @Test
+    public void mockOnEventNotifiedCorrectJsonStreamColon() {
+        EventHandlerImplFactory mockEventHandlerImplFactory = new EventHandlerImplFactory();
+        mockEventHandlerImpl.onEventNotified(mockEventHandlerImplFactory
+                .setNotificationCorrectJsonStreamEventKeyColon());
+
+    }
+
     @Test
     public void mockOnEventNotifiedCorrectJsonAlert() {
         EventHandlerImplFactory mockEventHandlerImplFactory = new EventHandlerImplFactory();
         mockEventHandlerImpl.onEventNotified(mockEventHandlerImplFactory.setNotificationCorrectJsonAlert());
     }
+
     private class MockEventHandlerImpl extends EventHandlerImpl {
 
         public MockEventHandlerImpl(StreamhandlerImpl streamHandlerImpl) {

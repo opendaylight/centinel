@@ -7,12 +7,19 @@
  */
 package org.opendaylight.centinel.impl.dashboard;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardIncrementTestInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardIncrementTestInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardRecord;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardRecordBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DeleteDashboardInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DeleteDashboardInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DeleteWidgetInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DeleteWidgetInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.GetDashboardInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.GetDashboardInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.GetWidgetHistogramInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.GetWidgetHistogramInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.GetWidgetMessageCountInput;
@@ -24,6 +31,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboar
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.SetWidgetInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.SetWidgetInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.WidgetMode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.dashboard.Widgets;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.dashboard.WidgetsBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.dashboardrecord.DashboardList;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.dashboardrecord.DashboardListBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.SetStreamOutput;
@@ -223,9 +232,34 @@ public class CentinelDashboardImplFactory {
         getWidgetHistogramInputBuilder.setWidgetID("100");
         return getWidgetHistogramInputBuilder.build();
     }
-    
+
     public String inputForRemoveCounterForWidget() {
         return "100";
+    }
+
+    public DashboardRecord getDashboardRecord() {
+        DashboardRecordBuilder dashboardRecordBuilder = new DashboardRecordBuilder();
+        List<DashboardList> dashboardList = new ArrayList<DashboardList>();
+        DashboardListBuilder dashBoardListBuilder = new DashboardListBuilder();
+        dashBoardListBuilder.setDashboardID("1001");
+        dashBoardListBuilder.setDescription("dashboard");
+        dashBoardListBuilder.setTimestamp("10");
+        dashBoardListBuilder.setTitle("dashboard");
+        WidgetsBuilder widgetInput = new WidgetsBuilder();
+        widgetInput.setWidgetID("1001");
+        widgetInput.setAlertID("1002");
+        List<Widgets> widgetList = new ArrayList<Widgets>();
+        widgetList.add(widgetInput.build());
+        dashBoardListBuilder.setWidgets(widgetList);
+        dashboardList.add(dashBoardListBuilder.build());
+        dashboardRecordBuilder.setDashboardList(dashboardList);
+        return dashboardRecordBuilder.build();
+    }
+
+    public GetDashboardInput getDashboardInput() {
+        GetDashboardInputBuilder getDashboardInput = new GetDashboardInputBuilder();
+        getDashboardInput.setDashboardID("1001");
+        return getDashboardInput.build();
     }
 
 }

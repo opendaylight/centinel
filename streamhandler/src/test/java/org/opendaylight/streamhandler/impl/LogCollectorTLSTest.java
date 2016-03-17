@@ -14,17 +14,17 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
 
-public class LogCollectorTest {
+public class LogCollectorTLSTest {
 
-    MockClientHandler mockClientHandler = new MockClientHandler(null);
-    LogCollectorFactory logCollectorFactory = new LogCollectorFactory();
+    MockClientHandlerTLS mockClientHandlerTls = new MockClientHandlerTLS(null);
+    LogCollectorTLSFactory logCollectorFactoryTls = new LogCollectorTLSFactory();
     boolean errorWhileCreatingJson = false;
 
     @Test
-    public void testRun() {
+    public void testRunTLS() {
         boolean catchException = false;
         try {
-            mockClientHandler.run();
+            mockClientHandlerTls.run();
         } catch (Exception e) {
             catchException = true;
             assertTrue(catchException);
@@ -32,10 +32,10 @@ public class LogCollectorTest {
     }
 
     @Test
-    public void mockParseLogMessageBadTimeFormat() {
+    public void mockParseLogMessageBadTimeFormatTLS() {
         try {
-            JSONObject mockJSONObject = mockClientHandler.parseLogMessage(logCollectorFactory
-                    .inputStringMessageBadTimeFormat());
+            JSONObject mockJSONObject = mockClientHandlerTls.parseLogMessage(logCollectorFactoryTls
+                    .inputStringMessageBadTimeFormatTls());
             if (mockJSONObject.length() == 0) {
                 errorWhileCreatingJson = true;
                 assertTrue(errorWhileCreatingJson);
@@ -48,10 +48,10 @@ public class LogCollectorTest {
     }
 
     @Test
-    public void mockParseLogMessageCorrect() {
+    public void mockParseLogMessageCorrectTLS() {
         try {
-            JSONObject mockJSONObject = mockClientHandler.parseLogMessage(logCollectorFactory
-                    .inputStringMessageCorrectParse());
+            JSONObject mockJSONObject = mockClientHandlerTls.parseLogMessage(logCollectorFactoryTls
+                    .inputStringMessageCorrectParseTls());
             if (mockJSONObject.length() == 0) {
                 errorWhileCreatingJson = true;
                 assertTrue(errorWhileCreatingJson);
@@ -64,10 +64,10 @@ public class LogCollectorTest {
     }
 
     @Test
-    public void mockParseLogMessagerfc5424() {
+    public void mockParseLogMessagerfc5424TLS() {
         try {
-            JSONObject mockJSONObject = mockClientHandler.parseLogMessage(logCollectorFactory
-                    .inputStringMessagerfc5424());
+            JSONObject mockJSONObject = mockClientHandlerTls.parseLogMessage(logCollectorFactoryTls
+                    .inputStringMessagerfc5424Tls());
             if (mockJSONObject.length() == 0) {
                 errorWhileCreatingJson = true;
                 assertTrue(errorWhileCreatingJson);
@@ -79,10 +79,10 @@ public class LogCollectorTest {
     }
 
     @Test
-    public void mockParseLogMessageNoTimeStamp() {
+    public void mockParseLogMessageNoTimeStampTLS() {
         try {
-            JSONObject mockJSONObject = mockClientHandler.parseLogMessage(logCollectorFactory
-                    .inputStringMessageNoTimeStamp());
+            JSONObject mockJSONObject = mockClientHandlerTls.parseLogMessage(logCollectorFactoryTls
+                    .inputStringMessageNoTimeStampTls());
             if (mockJSONObject.length() == 0) {
                 errorWhileCreatingJson = true;
                 assertTrue(errorWhileCreatingJson);
@@ -93,9 +93,9 @@ public class LogCollectorTest {
         }
     }
 
-    private class MockClientHandler extends ClientHandler {
+    private class MockClientHandlerTLS extends ClientHandlerTLS {
 
-        MockClientHandler(Socket conn) {
+        MockClientHandlerTLS(Socket conn) {
             super(conn);
         }
     }
