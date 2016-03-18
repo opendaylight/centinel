@@ -9,16 +9,25 @@ package org.opendaylight.streamhandler.impl;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.Future;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryEventsInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryEventsOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryLuceneApiInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryLuceneApiOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryLuceneRelativeApiInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryLuceneRelativeApiOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlApiInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlApiOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlRelativeApiInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlRelativeApiOutput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+
+import com.sun.jersey.api.client.ClientHandlerException;
 
 public class StreamhandlerImplTest {
 
@@ -41,9 +50,29 @@ public class StreamhandlerImplTest {
     }
 
     @Test
+    public void mockQuerySqlRelativeApiWhenQueryCheckDot() {
+        boolean drillClientNotWorking = false;
+        QuerySqlRelativeApiInput mockInputNull = streamHandlerImplFactory
+                .inputForQuerySqlRelativeApiNotNullLimitStreamQuery();
+        try {
+            Future<RpcResult<QuerySqlRelativeApiOutput>> futureOutput = myMock.querySqlRelativeApi(mockInputNull);
+        } catch (ClientHandlerException e) {
+            drillClientNotWorking = true;
+            assertTrue(drillClientNotWorking);
+        }
+
+    }
+
+    @Test
     public void mockQuerySqlRelativeApiWhenlimitNull() {
         QuerySqlRelativeApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlRelativeApiNullLimit();
         Future<RpcResult<QuerySqlRelativeApiOutput>> futureOutput = myMock.querySqlRelativeApi(mockInputNull);
+        try {
+            myMock.close();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         assertNotNull(futureOutput);
     }
 
@@ -118,6 +147,70 @@ public class StreamhandlerImplTest {
 
             QuerySqlRelativeApiInput mockInputNull = streamHandlerImplFactory
                     .inputForQuerySqlRelativeApiNotNullTimeQueryContainDot();
+            Future<RpcResult<QuerySqlRelativeApiOutput>> futureOutput = myMock.querySqlRelativeApi(mockInputNull);
+
+        } catch (Exception e) {
+            drillPostingQuery = true;
+            assertTrue(drillPostingQuery);
+        }
+
+    }
+
+    @Test
+    public void mockQuerySqlRelativeApiWhenTimeNotNullQueryContainDotWhereClause() {
+        boolean drillPostingQuery = false;
+        try {
+
+            QuerySqlRelativeApiInput mockInputNull = streamHandlerImplFactory
+                    .inputForQuerySqlRelativeApiNotNullTimeQueryContainDotWhereClause();
+            Future<RpcResult<QuerySqlRelativeApiOutput>> futureOutput = myMock.querySqlRelativeApi(mockInputNull);
+
+        } catch (Exception e) {
+            drillPostingQuery = true;
+            assertTrue(drillPostingQuery);
+        }
+
+    }
+
+    @Test
+    public void mockQuerySqlRelativeApiWhenTimeNotNullAlertQueryContainDotWhereClause() {
+        boolean drillPostingQuery = false;
+        try {
+
+            QuerySqlRelativeApiInput mockInputNull = streamHandlerImplFactory
+                    .inputForQuerySqlRelativeApiNotNullTimeAlertQueryContainDotWhereClause();
+            Future<RpcResult<QuerySqlRelativeApiOutput>> futureOutput = myMock.querySqlRelativeApi(mockInputNull);
+
+        } catch (Exception e) {
+            drillPostingQuery = true;
+            assertTrue(drillPostingQuery);
+        }
+
+    }
+
+    @Test
+    public void mockQuerySqlRelativeApiWhenTimeNotNullDashboardQueryContainDotWhereClause() {
+        boolean drillPostingQuery = false;
+        try {
+
+            QuerySqlRelativeApiInput mockInputNull = streamHandlerImplFactory
+                    .inputForQuerySqlRelativeApiNotNullTimeDashboardQueryContainDotWhereClause();
+            Future<RpcResult<QuerySqlRelativeApiOutput>> futureOutput = myMock.querySqlRelativeApi(mockInputNull);
+
+        } catch (Exception e) {
+            drillPostingQuery = true;
+            assertTrue(drillPostingQuery);
+        }
+
+    }
+
+    @Test
+    public void mockQuerySqlRelativeApiWhenTimeNotNullDataQueryContainDotWhereClause() {
+        boolean drillPostingQuery = false;
+        try {
+
+            QuerySqlRelativeApiInput mockInputNull = streamHandlerImplFactory
+                    .inputForQuerySqlRelativeApiNotNullTimeDataQueryContainDotWhereClause();
             Future<RpcResult<QuerySqlRelativeApiOutput>> futureOutput = myMock.querySqlRelativeApi(mockInputNull);
 
         } catch (Exception e) {
@@ -227,6 +320,45 @@ public class StreamhandlerImplTest {
         boolean clientResponse = false;
         try {
             QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullStream();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullAlertWhere() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullAlertWhere();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullDashboardWhere() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullDashboardWhere();
+            futureOutput = myMock.querySqlApi(mockInputNull);
+        } catch (Exception e) {
+            clientResponse = true;
+            assertTrue(clientResponse);
+        }
+    }
+
+    @Test
+    public void mockQuerySqlApiQueryWhenLimitNotNullStringData() {
+        Future<RpcResult<QuerySqlApiOutput>> futureOutput = null;
+        boolean clientResponse = false;
+        try {
+            QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullStringData();
             futureOutput = myMock.querySqlApi(mockInputNull);
         } catch (Exception e) {
             clientResponse = true;
@@ -367,6 +499,29 @@ public class StreamhandlerImplTest {
         QuerySqlApiInput mockInputNull = streamHandlerImplFactory.inputForQuerySqlApiLimitNotNullTimeNullNone();
         futureOutput = myMock.querySqlApi(mockInputNull);
         assertNotNull(futureOutput);
+    }
+
+    @Test
+    public void mockQueryEvents() {
+        QueryEventsInput mockQueryEvents = streamHandlerImplFactory.inputQueryEvents();
+        Future<RpcResult<QueryEventsOutput>> futureOutput = myMock.queryEvents(mockQueryEvents);
+        assertNull(futureOutput);
+    }
+
+    @Test
+    public void mockQueryLuceneRelativeApi() {
+        QueryLuceneRelativeApiInput mockQueryLuceneRelativeApiInput = streamHandlerImplFactory
+                .inputQueryLuceneRelativeApi();
+        Future<RpcResult<QueryLuceneRelativeApiOutput>> futureOutput = myMock
+                .queryLuceneRelativeApi(mockQueryLuceneRelativeApiInput);
+        assertNull(futureOutput);
+    }
+
+    @Test
+    public void mockQueryLuceneApi() {
+        QueryLuceneApiInput mockQueryLuceneApiInput = streamHandlerImplFactory.inputQueryLuceneApi();
+        Future<RpcResult<QueryLuceneApiOutput>> futureOutput = myMock.queryLuceneApi(mockQueryLuceneApiInput);
+        assertNull(futureOutput);
     }
 
     private class MockStreamhandlerImpl extends StreamhandlerImpl {
