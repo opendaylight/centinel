@@ -7,6 +7,12 @@
  */
 package org.opendaylight.streamhandler.impl;
 
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryEventsInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryEventsInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryLuceneApiInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryLuceneApiInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryLuceneRelativeApiInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QueryLuceneRelativeApiInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlApiInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlApiInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.QuerySqlRelativeApiInput;
@@ -26,6 +32,13 @@ public class StreamhandlerImplFactory {
     public QuerySqlRelativeApiInput inputForQuerySqlRelativeApiNullLimit() {
         QuerySqlRelativeApiInputBuilder querySqlRelativeApiInputBuilder = new QuerySqlRelativeApiInputBuilder();
         querySqlRelativeApiInputBuilder.setQueryString("select '1' from centinel");
+        return querySqlRelativeApiInputBuilder.build();
+    }
+
+    public QuerySqlRelativeApiInput inputForQuerySqlRelativeApiNotNullLimitStreamQuery() {
+        QuerySqlRelativeApiInputBuilder querySqlRelativeApiInputBuilder = new QuerySqlRelativeApiInputBuilder();
+        querySqlRelativeApiInputBuilder.setQueryString("select stream.stringdata from centinel limit 50");
+        querySqlRelativeApiInputBuilder.setLimit((short) 50);
         return querySqlRelativeApiInputBuilder.build();
     }
 
@@ -60,6 +73,39 @@ public class StreamhandlerImplFactory {
     public QuerySqlRelativeApiInput inputForQuerySqlRelativeApiNotNullTimeQueryContainDot() {
         QuerySqlRelativeApiInputBuilder querySqlRelativeApiInputBuilder = new QuerySqlRelativeApiInputBuilder();
         querySqlRelativeApiInputBuilder.setQueryString("select stream.data from centinel limit 50");
+        querySqlRelativeApiInputBuilder.setLimit((short) 50);
+        querySqlRelativeApiInputBuilder.setTimeRange((short) 50);
+        return querySqlRelativeApiInputBuilder.build();
+    }
+
+    public QuerySqlRelativeApiInput inputForQuerySqlRelativeApiNotNullTimeQueryContainDotWhereClause() {
+        QuerySqlRelativeApiInputBuilder querySqlRelativeApiInputBuilder = new QuerySqlRelativeApiInputBuilder();
+        querySqlRelativeApiInputBuilder.setQueryString("select stream from centinel where stream.event_timestamp>0");
+        querySqlRelativeApiInputBuilder.setLimit((short) 50);
+        querySqlRelativeApiInputBuilder.setTimeRange((short) 50);
+        return querySqlRelativeApiInputBuilder.build();
+    }
+
+    public QuerySqlRelativeApiInput inputForQuerySqlRelativeApiNotNullTimeAlertQueryContainDotWhereClause() {
+        QuerySqlRelativeApiInputBuilder querySqlRelativeApiInputBuilder = new QuerySqlRelativeApiInputBuilder();
+        querySqlRelativeApiInputBuilder.setQueryString("select alert from centinel where alert.event_timestamp>0");
+        querySqlRelativeApiInputBuilder.setLimit((short) 50);
+        querySqlRelativeApiInputBuilder.setTimeRange((short) 50);
+        return querySqlRelativeApiInputBuilder.build();
+    }
+
+    public QuerySqlRelativeApiInput inputForQuerySqlRelativeApiNotNullTimeDashboardQueryContainDotWhereClause() {
+        QuerySqlRelativeApiInputBuilder querySqlRelativeApiInputBuilder = new QuerySqlRelativeApiInputBuilder();
+        querySqlRelativeApiInputBuilder
+                .setQueryString("select dashboard from centinel where dashboard.event_timestamp>0");
+        querySqlRelativeApiInputBuilder.setLimit((short) 50);
+        querySqlRelativeApiInputBuilder.setTimeRange((short) 50);
+        return querySqlRelativeApiInputBuilder.build();
+    }
+
+    public QuerySqlRelativeApiInput inputForQuerySqlRelativeApiNotNullTimeDataQueryContainDotWhereClause() {
+        QuerySqlRelativeApiInputBuilder querySqlRelativeApiInputBuilder = new QuerySqlRelativeApiInputBuilder();
+        querySqlRelativeApiInputBuilder.setQueryString("select stringdata from centinel ");
         querySqlRelativeApiInputBuilder.setLimit((short) 50);
         querySqlRelativeApiInputBuilder.setTimeRange((short) 50);
         return querySqlRelativeApiInputBuilder.build();
@@ -121,6 +167,33 @@ public class StreamhandlerImplFactory {
     public QuerySqlApiInput inputForQuerySqlApiLimitNotNullStream() {
         QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
         querySqlApiInput.setQueryString("select stream from centinel");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime("12");
+        querySqlApiInput.setToTime("200");
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullAlertWhere() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select alert from centinel where alert.event_timestamp>0");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime("12");
+        querySqlApiInput.setToTime("200");
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullDashboardWhere() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select dashboard from centinel where dashboard.event_timestamp>0");
+        querySqlApiInput.setLimit((short) 50);
+        querySqlApiInput.setFromTime("12");
+        querySqlApiInput.setToTime("200");
+        return querySqlApiInput.build();
+    }
+
+    public QuerySqlApiInput inputForQuerySqlApiLimitNotNullStringData() {
+        QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
+        querySqlApiInput.setQueryString("select stringdata from centinel");
         querySqlApiInput.setLimit((short) 50);
         querySqlApiInput.setFromTime("12");
         querySqlApiInput.setToTime("200");
@@ -213,7 +286,7 @@ public class StreamhandlerImplFactory {
 
     public QuerySqlApiInput inputForQuerySqlApiLimitNotNullTimeNullData() {
         QuerySqlApiInputBuilder querySqlApiInput = new QuerySqlApiInputBuilder();
-        querySqlApiInput.setQueryString("select data from centinel");
+        querySqlApiInput.setQueryString("select stringdata from centinel");
         querySqlApiInput.setLimit((short) 50);
         querySqlApiInput.setFromTime(null);
         querySqlApiInput.setToTime(null);
@@ -228,4 +301,24 @@ public class StreamhandlerImplFactory {
         querySqlApiInput.setToTime(null);
         return querySqlApiInput.build();
     }
+
+    public QueryEventsInput inputQueryEvents() {
+        QueryEventsInputBuilder queryEventsInputBuilder = new QueryEventsInputBuilder();
+        queryEventsInputBuilder.setEventType("STREAM");
+        queryEventsInputBuilder.setQueryString("select * from centinel");
+        return queryEventsInputBuilder.build();
+    }
+
+    public QueryLuceneRelativeApiInput inputQueryLuceneRelativeApi() {
+        QueryLuceneRelativeApiInputBuilder queryLuceneRelativeApiInput = new QueryLuceneRelativeApiInputBuilder();
+        queryLuceneRelativeApiInput.setQueryString("select * from centinel");
+        return queryLuceneRelativeApiInput.build();
+    }
+
+    public QueryLuceneApiInput inputQueryLuceneApi() {
+        QueryLuceneApiInputBuilder queryLuceneApiInput = new QueryLuceneApiInputBuilder();
+        queryLuceneApiInput.setQueryString("select * from centinel");
+        return queryLuceneApiInput.build();
+    }
+
 }

@@ -21,6 +21,7 @@ import org.graylog2.plugin.alarms.AlertCondition;
 import org.graylog2.plugin.alarms.callbacks.AlarmCallbackConfigurationException;
 import org.graylog2.plugin.alarms.callbacks.AlarmCallbackException;
 import org.graylog2.plugin.configuration.Configuration;
+import org.graylog2.plugin.configuration.ConfigurationException;
 import org.graylog2.plugin.streams.Stream;
 import org.graylog2.plugin.streams.StreamRule;
 import org.graylog2.plugin.streams.StreamRuleType;
@@ -32,7 +33,7 @@ import org.junit.Test;
 /**
  * @author Monika Verma
  * 
- * This class provides unit tests for CentinelAlertCallback.
+ *         This class provides unit tests for CentinelAlertCallback.
  * 
  */
 
@@ -40,7 +41,7 @@ public class CentinelAlertCallbackTest {
 
     CentinelAlertCallback alertCallback;
     boolean exceptionCaught = false;
-    
+
     @Before
     public void init() {
         alertCallback = new CentinelAlertCallback();
@@ -53,16 +54,16 @@ public class CentinelAlertCallbackTest {
 
     @Test
     public void testCall() {
-        
+
         AlertCondition.CheckResult checkResult = mock(AlertCondition.CheckResult.class);
         AlertCondition alertCondition = mock(AlertCondition.class);
         Stream stream = mock(Stream.class);
-        
+
         List<MessageSummary> listMessageSummary = mock(List.class);
         MessageSummary messageSummary = mock(MessageSummary.class);
         doReturn(messageSummary).when(listMessageSummary).get(0);
         doReturn(new DateTime()).when(messageSummary).getTimestamp();
-        
+
         doReturn("alertConditionId").when(alertCondition).getId();
         doReturn("Message-Count").when(alertCondition).getTypeString();
         doReturn("testUserId").when(alertCondition).getCreatorUserId();
@@ -71,24 +72,24 @@ public class CentinelAlertCallbackTest {
         doReturn(new HashMap<String, Object>()).when(alertCondition).getParameters();
         doReturn("AlertCondition Description").when(alertCondition).getDescription();
         doReturn(0).when(alertCondition).getBacklog();
-        
+
         doReturn("mock result desc").when(checkResult).getResultDescription();
         doReturn(alertCondition).when(checkResult).getTriggeredCondition();
         doReturn(listMessageSummary).when(checkResult).getMatchingMessages();
         doReturn(new DateTime()).when(checkResult).getTriggeredAt();
         doReturn(true).when(checkResult).isTriggered();
-        
-        List<StreamRule> streamRules  = mock(List.class);
+
+        List<StreamRule> streamRules = mock(List.class);
         StreamRule streamRule = mock(StreamRule.class);
         doReturn(streamRule).when(streamRules).get(0);
         doReturn(StreamRuleType.EXACT).when(streamRule).getType();
-        
+
         doReturn(streamRules).when(stream).getStreamRules();
         doReturn("Stream Description").when(stream).getDescription();
         doReturn(true).when(stream).getDisabled();
         doReturn("StreamId").when(stream).getId();
         doReturn("Stream Title").when(stream).getTitle();
-        
+
         try {
             alertCallback.call(stream, checkResult);
         } catch (AlarmCallbackException e) {
@@ -96,7 +97,7 @@ public class CentinelAlertCallbackTest {
         }
         assertTrue(exceptionCaught);
     }
-    
+
     @Test
     public void testGetAttributes() {
         Configuration configuration = mock(Configuration.class);
@@ -108,12 +109,17 @@ public class CentinelAlertCallbackTest {
         doReturn(new HashMap<String, Object>()).when(configuration).getSource();
         assertNotNull(alertCallback.getAttributes());
     }
-    
+
     @Test
     public void testGetRequestedConfiguration() {
+        try {
+            alertCallback.checkConfiguration();
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
         assertNotNull(alertCallback.getRequestedConfiguration());
     }
-    
+
     @Test
     public void testGetName() {
         assertNotNull(alertCallback.getName());

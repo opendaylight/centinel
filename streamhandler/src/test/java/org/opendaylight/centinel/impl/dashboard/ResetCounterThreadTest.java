@@ -23,6 +23,12 @@ public class ResetCounterThreadTest {
         WidgetStreamCounterVO mockWidgetStreamCounterVO = resetCounterThreadFactory.setValuesForSaveInDb();
         ResetCounterThread mockResetCounterThread = new ResetCounterThread(mockWidgetStreamCounterVO,
                 mockStreamhandlerImpl);
+        mockWidgetStreamCounterVO.hashCode();
+        mockWidgetStreamCounterVO.getMode();
+        WidgetStreamCounterVO mockWidgetStreamCounterVOSecond = new WidgetStreamCounterVO();
+        mockWidgetStreamCounterVO.equals(mockWidgetStreamCounterVOSecond);
+        WidgetStreamCounterVO mockWidgetStreamCounterVOThird = null;
+        mockWidgetStreamCounterVO.equals(mockWidgetStreamCounterVOThird);
         mockResetCounterThread.run();
     }
 }

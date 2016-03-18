@@ -75,6 +75,12 @@ public class SubscriberImplTest {
     @After
     public void AfterTest() {
         mockSubscriberImpl = null;
+        try {
+            myMock.close();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -147,11 +153,13 @@ public class SubscriberImplTest {
         doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
         SubscribeTestInput input = subscriberImplFactory.mockInputForSubscribeTest();
         List<Subscriptions> value = new ArrayList<Subscriptions>();
-        Subscriptions e = new SubscriptionsBuilder().setMode(Mode.Alert).setRuleID("100").build();
+        Subscriptions e = new SubscriptionsBuilder().setMode(Mode.Alert).setRuleID("100").setUserName("opendaylight")
+                .setURL("www.opendaylight.com").build();
         value.add(e);
         Subscription inpt = new SubscriptionBuilder().setSubscriptions(value).build();
         SubscriberInfoCache mockSubscriberInfoCache = SubscriberInfoCache.getInstance();
         mockSubscriberInfoCache.setSubscription(inpt);
+        mockSubscriberInfoCache.toString();
         Future<RpcResult<SubscribeTestOutput>> futureOutput = myMock.subscribeTest(input);
         assertNotNull(futureOutput);
     }
