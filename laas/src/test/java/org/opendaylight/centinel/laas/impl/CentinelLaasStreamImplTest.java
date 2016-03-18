@@ -11,6 +11,7 @@ package org.opendaylight.centinel.laas.impl;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.any;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.laas.impl.CentinelLaasStreamImpl;
+import org.opendaylight.laas.rest.utilities.CentinelStreamRESTServices;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecord;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.StreamRecordBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.stream.rev150105.streamrecord.StreamList;
@@ -66,6 +68,22 @@ public class CentinelLaasStreamImplTest {
             e.printStackTrace();
         }
         centinelLaasStreamImpl = null;
+    }
+    
+    
+    @Test
+    public void testCreateFromConfigToOperationalStream()
+    {
+    	boolean exceptionCaughtFromGraylog = false;
+    	try
+    	{
+    	 ChangeEventObjectFactory changeEventObjectFactory = new ChangeEventObjectFactory();
+    	CentinelStreamRESTServices.getInstance().createFromConfigToOperationalStream(changeEventObjectFactory.getOriginalSubtreeStreamRecord());
+    	}
+    	 catch (Exception e) {
+             exceptionCaughtFromGraylog = true;
+             assertTrue(exceptionCaughtFromGraylog);
+         }
     }
 
     @SuppressWarnings("static-access")

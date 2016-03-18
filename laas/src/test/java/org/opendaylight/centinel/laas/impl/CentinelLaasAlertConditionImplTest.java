@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.centinel.las.impl;
+package org.opendaylight.centinel.laas.impl;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
@@ -26,6 +26,7 @@ import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.laas.impl.CentinelLaasAlertConditionImpl;
+import org.opendaylight.laas.rest.utilities.CentinelAlertConditionRESTServices;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.AlertFieldContentRuleRecord;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.AlertFieldContentRuleRecordBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alertrule.rev150105.AlertFieldValueRuleRecord;
@@ -63,6 +64,69 @@ public class CentinelLaasAlertConditionImplTest {
         centinelLaasAlertConditionImpl = new CentinelLaasAlertConditionImpl();
         centinelLaasAlertConditionImpl.setDataProvider(mockDataBroker);
 
+    }
+    
+    @Test
+    public void testDeleteFromOperational()
+    {
+    	  boolean exceptionCaughtFromGraylog = false;
+          
+          ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+          
+          doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+          @SuppressWarnings("unchecked")
+          final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> mockChangeEvent = Mockito
+                  .mock(AsyncDataChangeEvent.class);
+
+          when(mockChangeEvent.getUpdatedSubtree()).thenReturn(
+                  centinelAlertConditionImplObjectFactory.buildAlertMessageCountRuleRecord());
+
+          when(mockChangeEvent.getCreatedData()).thenReturn(
+                  centinelAlertConditionImplObjectFactory.buildAlertMessageCountRuleRecordMap());
+          
+          
+          try {
+        	  ChangeEventObjectFactory changeEventObjectFactory = new ChangeEventObjectFactory();
+        	  CentinelAlertConditionRESTServices.getInstance().deleteFromOperational(changeEventObjectFactory.getOriginalSubtreeAlertRecord());
+          }
+
+          catch (Exception e) {
+              exceptionCaughtFromGraylog = true;
+              assertTrue(exceptionCaughtFromGraylog);
+          }
+    	
+    }
+    
+    
+    @Test
+    public void testUpdateFromOperational()
+    {
+    	  boolean exceptionCaughtFromGraylog = false;
+          
+          ReadWriteTransaction mockReadWriteTx = mock(ReadWriteTransaction.class);
+          
+          doReturn(mockReadWriteTx).when(mockDataBroker).newReadWriteTransaction();
+          @SuppressWarnings("unchecked")
+          final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> mockChangeEvent = Mockito
+                  .mock(AsyncDataChangeEvent.class);
+
+          when(mockChangeEvent.getUpdatedSubtree()).thenReturn(
+                  centinelAlertConditionImplObjectFactory.buildAlertMessageCountRuleRecord());
+
+          when(mockChangeEvent.getCreatedData()).thenReturn(
+                  centinelAlertConditionImplObjectFactory.buildAlertMessageCountRuleRecordMap());
+          
+          
+          try {
+        	  ChangeEventObjectFactory changeEventObjectFactory = new ChangeEventObjectFactory();
+        	  CentinelAlertConditionRESTServices.getInstance().updateToOperational(changeEventObjectFactory.getOriginalSubtreeAlertRecord());
+          }
+
+          catch (Exception e) {
+              exceptionCaughtFromGraylog = true;
+              assertTrue(exceptionCaughtFromGraylog);
+          }
+    	
     }
 
     @Test
@@ -328,5 +392,7 @@ public class CentinelLaasAlertConditionImplTest {
                     .equals(centinelAlertConditionImplObjectFactory.buildAlertFieldContentRuleList()));
 
     }
+    
+   
     
 }
