@@ -13,6 +13,7 @@ import static org.mockito.Mockito.doReturn;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
+import org.apache.flume.conf.ComponentConfiguration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +41,13 @@ public class SplittingSerializerTest {
     @After
     public void destroy() {
         splittingSerializer = null;
+    }
+
+    @Test
+    public void testInitializeTableCfNull() {
+        table = null;
+        cf = null;
+        splittingSerializer.initialize(table, cf);
     }
 
     @Test
@@ -74,7 +82,12 @@ public class SplittingSerializerTest {
     public void testConfigure() {
         Context inputContext = splittingSerializerFactory.flumeContext();
         splittingSerializer.configure(inputContext);
+    }
 
+    @Test
+    public void testConfigureCompConfig() {
+        ComponentConfiguration conf = null;
+        splittingSerializer.configure(conf);
     }
 
     @Test
