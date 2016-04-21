@@ -46,19 +46,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency> 
     <dependency>
     <groupId>com.sun.jersey</groupId>
-     <artifactId>jersey-client</artifactId>
-     <version>${jersey.version}</version>
-     </dependency>
-     <dependency>
-     <groupId>com.sun.jersey</groupId>
-     <artifactId>jersey-json</artifactId>
-     <version>${jersey.version}</version>
-     </dependency>
-      <dependency>
+      <artifactId>jersey-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-json</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.json</artifactId>
-      <version>1.0.4</version>
-     </dependency>
+    </dependency>
      <dependency>
      <groupId>org.apache.flume</groupId>
      <artifactId>flume-ng-sdk</artifactId>
