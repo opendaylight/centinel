@@ -113,12 +113,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.1</version>
+			<artifactId>log4j-over-slf4j</artifactId>
 		</dependency>
 		 <dependency>
 			<groupId>javax.json</groupId>
