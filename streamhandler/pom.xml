@@ -64,7 +64,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <dependency>
 	<groupId>org.codehaus.jettison</groupId>
 	<artifactId>jettison</artifactId>
-	<version>${jettison.version}</version>
 	</dependency>
 	
 	
@@ -80,18 +79,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 	<version>1.7.4</version>
 	</dependency>
 	 
-	  <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-       <version>1.2.17</version>
-	</dependency>
-	
 	<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>2.5</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
@@ -124,18 +116,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>${org.json.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.0</version>
-		</dependency>		
+			<version>2.9.1</version>
+		</dependency>
 </dependencies>
 </project>
 
