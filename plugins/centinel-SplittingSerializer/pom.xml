@@ -17,6 +17,12 @@
       <groupId>org.apache.flume</groupId>
       <artifactId>flume-ng-core</artifactId>
       <version>1.5.2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+      </exclusions>
       </dependency>
       <dependency>
       <groupId>org.apache.flume</groupId>
@@ -32,6 +38,12 @@
       <groupId>org.apache.flume</groupId>
       <artifactId>flume-ng-configuration</artifactId>
       <version>1.6.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.flume.flume-ng-sinks</groupId>
@@ -47,6 +59,11 @@
        <groupId>org.mockito</groupId>
        <artifactId>mockito-all</artifactId>
        <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

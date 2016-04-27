@@ -59,9 +59,7 @@ Author: Abhishek Sharma <abhishek.abhi@tcs.com>
     <bundle>wrap:mvn:org.codehaus.jackson/jackson-core-asl/1.9.3</bundle> 
     <bundle>wrap:mvn:org.codehaus.jackson/jackson-mapper-asl/1.9.3</bundle> 
     <bundle>wrap:mvn:io.netty/netty/3.5.12.Final</bundle> 
-    <bundle>wrap:mvn:org.slf4j/slf4j-api/1.6.1</bundle> 
-    <bundle>wrap:mvn:org.slf4j/slf4j-log4j12/1.6.1</bundle> 
-    
+
     <bundle>mvn:org.codehaus.jettison/jettison/{{VERSION}}</bundle>
     <bundle>mvn:log4j/log4j/1.2.17</bundle> 
     <bundle>wrap:mvn:com.google.guava/guava/10.0</bundle>
