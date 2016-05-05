@@ -11,6 +11,9 @@ Author : Sumit Kapoor <sumit.kapoor@tcs.com>
 Modified: 17 November, 2015
 Modified the original file to support SingleFeatureTest and refactor features.
 Author: Abhishek Sharma <abhishek.abhi@tcs.com>
+Modified: 05 May, 2016
+Modified the original file to support analytics feature.
+Author: Amandeep Singh <amandeep.singh6@tcs.com>
 -->
 <features name="odl-centinel-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -79,12 +82,24 @@ Author: Abhishek Sharma <abhishek.abhi@tcs.com>
     <bundle>mvn:org.opendaylight.centinel/centinelUI-bundle/{{VERSION}}</bundle>
   </feature>
 
+ <feature name='odl-centinel-analytics' version='${project.version}' description='OpenDaylight :: centinel :: analytics'>
+    <bundle>mvn:org.opendaylight.centinel/centinel-analytics/{{VERSION}}</bundle>
+    <bundle>wrap:mvn:org.apache.storm/storm-core/{{VERSION}}</bundle>
+    <bundle>wrap:mvn:org.apache.storm/storm-kafka/{{VERSION}}</bundle>
+    <bundle>wrap:mvn:org.apache.kafka/kafka_2.9.2/{{VERSION}}</bundle>
+    <bundle>wrap:mvn:org.yaml/snakeyaml/{{VERSION}}</bundle>
+   <!-- <bundle>wrap:mvn:com.google.guava/guava/{{VERSION}}</bundle> 
+    <bundle>wrap:mvn:commons-collections/commons-collections/{{VERSION}}</bundle> -->
+    <bundle>wrap:mvn:org.scala-lang/scala-library/{{VERSION}}</bundle>
+    <bundle>wrap:mvn:org.apache.zookeeper/zookeeper/{{VERSION}}</bundle>
+  </feature>
 
 <feature name='odl-centinel-all' version='${project.version}' description='OpenDaylight :: centinel :: stream-handler'>
     <feature version="${project.version}">odl-centinel-core</feature>
     <feature version="${project.version}">odl-centinel-laas</feature>
     <feature version="${project.version}">odl-centinel-streamhandler</feature>
     <feature version="${project.version}">odl-centinel-ui</feature>
+    <feature version="${project.version}">odl-centinel-analytics</feature>
   </feature>
 
 </features>
