@@ -2,6 +2,7 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centine
 
 import org.opendaylight.centinel.impl.dashboard.CentinelDashboardImpl;
 import org.opendaylight.centinel.impl.dashboard.StreamCounterInfoCache;
+import org.opendaylight.centinel.impl.ipfix.IpfixCollector;
 import org.opendaylight.centinel.impl.subscribe.SubscriberImpl;
 import org.opendaylight.centinel.impl.subscribe.SubscriberInfoCache;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
@@ -24,8 +25,7 @@ public class StreamhandlerModule extends
         super(identifier, dependencyResolver);
     }
 
-    public StreamhandlerModule(
-            org.opendaylight.controller.config.api.ModuleIdentifier identifier,
+    public StreamhandlerModule(org.opendaylight.controller.config.api.ModuleIdentifier identifier,
             org.opendaylight.controller.config.api.DependencyResolver dependencyResolver,
             org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centinel.streamhandler.impl.rev141210.StreamhandlerModule oldModule,
             java.lang.AutoCloseable oldInstance) {
@@ -45,7 +45,9 @@ public class StreamhandlerModule extends
         ConfigurationChangeImpl configurationChangeImpl = new ConfigurationChangeImpl();
         configurationChangeImpl.logCollectorStart();
         DataBroker dataBrokerService = getDataBrokerDependency();
-        
+        IpfixCollector ipfixCollector = new IpfixCollector();
+        ipfixCollector.start();
+
         /***
          * load the CentinelDashboardImpl and StreamCounterInfoCache register
          * for RPC
@@ -82,7 +84,7 @@ public class StreamhandlerModule extends
         getNotificationServiceDependency().registerNotificationListener(configurationChangeImpl);
 
         getBrokerDependency().registerProvider(streamhandlerProvider);
-        
+
         final class AutoCloseableToaster implements AutoCloseable {
 
             @Override
