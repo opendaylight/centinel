@@ -12,8 +12,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         <groupId>org.opendaylight.centinel</groupId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
-    <groupId>org.opendaylight.centinel</groupId>
     <artifactId>centinelUI-module</artifactId>
     <packaging>jar</packaging>
-        <version>0.2.0-SNAPSHOT</version>
 </project>
