@@ -41,6 +41,24 @@ public class IPFIXRecordSets {
                 TemplateRecord tr = new TemplateRecord();
                 tr.parse(subData);
                 setsObject.getTemplateRecords().add(tr);
+            }
+            // 3 -> template option sets
+            else if (setsObject.getSetID() == 3) {
+                int offset = 4;
+                byte[] subData = new byte[setsObject.getLength() - offset];
+                System.arraycopy(setData, offset, subData, 0, subData.length);
+                OptionTemplateRecord otr = OptionTemplateRecord.parse(subData);
+                setsObject.getOptionTemplateRecords().add(otr);
+            }
+
+            // > 256 -> data record;
+            else if (setsObject.getSetID() == 256) {
+                int offset = 4;
+                byte[] subData = new byte[setsObject.getLength() - offset];
+                System.arraycopy(setData, offset, subData, 0, IPFIXDataSetParser.LENGTH);
+                IPFIXDataSetParser sdr = IPFIXDataSetParser.parse(subData);
+                setsObject.getDataRecords().add(sdr);
+
             } else {
                 LOG.log(Level.INFO, "Set ID " + setsObject.getSetID() + " is unknown and not handled");
             }

@@ -14,6 +14,7 @@ import java.util.List;
 public class IPFIXSetsDAO extends PacketLength {
     private List<DataSetRecord> dataRecords = new ArrayList<DataSetRecord>();
     private List<TemplateRecord> templateRecords = new ArrayList<TemplateRecord>();
+    private List<OptionTemplateRecord> optionTemplateRecords = new ArrayList<OptionTemplateRecord>();
     private final static int SETHEADERLENGTH = 4;
     private int setID;
 
@@ -40,6 +41,15 @@ public class IPFIXSetsDAO extends PacketLength {
 
     public void setTemplateRecords(List<TemplateRecord> templateRecords) {
         this.templateRecords = templateRecords;
+        updateLength();
+    }
+
+    public List<OptionTemplateRecord> getOptionTemplateRecords() {
+        return optionTemplateRecords;
+    }
+
+    public void setOptionTemplateRecords(List<OptionTemplateRecord> optionTemplateRecords) {
+        this.optionTemplateRecords = optionTemplateRecords;
         updateLength();
     }
 
