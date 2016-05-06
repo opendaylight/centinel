@@ -59,7 +59,6 @@ public class LogCollectorTLS extends Thread {
 			// load server private key
 			KeyStore serverKeys = KeyStore
 					.getInstance(commonServices.tlsSecurityType);
-			FileOutputStream file = new FileOutputStream("abc.txt");
 			serverKeys.load(
 					new FileInputStream(commonServices.tlsServerKeyPath),
 					(commonServices.tlsServerKeyPwd).toCharArray());
