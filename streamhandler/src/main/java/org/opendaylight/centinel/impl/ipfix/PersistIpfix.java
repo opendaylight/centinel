@@ -75,4 +75,8 @@ public class PersistIpfix {
         }
     }
 
+    public void setSetDataObjectInJson(IPFIXDataSetParser sdr) {
+        headerJson.put("ObservationPointId", sdr.getObservationDomainId());
+        addJsonObjectInDatabase(headerJson);
+    }
 }
