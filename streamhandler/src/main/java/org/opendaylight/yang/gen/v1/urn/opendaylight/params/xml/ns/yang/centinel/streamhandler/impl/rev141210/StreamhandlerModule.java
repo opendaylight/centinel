@@ -3,6 +3,7 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centine
 import org.opendaylight.centinel.impl.dashboard.CentinelDashboardImpl;
 import org.opendaylight.centinel.impl.dashboard.StreamCounterInfoCache;
 import org.opendaylight.centinel.impl.ipfix.IpfixCollector;
+import org.opendaylight.centinel.impl.openflow.CentinelOpenFlowCollector;
 import org.opendaylight.centinel.impl.subscribe.SubscriberImpl;
 import org.opendaylight.centinel.impl.subscribe.SubscriberInfoCache;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
@@ -45,6 +46,7 @@ public class StreamhandlerModule extends
         ConfigurationChangeImpl configurationChangeImpl = new ConfigurationChangeImpl();
         configurationChangeImpl.logCollectorStart();
         DataBroker dataBrokerService = getDataBrokerDependency();
+        final CentinelOpenFlowCollector centinelOpenFlowCollector = new CentinelOpenFlowCollector(dataBrokerService);
         IpfixCollector ipfixCollector = new IpfixCollector();
         ipfixCollector.start();
 
@@ -89,6 +91,7 @@ public class StreamhandlerModule extends
 
             @Override
             public void close() throws Exception {
+                centinelOpenFlowCollector.close();
                 rpcRegistrationhandler.close();
                 closeQuietly(streamhandlerImpl);
 
