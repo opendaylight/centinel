@@ -3,21 +3,20 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centine
 import org.opendaylight.centinel.impl.dashboard.CentinelDashboardImpl;
 import org.opendaylight.centinel.impl.dashboard.StreamCounterInfoCache;
 import org.opendaylight.centinel.impl.ipfix.IpfixCollector;
-import org.opendaylight.centinel.impl.openflow.CentinelOpenFlowCollector;
 import org.opendaylight.centinel.impl.subscribe.SubscriberImpl;
-import org.opendaylight.centinel.impl.subscribe.SubscriberInfoCache;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.centinel.impl.openflow.CentinelOpenFlowCollector;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
-import org.opendaylight.streamhandler.impl.ConfigurationChangeImpl;
+import org.opendaylight.centinel.impl.subscribe.SubscriberInfoCache;
 import org.opendaylight.streamhandler.impl.EventHandlerImpl;
-import org.opendaylight.streamhandler.impl.LogCollectorTLS;
-
+import org.opendaylight.streamhandler.impl.LogCollectorSecurityChangeImpl;
 import org.opendaylight.streamhandler.impl.StreamhandlerImpl;
 import org.opendaylight.streamhandler.impl.StreamhandlerProvider;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.dashboardrule.rev150105.DashboardruleService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.streamhandler.rev150105.StreamhandlerService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.subscribe.rev150105.SubscribeService;
+
 
 public class StreamhandlerModule extends
         org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.centinel.streamhandler.impl.rev141210.AbstractStreamhandlerModule {
@@ -43,8 +42,8 @@ public class StreamhandlerModule extends
         final StreamhandlerImpl streamhandlerImpl = new StreamhandlerImpl();
         StreamhandlerProvider streamhandlerProvider = new StreamhandlerProvider();
         EventHandlerImpl eventHandlerImpl = new EventHandlerImpl(streamhandlerImpl);
-        ConfigurationChangeImpl configurationChangeImpl = new ConfigurationChangeImpl();
-        configurationChangeImpl.logCollectorStart();
+        LogCollectorSecurityChangeImpl logCollectorSecurityChangeImpl = new LogCollectorSecurityChangeImpl();
+        logCollectorSecurityChangeImpl.logCollectorStart();;
         DataBroker dataBrokerService = getDataBrokerDependency();
         final CentinelOpenFlowCollector centinelOpenFlowCollector = new CentinelOpenFlowCollector(dataBrokerService);
         IpfixCollector ipfixCollector = new IpfixCollector();
@@ -83,7 +82,7 @@ public class StreamhandlerModule extends
 
         // Register notification listeners to receive notifications
         getNotificationServiceDependency().registerNotificationListener(eventHandlerImpl);
-        getNotificationServiceDependency().registerNotificationListener(configurationChangeImpl);
+        getNotificationServiceDependency().registerNotificationListener(logCollectorSecurityChangeImpl);
 
         getBrokerDependency().registerProvider(streamhandlerProvider);
 
