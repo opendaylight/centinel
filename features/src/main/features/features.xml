@@ -70,6 +70,7 @@ Author: Amandeep Singh <amandeep.singh6@tcs.com>
     <bundle>wrap:mvn:com.google.guava/guava/{{VERSION}}</bundle>
     <bundle>wrap:mvn:joda-time/joda-time/{{VERSION}}</bundle>
     <bundle>wrap:mvn:org.json/json/{{VERSION}}</bundle>
+    <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.kafka-clients/0.9.0.1_1</bundle>
     <feature version="${project.version}">odl-centinel-core</feature>
     
   <configfile finalname="${configfile.directory}/centinelstream.xml">mvn:org.opendaylight.centinel/centinel-streamhandler/{{VERSION}}/xml/config</configfile>
