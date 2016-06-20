@@ -72,7 +72,7 @@ public class CentinelOpenFlowNodeMeterStatisticsExtractor extends CentinelOpenFl
             jsonArrayObject.add(factory.createObjectBuilder()
                     .add(properties.getProperty("BAND_ID"), bandStat.getBandId().getValue())
                     .add(properties.getProperty("BYT_BAND_COUNT"), bandStat.getByteBandCount().getValue())
-                    .add(properties.getProperty("KYE"), bandStat.getKey().getBandId().getValue())
+                    .add(properties.getProperty("KEY"), bandStat.getKey().getBandId().getValue())
                     .add(properties.getProperty("PCK_BAND_COUNT"), bandStat.getPacketBandCount().getValue()));
         }
         return jsonArrayObject;
