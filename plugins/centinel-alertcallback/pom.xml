@@ -6,13 +6,13 @@
     <parent>
       <groupId>org.opendaylight.centinel.plugin</groupId>
       <artifactId>centinel-plugins</artifactId>
-      <version>0.1.3-SNAPSHOT</version>
+      <version>0.1.3-Beryllium-SR3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>org.opendaylight.centinel.plugin</groupId>
     <artifactId>centinel-alertcallback</artifactId>
-    <version>0.1.3-SNAPSHOT</version>
+    <version>0.1.3-Beryllium-SR3</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
