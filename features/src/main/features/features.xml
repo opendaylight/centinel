@@ -106,7 +106,6 @@ Author: Amandeep Singh <amandeep.singh6@tcs.com>
     <bundle>wrap:mvn:org.yaml/snakeyaml/{{VERSION}}</bundle>
     <bundle>wrap:mvn:org.scala-lang/scala-library/{{VERSION}}</bundle>
     <bundle>wrap:mvn:org.apache.zookeeper/zookeeper/{{VERSION}}</bundle>
-    <bundle>wrap:mvn:com.google.collections/google-collections/{{VERSION}}</bundle>
   </feature>
 
 <feature name='odl-centinel-all' version='${project.version}' description='OpenDaylight :: centinel :: stream-handler'>
