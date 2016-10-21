@@ -4,12 +4,12 @@
     <parent>
         <artifactId>centinelUI</artifactId>
         <groupId>org.opendaylight.centinel</groupId>
-        <version>0.1.4-SNAPSHOT</version>
+        <version>0.1.5-SNAPSHOT</version>
     </parent>
     <groupId>org.opendaylight.centinel</groupId>
     <artifactId>centinelUI-bundle</artifactId>
     <packaging>bundle</packaging>
-    <version>0.1.4-SNAPSHOT</version>
+    <version>0.1.5-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>org.osgi</groupId>
