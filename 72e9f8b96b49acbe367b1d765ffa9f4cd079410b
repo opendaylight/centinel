@@ -1,0 +1,11 @@
+Verified+1: jenkins-releng <jenkins-releng@opendaylight.org>
+Code-Review+1: Vratko Polák <vrpolak@cisco.com>
+Code-Review+1: Thanh Ha <thanh.ha@linuxfoundation.org>
+Code-Review+1: Ryan Goulding <ryandgoulding@gmail.com>
+Code-Review+1: Robert Varga <nite@hq.sk>
+Code-Review+2: sumit kapoor <sumit.kapoor@tcs.com>
+Submitted-by: sumit kapoor <sumit.kapoor@tcs.com>
+Submitted-at: Thu, 27 Oct 2016 04:01:39 +0000
+Reviewed-on: https://git.opendaylight.org/gerrit/46574
+Project: centinel
+Branch: refs/heads/master
