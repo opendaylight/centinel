@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <artifactId>centinel-plugins</artifactId>
-    <groupId>org.opendaylight.centinel.plugin</groupId>
-    <version>0.1.0-SNAPSHOT</version>
+    <artifactId>config-parent</artifactId>
+    <groupId>org.opendaylight.controller</groupId>
+    <version>0.6.0-SNAPSHOT</version>
+    <relativePath>pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.centinel.plugin</groupId>
   <artifactId>centinel-output</artifactId>
   <name>${project.artifactId}</name>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.3.0-SNAPSHOT</version>
   <description>Graylog ${project.artifactId} plugin.</description>
   <url>https://www.graylog.org</url>
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.3</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -65,8 +65,10 @@
             <prefix>/usr</prefix>
           </prefixes>
           <defineStatements>
-            <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
-            <defineStatement>_binaries_in_noarch_packages_terminate_build 0</defineStatement>
+            <defineStatement>_unpackaged_files_terminate_build
+                            0</defineStatement>
+            <defineStatement>_binaries_in_noarch_packages_terminate_build
+                            0</defineStatement>
           </defineStatements>
           <defaultFilemode>644</defaultFilemode>
           <defaultDirmode>755</defaultDirmode>
@@ -97,10 +99,6 @@
       <scope>provided</scope>
       <exclusions>
         <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>guice-assistedinject</artifactId>
           <groupId>com.google.inject.extensions</groupId>
         </exclusion>
@@ -111,10 +109,6 @@
         <exclusion>
           <artifactId>metrics-core</artifactId>
           <groupId>io.dropwizard.metrics</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>disruptor</artifactId>
-          <groupId>com.lmax</groupId>
         </exclusion>
         <exclusion>
           <artifactId>guice</artifactId>
@@ -168,19 +162,66 @@
           <artifactId>jadconfig</artifactId>
           <groupId>com.github.joschi</groupId>
         </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+      <exclusions>
         <exclusion>
-          <artifactId>jsr305</artifactId>
-          <groupId>com.google.code.findbugs</groupId>
+          <artifactId>hamcrest-core</artifactId>
+          <groupId>org.hamcrest</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.10.19</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.21</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.21</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>annotations</artifactId>
+      <version>3.0.0</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>jcip-annotations</artifactId>
+          <groupId>net.jcip</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>3.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
+      <version>2.0.0</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <properties>
     <graylog2.plugin-dir>/usr/share/graylog-server/plugin</graylog2.plugin-dir>
     <graylog2.version>1.0.0</graylog2.version>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
 </project>
 
