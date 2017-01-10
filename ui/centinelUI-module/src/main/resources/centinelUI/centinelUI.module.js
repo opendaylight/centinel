@@ -4,17 +4,17 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * @author Himanshu Yadav 
- * @description : This js registers and configure all modules in CentinelUI 
+ * @author Himanshu Yadav
+ * @description : This js registers and configure all modules in CentinelUI
 */
 
 define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/config/env.module','d3'], function(ng) {
-  var centinelUIApp = angular.module('app.centinelUI', 
+  var centinelUIApp = angular.module('app.centinelUI',
 		  ['app.core', 'ui.router.state','config','pascalprecht.translate','restangular']);
 
-  centinelUIApp.register = centinelUIApp; 
+  centinelUIApp.register = centinelUIApp;
 
-  
+
   centinelUIApp.factory("centinelLoaderSvc", function ($q) {
 
       var controllers = [
@@ -48,19 +48,20 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
 		'app/centinelUI/utils/js/autocomplete',
 		'app/centinelUI/utils/js/formValidator'
       ];
-  
+
       var loaded = $q.defer();
 
        require([].concat(controllers).concat(services).concat(directive), function () {
      		console.info("centinelLoaderSvc:  completed");
      		loaded.resolve(true);
     	});
- 
+
       return loaded.promise; // return promise to wait for in $state transition
     });
-  
-  
-  centinelUIApp.config(function($stateProvider, $compileProvider, $controllerProvider, $provide, NavHelperProvider, $translateProvider,RestangularProvider) {
+
+
+  centinelUIApp.config(function($stateProvider, $compileProvider, $controllerProvider, $provide, NavHelperProvider,
+                                $translateProvider, $urlRouterProvider, RestangularProvider) {
     centinelUIApp.register = {
       controller : $controllerProvider.register,
       directive : $compileProvider.directive,
@@ -68,12 +69,14 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
       service : $provide.service
 
     };
-    
+
+    $urlRouterProvider.otherwise('/centinelUI');
+
     $translateProvider.useStaticFilesLoader({
     			prefix: 'src/app/centinelUI/assets/data/application_properties_',
 			    suffix: '.json'
       });
-   
+
 
 
     NavHelperProvider.addControllerUrl('app/centinelUI/centinelUI.controller');
@@ -96,7 +99,7 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
         views : {
             'content' : {
                 templateUrl: 'src/app/centinelUI/centinelUI.tpl.html',
-                controller: 'centinelUICtrl'     	
+                controller: 'centinelUICtrl'
             }
         },
         resolve: {
@@ -104,7 +107,7 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
           }
     });
 
-    
+
     $stateProvider.state('main.centinelUI.streamdata', {
         url: '/streamdata',
         access: access.public,
@@ -113,10 +116,10 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
                 templateUrl: 'src/app/centinelUI/streamingData/streamdata.html',
                 controller: 'centinelUIStreamdataCtrl'
             }
-           
+
         }
     });
-    
+
     $stateProvider.state('main.centinelUI.stream', {
         url: '/streams',
         access: access.public,
@@ -124,12 +127,12 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
             'centinelContent' : {
                 templateUrl: 'src/app/centinelUI/streams/stream.html',
                 controller: 'centinelUIStreamCtrl'
-                
+
             }
-           
+
         }
     });
-    
+
    $stateProvider.state('main.centinelUI.alert', {
         url: '/alertFunction',
         access: access.public,
@@ -137,12 +140,12 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
             'centinelContent' : {
                 templateUrl: 'src/app/centinelUI/streams/alert/manageAlert.html',
                 controller: 'centinelUIAlertCtrl'
-                
+
             }
         },
    		params: {streamID: null}
     });
-   
+
     $stateProvider.state('main.centinelUI.editRules', {
         url: '/editRulesFunction',
         access: access.public,
@@ -150,7 +153,7 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
             'centinelContent' : {
                 templateUrl: 'src/app/centinelUI/streams/editRules/editRules.html',
                 controller: 'editRulesFunCtrl'
-                
+
             }
         },
 		params: {streamID: null}
@@ -162,11 +165,11 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
             'centinelContent' : {
                 templateUrl: 'src/app/centinelUI/dashboards/dashboard.html',
                 controller: 'centinelUIDashboardCtrl'
-                
+
             }
         }
     });
-    
+
     $stateProvider.state('main.centinelUI.widgets', {
     	url : '/dashboards/widgets',
     	access : access.public,
@@ -198,7 +201,7 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
 		    'centinelContent' : {
 		        templateUrl: 'src/app/centinelUI/configuration/config.html',
 		        controller: 'centinelUIConfigCtrl'
-		        
+
 		    }
 		}
 	    });
@@ -209,15 +212,15 @@ define(['angularAMD', 'app/routingConfig', 'app/core/core.services', 'common/con
         return response;
       });
     RestangularProvider.setFullResponse(true);
-    
+
     RestangularProvider.setErrorInterceptor(function ( response ) {
     	        // DON'T stop promise chain since error is not handled
     	        return true;
-    	    
+
     });
 
 
-    
+
   });
 
   return centinelUIApp;
