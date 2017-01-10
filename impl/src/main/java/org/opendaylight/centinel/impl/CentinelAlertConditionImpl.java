@@ -700,7 +700,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
         }
         final String configID = configId;
 
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<AlertMessageCountRuleRecord>, Void>() {
 
                     @Override
@@ -845,7 +845,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         }
         final String configID = configId;
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<AlertFieldContentRuleRecord>, Void>() {
 
                     @Override
@@ -986,7 +986,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         }
         final String configID = configId;
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<AlertFieldValueRuleRecord>, Void>() {
 
                     @Override
@@ -1134,7 +1134,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         }
         final String configID = configId;
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<AlertMessageCountRuleRecord>, Void>() {
 
                     @Override
@@ -1279,7 +1279,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         }
         final String configID = configId;
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<AlertFieldContentRuleRecord>, Void>() {
 
                     @Override
@@ -1409,7 +1409,7 @@ public class CentinelAlertConditionImpl implements AlertruleService, AutoCloseab
 
         }
         final String configID = configId;
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<AlertFieldValueRuleRecord>, Void>() {
 
                     @Override

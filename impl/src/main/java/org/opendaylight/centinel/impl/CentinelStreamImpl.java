@@ -395,7 +395,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
 
         }
         final String confID = configId;
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<StreamRecord>, Void>() {
 
                     @Override
@@ -564,7 +564,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         }
         final String confId = configId;
 
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<StreamRecord>, Void>() {
 
                     @Override
@@ -734,7 +734,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         final String confID = configId;
         final String opStrmId = opStreamId;
 
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<StreamRecord>, Void>() {
 
                     @Override
@@ -863,7 +863,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         final String confID = configId;
         final String opStreamId = opStrmId;
 
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<StreamRecord>, Void>() {
 
                     @Override
@@ -1006,7 +1006,7 @@ public class CentinelStreamImpl implements StreamService, AutoCloseable {
         }
         final String confID = configIdOp;
         final String strmID = streamIdOp;
-        final ListenableFuture<Void> commitFuture = Futures.transform(readFutureConfigure,
+        final ListenableFuture<Void> commitFuture = Futures.transformAsync(readFutureConfigure,
                 new AsyncFunction<Optional<StreamRecord>, Void>() {
 
                     @Override
