@@ -76,7 +76,6 @@ Author: Abhishek Sharma <abhishek.abhi@tcs.com>
   <feature name='odl-centinel-ui' version='${project.version}' description='OpenDaylight :: centinel :: UI'>
     <feature version="${dlux.version}">odl-dlux-core</feature>
     <feature version="${mdsal.version}">odl-mdsal-apidocs</feature>
-    <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
     <feature>http</feature>
     <feature>webconsole</feature>
     <bundle>mvn:org.opendaylight.centinel/centinelUI-bundle/{{VERSION}}</bundle>
