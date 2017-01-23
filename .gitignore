@@ -1,5 +1,7 @@
 # Maven
 target/
+target-ide/
+dependency-reduced-pom.xml
 
 # OpenDaylight
 yang-gen-sal/
