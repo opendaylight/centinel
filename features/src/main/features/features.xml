@@ -25,7 +25,7 @@ Author: Abhishek Sharma <abhishek.abhi@tcs.com>
   </feature>
   <feature name='odl-centinel-core' version='${project.version}' description='OpenDaylight :: centinel'>
     <feature version="${restconf.version}">odl-restconf-all</feature>
-    <feature version='${mdsal.version}'>odl-mdsal-all</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <bundle>mvn:org.opendaylight.centinel/centinel-api/{{VERSION}}</bundle>
     <bundle>mvn:org.opendaylight.centinel/centinel-impl/{{VERSION}}</bundle>
     <bundle>mvn:com.sun.jersey/jersey-client/{{VERSION}}</bundle>
