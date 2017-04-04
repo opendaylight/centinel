@@ -29,7 +29,7 @@ Author: Amandeep Singh <amandeep.singh6@tcs.com>
   </feature>
   <feature name='odl-centinel-core' version='${project.version}' description='OpenDaylight :: centinel'>
     <feature version="${restconf.version}">odl-restconf-all</feature>
-    <feature version='${mdsal.version}'>odl-mdsal-all</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <feature version="${l2switch-switch.version}">odl-l2switch-switch</feature>
     <feature version="${model.flow.statistics}">odl-openflowplugin-nsf-model</feature>
     <bundle>mvn:org.opendaylight.centinel/centinel-api/{{VERSION}}</bundle>
