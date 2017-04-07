@@ -22,7 +22,7 @@ Author: Amandeep Singh <amandeep.singh6@tcs.com>
   <repository>mvn:org.opendaylight.controller/features-mdsal/{{VERSION}}/xml/features</repository>
   <repository>mvn:org.opendaylight.netconf/features-restconf/{{VERSION}}/xml/features</repository>
   <repository>mvn:org.opendaylight.dlux/features-dlux/{{VERSION}}/xml/features</repository>
-  <repository>mvn:org.opendaylight.l2switch/features-l2switch/0.4.3-SNAPSHOT/xml/features</repository>
+  <repository>mvn:org.opendaylight.l2switch/features-l2switch/0.4.4-SNAPSHOT/xml/features</repository>
   <feature name='odl-centinel-api' version='${project.version}' description='OpenDaylight :: centinel :: api'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <bundle>mvn:org.opendaylight.centinel/centinel-api/{{VERSION}}</bundle>
